@@ -9,13 +9,13 @@ export function Dashboard() {
   const logout = useAuthStore(state => state.logout)
 
   useEffect(() => {
-    fetch('http://localhost:3000/vehicles')
+    fetch(`${import.meta.env.VITE_API_URL}/vehicles`)
       .then(res => res.json())
       .then(data => setVehicles(data))
   }, [])
 
   function handleDelete(id: string) {
-    fetch(`http://localhost:3000/vehicles/${id}`, { method: 'DELETE' })
+    fetch(`${import.meta.env.VITE_API_URL}/vehicles/${id}`, { method: 'DELETE' })
       .then(() => setVehicles(vehicles.filter(v => v.id !== id)))
   }
 

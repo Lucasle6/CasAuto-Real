@@ -10,7 +10,7 @@ export function VehicleDetail() {
   const [showForm, setShowForm] = useState(false)
 
   useEffect(() => {
-    fetch(`http://localhost:3000/vehicles/${id}`)
+    fetch(`${import.meta.env.VITE_API_URL}/vehicles/${id}`)
       .then(res => res.json())
       .then(data => setVehicle(data))
   }, [id])

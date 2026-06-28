@@ -32,7 +32,7 @@ export function Catalog() {
     if (minYear) params.append('minYear', minYear)
     if (maxYear) params.append('maxYear', maxYear)
 
-    fetch(`http://localhost:3000/vehicles?${params.toString()}`)
+    fetch(`${import.meta.env.VITE_API_URL}/vehicles?${params.toString()}`)
       .then(res => res.json())
       .then(data => setVehicles(data))
   }, [selectedBrand, selectedCategory, selectedFuel, selectedStatus, minPrice, maxPrice, minYear, maxYear])

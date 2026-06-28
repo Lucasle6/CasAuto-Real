@@ -17,7 +17,7 @@ export function VehicleEdit() {
   const { id } = useParams()
 
   useEffect(() => {
-    fetch(`http://localhost:3000/vehicles/${id}`)
+    fetch(`${import.meta.env.VITE_API_URL}/vehicles/${id}`)
       .then(res => res.json())
       .then(data => setForm({
         brand: data.brand,
@@ -35,7 +35,7 @@ export function VehicleEdit() {
   }
 
   async function handleSubmit() {
-    await fetch(`http://localhost:3000/vehicles/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/vehicles/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

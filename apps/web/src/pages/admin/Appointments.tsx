@@ -19,7 +19,7 @@ export function Appointments() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    fetch('http://localhost:3000/appointments')
+    fetch(`${import.meta.env.VITE_API_URL}/appointments`)
       .then(res => res.json())
       .then(data => setAppointments(data))
   }, [])

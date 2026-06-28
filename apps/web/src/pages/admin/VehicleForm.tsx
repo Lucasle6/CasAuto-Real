@@ -20,7 +20,7 @@ export function VehicleForm() {
   }
 
   async function handleSubmit() {
-    await fetch('http://localhost:3000/vehicles', {
+    await fetch(`${import.meta.env.VITE_API_URL}/vehicles`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
