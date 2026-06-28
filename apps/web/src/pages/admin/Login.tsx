@@ -31,7 +31,7 @@ export function Login() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="bg-white border border-gray-200 rounded-lg p-10 shadow-sm w-full max-w-sm">
         <h1 className="text-2xl font-bold tracking-widest uppercase text-red-800 text-center mb-8">
-          Autohaus Royal
+          CasAuto Real
         </h1>
 
         <div className="space-y-4">

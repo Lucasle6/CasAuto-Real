@@ -22,7 +22,7 @@ export function Kontakt() {
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200 px-8 py-4 shadow-sm flex justify-between items-center">
-        <h1 onClick={() => navigate('/')} className="text-2xl font-bold tracking-widest uppercase text-red-800 cursor-pointer">Autohaus Royal</h1>
+        <h1 onClick={() => navigate('/')} className="text-2xl font-bold tracking-widest uppercase text-red-800 cursor-pointer">CasAuto Real</h1>
         <nav className="flex gap-6">
           <button onClick={() => navigate('/fahrzeuge')} className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Fahrzeuge</button>
           <button onClick={() => navigate('/unternehmen')} className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Unternehmen</button>

@@ -51,7 +51,11 @@ export function Catalog() {
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200 px-8 py-4 shadow-sm flex justify-between items-center">
-        <h1 className="text-2xl font-bold tracking-widest uppercase text-red-800">Autohaus Royal</h1>
+        <h1 
+        onClick={() => navigate('/')} 
+        className="text-2xl font-bold tracking-widest uppercase cursor-pointer select-none text-red-800">
+          CasAuto Real
+          </h1>
         <button
           onClick={() => navigate('/admin')}
           className="text-sm px-4 py-2 rounded-md border border-green-700 text-green-700 hover:bg-green-100 transition-colors"

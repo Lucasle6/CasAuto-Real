@@ -28,7 +28,7 @@ export function Landing() {
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-8 py-4 shadow-sm flex justify-between items-center">
-        <h1 className="text-2xl font-bold tracking-widest uppercase text-red-800">Autohaus Royal</h1>
+        <h1 className="text-2xl font-bold tracking-widest uppercase text-red-800">CasAuto Real</h1>
         <nav className="flex gap-6">
           <button onClick={() => navigate('/fahrzeuge')} className="text-sm text-gray-500 hover:text-red-900 transition-colors">Fahrzeuge</button>
           <button onClick={() => navigate('/unternehmen')} className="text-sm text-gray-500 hover:text-red-900 transition-colors">Unternehmen</button>
@@ -98,7 +98,7 @@ export function Landing() {
       <footer className="bg-gray-950 text-gray-400 px-8 py-12">
         <div className="max-w-5xl mx-auto grid grid-cols-3 gap-8">
           <div>
-            <h4 className="text-white font-bold tracking-widest uppercase text-sm mb-4">Autohaus Royal</h4>
+            <h4 className="text-white font-bold tracking-widest uppercase text-sm mb-4">CasAuto Real</h4>
             <p className="text-sm">Bessemerstraße 42A</p>
             <p className="text-sm">12103 Berlin</p>
           </div>
@@ -120,7 +120,7 @@ export function Landing() {
           </div>
         </div>
         <div className="max-w-5xl mx-auto border-t border-gray-800 mt-8 pt-8 text-center">
-          <p className="text-xs">© 2026 Autohaus Royal GmbH · Datenschutz · Impressum</p>
+          <p className="text-xs">© 2026 CasAuto Real GmbH · Datenschutz · Impressum</p>
         </div>
       </footer>
     </div>
