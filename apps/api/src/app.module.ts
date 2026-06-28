@@ -13,7 +13,7 @@ import { UsersModule } from './users/users.module';
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      url: process.env.DATABASE_URL,
+      url: process.env.MYSQL_URL,
       autoLoadEntities: true,
       synchronize: true,
     }),
