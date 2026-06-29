@@ -33,6 +33,12 @@ export function Login() {
         <h1 className="text-2xl font-bold tracking-widest uppercase text-red-800 text-center mb-8">
           CasAuto Real
         </h1>
+        <p 
+          onClick={() => navigate('/')} 
+          className="text-center text-sm text-gray-400 hover:text-gray-600 cursor-pointer mb-6"
+        >
+          Zurück zur Website
+        </p>
 
         <div className="space-y-4">
           <div>

@@ -11,6 +11,7 @@ import { Karriere } from './pages/Karriere'
 import { Landing } from './pages/Landing'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { Login } from './pages/admin/Login'
+import { Register } from './pages/Register'
 
 function App() {
   return (
@@ -22,10 +23,11 @@ function App() {
       <Route path="/unternehmen" element={<Unternehmen />} />
       <Route path="/karriere" element={<Karriere />} />
       <Route path="/admin/login" element={<Login />} />
-      <Route path="/admin" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/admin/vehicles/new" element={<ProtectedRoute><VehicleForm /></ProtectedRoute>} />
-      <Route path="/admin/vehicles/:id/edit" element={<ProtectedRoute><VehicleEdit /></ProtectedRoute>} />
-      <Route path="/admin/appointments" element={<ProtectedRoute><Appointments /></ProtectedRoute>} />
+      <Route path="/admin" element={<ProtectedRoute requireAdmin><Dashboard /></ProtectedRoute>} />
+      <Route path="/admin/vehicles/new" element={<ProtectedRoute requireAdmin><VehicleForm /></ProtectedRoute>} />
+      <Route path="/admin/vehicles/:id/edit" element={<ProtectedRoute requireAdmin><VehicleEdit /></ProtectedRoute>} />
+      <Route path="/admin/appointments" element={<ProtectedRoute requireAdmin><Appointments /></ProtectedRoute>} />
+      <Route path="/register" element={<Register />} />
     </Routes>
   )
 }
