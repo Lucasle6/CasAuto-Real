@@ -219,9 +219,9 @@ export function Catalog() {
         {/* Footer */}
         
         
-        <Footer />
         
         </div>
+        <Footer />
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import type{ Vehicle } from '../types'
+import {motion} from 'framer-motion'
 
 const BRAND_IMAGES: Record<string, string> = {
   BMW: 'https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg',
@@ -16,10 +17,12 @@ export function VehicleCard({ vehicle }: Props) {
   const navigate = useNavigate()
 
   return (
-    <div
-      onClick={() => navigate(`/vehicles/${vehicle.id}`)}
-      className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-red-800 hover:shadow-md transition-all cursor-pointer"
-    >
+    <motion.div
+        onClick={() => navigate(`/vehicles/${vehicle.id}`)}
+        whileHover={{ y: -4, boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}
+        transition={{ duration: 0.2 }}
+        className="bg-white border border-gray-200 rounded-lg overflow-hidden cursor-pointer"
+      >
       <div className="bg-gray-50 h-40 flex items-center justify-center border-b border-gray-100">
         <img
           src={BRAND_IMAGES[vehicle.brand]}
@@ -43,6 +46,6 @@ export function VehicleCard({ vehicle }: Props) {
           <span className="text-xs text-gray-400 uppercase">{vehicle.fuelType}</span>
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }
