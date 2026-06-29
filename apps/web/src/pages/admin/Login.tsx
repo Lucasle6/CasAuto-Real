@@ -24,21 +24,27 @@ export function Login() {
 
     const data = await res.json()
     login(data.accessToken)
-    navigate('/admin')
+  navigate('/admin')
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="bg-white border border-gray-200 rounded-lg p-10 shadow-sm w-full max-w-sm">
+  <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div className="w-full max-w-sm">
+      
+      <button
+        onClick={() => navigate('/')}
+        className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors mb-6 cursor-pointer select-none"
+      >
+        <span className="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-xs">
+          ←
+        </span>
+        Zurück zur Website
+      </button>
+
+      <div className="bg-white border border-gray-200 rounded-lg p-10 shadow-sm">
         <h1 className="text-2xl font-bold tracking-widest uppercase text-red-800 text-center mb-8">
-          CasAuto Real
+          Autohaus Royal
         </h1>
-        <p 
-          onClick={() => navigate('/')} 
-          className="text-center text-sm text-gray-400 hover:text-gray-600 cursor-pointer mb-6"
-        >
-          Zurück zur Website
-        </p>
 
         <div className="space-y-4">
           <div>
@@ -71,5 +77,5 @@ export function Login() {
         </div>
       </div>
     </div>
-  )
-}
+  </div>
+)}

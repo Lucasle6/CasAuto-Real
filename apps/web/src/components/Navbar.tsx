@@ -1,10 +1,13 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useAuthStore } from '../store/authStore'
+
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
+  const { isAuthenticated, logout } = useAuthStore()
 
   function isActive(path: string) {
     return location.pathname === path
@@ -26,7 +29,21 @@ export function Navbar() {
           <button onClick={() => navigate('/unternehmen')} className={`text-sm transition-colors ${isActive('/unternehmen') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>Unternehmen</button>
           <button onClick={() => navigate('/karriere')} className={`text-sm transition-colors ${isActive('/karriere') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>Karriere</button>
           <button onClick={() => navigate('/kontakt')} className={`text-sm transition-colors ${isActive('/kontakt') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>Kontakt</button>
-          <button onClick={() => navigate('/register')} className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-800 hover:bg-red-50 transition-colors">Registrieren</button>
+          {isAuthenticated ? (
+            <button
+              onClick={() => { logout(); navigate('/') }}
+              className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-800 hover:bg-red-50 transition-colors"
+            >
+              Abmelden
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate('/register')}
+              className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-800 hover:bg-red-50 transition-colors"
+            >
+              Registrieren
+            </button>
+          )}
         </nav>
 
         {/* Mobile hamburger */}
@@ -42,7 +59,21 @@ export function Navbar() {
           <button onClick={() => { navigate('/unternehmen'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left">Unternehmen</button>
           <button onClick={() => { navigate('/karriere'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left">Karriere</button>
           <button onClick={() => { navigate('/kontakt'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left">Kontakt</button>
-          <button onClick={() => navigate('/register')} className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-800 hover:bg-red-50 transition-colors">Registrieren</button>
+          {isAuthenticated ? (
+            <button
+              onClick={() => { logout(); navigate('/') }}
+              className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-800 hover:bg-red-50 transition-colors"
+            >
+              Abmelden
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate('/register')}
+              className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-800 hover:bg-red-50 transition-colors"
+            >
+              Registrieren
+            </button>
+          )}
         </nav>
       )}
     </header>
