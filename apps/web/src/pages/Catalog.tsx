@@ -3,6 +3,7 @@ import type { Vehicle } from '../types'
 import { VehicleCard } from '../components/VehicleCard'
 import { useNavigate } from 'react-router-dom'
 import { Footer } from '../components/Footer'
+import { Navbar } from '../components/Navbar'
 
 const BRANDS = ['All', 'BMW', 'Mercedes', 'Audi', 'Volkswagen']
 const CATEGORIES = ['All', 'New', 'Used']
@@ -52,19 +53,7 @@ export function Catalog() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-8 py-4 shadow-sm flex justify-between items-center">
-        <h1 
-        onClick={() => navigate('/')} 
-        className="text-2xl font-bold tracking-widest uppercase cursor-pointer select-none text-red-800">
-          CasAuto Real
-          </h1>
-        <button
-          onClick={() => navigate('/admin')}
-          className="text-sm px-4 py-2 rounded-md border border-green-700 text-green-700 hover:bg-green-100 transition-colors"
-        >
-          Log In
-        </button>
-      </header>
+      <Navbar/>
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 flex flex-col md:flex-row gap-8">
         <button
