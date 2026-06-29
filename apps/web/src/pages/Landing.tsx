@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { Navbar } from '../components/Navbar'
 import { Footer } from '../components/Footer'
+import { Newsletter } from '../components/Newsletter'
 
 const REVIEWS = [
   {
@@ -83,6 +84,15 @@ export function Landing() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Newsletter */}
+      <section className="px-8 py-20 bg-gray-900 text-white">
+        <div className="max-w-2xl mx-auto text-center">
+          <h3 className="text-3xl font-bold mb-2">Newsletter</h3>
+          <p className="text-gray-400 mb-8">Bleiben Sie über unsere neuesten Fahrzeuge und Angebote informiert.</p>
+          <Newsletter />
         </div>
       </section>
       

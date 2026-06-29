@@ -7,6 +7,7 @@ import { VehiclesModule } from './vehicles/vehicles.module';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { NewsletterModule } from './newsletter/newsletter.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UsersModule } from './users/users.module';
     AppointmentsModule,
     AuthModule,
     UsersModule,
+    NewsletterModule,
   ],
   controllers: [AppController],
   providers: [AppService],
