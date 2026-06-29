@@ -1,19 +1,13 @@
 import { useNavigate } from 'react-router-dom'
+import { Navbar } from '../components/Navbar'
+import { Footer } from '../components/Footer'
 
 export function Karriere() {
   const navigate = useNavigate()
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-8 py-4 shadow-sm flex justify-between items-center">
-        <h1 onClick={() => navigate('/')} className="text-2xl font-bold tracking-widest uppercase text-red-800 cursor-pointer">CasAuto Real</h1>
-        <nav className="flex gap-6">
-          <button onClick={() => navigate('/fahrzeuge')} className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Fahrzeuge</button>
-          <button onClick={() => navigate('/unternehmen')} className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Unternehmen</button>
-          <button onClick={() => navigate('/karriere')} className="text-sm text-red-800 font-medium">Karriere</button>
-          <button onClick={() => navigate('/kontakt')} className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Kontakt</button>
-        </nav>
-      </header>
+      <Navbar/>
 
       <main className="max-w-4xl mx-auto px-8 py-16">
         <h2 className="text-4xl font-bold text-gray-900 mb-4">Karriere & Jobs</h2>
@@ -44,6 +38,9 @@ export function Karriere() {
           ))}
         </div>
       </main>
+
+      <Footer />
+
     </div>
   )
 }

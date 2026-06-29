@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Navbar } from '../components/Navbar'
+import { Footer } from '../components/Footer'
 
 export function Kontakt() {
-  const navigate = useNavigate()
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -21,43 +21,13 @@ export function Kontakt() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-8 py-4 shadow-sm flex justify-between items-center">
-        <h1 onClick={() => navigate('/')} className="text-2xl font-bold tracking-widest uppercase text-red-800 cursor-pointer">CasAuto Real</h1>
-        <nav className="flex gap-6">
-          <button onClick={() => navigate('/fahrzeuge')} className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Fahrzeuge</button>
-          <button onClick={() => navigate('/unternehmen')} className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Unternehmen</button>
-          <button onClick={() => navigate('/karriere')} className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Karriere</button>
-          <button onClick={() => navigate('/kontakt')} className="text-sm text-red-800 font-medium">Kontakt</button>
-        </nav>
-      </header>
+      <Navbar/>
 
       <main className="max-w-4xl mx-auto px-8 py-16">
         <h2 className="text-4xl font-bold text-gray-900 mb-4">Kontakt</h2>
         <p className="text-red-800 text-lg mb-12">Wir freuen uns von Ihnen zu hören</p>
 
-        <div className="grid grid-cols-2 gap-12">
-          <div className="space-y-6">
-            <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Adresse</p>
-              <p className="text-gray-700">Bessemerstraße 42A</p>
-              <p className="text-gray-700">12103 Berlin</p>
-            </div>
-            <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Telefon</p>
-              <p className="text-gray-700">+49 30 800 935 833</p>
-            </div>
-            <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Email</p>
-              <p className="text-gray-700">verkauf@autohaus-royal.de</p>
-            </div>
-            <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Öffnungszeiten</p>
-              <p className="text-gray-700">Mo–Fr: 09:00 – 19:00 Uhr</p>
-              <p className="text-gray-700">Sa: 09:00 – 16:00 Uhr</p>
-              <p className="text-gray-500">So: geschlossen</p>
-            </div>
-          </div>
-
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
             {sent ? (
               <div className="text-center py-8">
@@ -112,8 +82,35 @@ export function Kontakt() {
               </div>
             )}
           </div>
+
+          <div className="space-y-6">
+            <div>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Adresse</p>
+              <p className="text-gray-700">Bessemerstraße 42A</p>
+              <p className="text-gray-700">12103 Berlin</p>
+            </div>
+            <div>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Telefon</p>
+              <p className="text-gray-700">+49 30 800 935 833</p>
+            </div>
+            <div>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Email</p>
+              <p className="text-gray-700">verkauf@autohaus-royal.de</p>
+            </div>
+            <div>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Öffnungszeiten</p>
+              <p className="text-gray-700">Mo–Fr: 09:00 – 19:00 Uhr</p>
+              <p className="text-gray-700">Sa: 09:00 – 16:00 Uhr</p>
+              <p className="text-gray-500">So: geschlossen</p>
+            </div>
+          </div>
+
+          
         </div>
       </main>
+
+      <Footer />  
+      
     </div>
   )
 }

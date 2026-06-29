@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { Vehicle } from '../types'
 import { VehicleCard } from '../components/VehicleCard'
 import { useNavigate } from 'react-router-dom'
+import { Footer } from '../components/Footer'
 
 const BRANDS = ['All', 'BMW', 'Mercedes', 'Audi', 'Volkswagen']
 const CATEGORIES = ['All', 'New', 'Used']
@@ -18,6 +19,7 @@ export function Catalog() {
   const [maxPrice, setMaxPrice] = useState('')
   const [minYear, setMinYear] = useState('')
   const [maxYear, setMaxYear] = useState('')
+  const [showFilters, setShowFilters] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -64,10 +66,15 @@ export function Catalog() {
         </button>
       </header>
 
-      <div className="max-w-7xl mx-auto px-8 py-12 flex gap-8">
-
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 flex flex-col md:flex-row gap-8">
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className="md:hidden w-full border border-gray-200 rounded-lg px-4 py-2 text-sm text-gray-600 bg-white shadow-sm mb-2"
+        >
+          {showFilters ? 'Filtros verbergen ✕' : 'Filter anzeigen ☰'}
+        </button>
         {/* Sidebar */}
-        <aside className="w-64 shrink-0">
+        <aside className={`w-full md:w-64 md:shrink-0 ${showFilters ? 'block' : 'hidden'} md:block`}>
           <div className="bg-white border border-gray-200 rounded-lg p-6 space-y-6 shadow-sm">
             <div className="flex justify-between items-center">
               <h2 className="text-sm uppercase tracking-widest text-gray-400">Filter</h2>
@@ -209,8 +216,12 @@ export function Catalog() {
             ))}
           </div>
         </main>
-
-      </div>
+        {/* Footer */}
+        
+        
+        <Footer />
+        
+        </div>
     </div>
   )
 }

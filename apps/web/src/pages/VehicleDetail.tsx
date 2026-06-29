@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import type { Vehicle } from '../types'
 import { AppointmentForm } from '../components/AppointmentForm'
+import { Navbar } from '../components/Navbar'
+import { Footer } from '../components/Footer'
 
 export function VehicleDetail() {
   const { id } = useParams()
@@ -19,9 +21,7 @@ export function VehicleDetail() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-8 py-4 shadow-sm">
-        <h1 className="text-2xl font-bold tracking-widest uppercase text-red-800">CasAuto Real</h1>
-      </header>
+      <Navbar/>
 
       <main className="max-w-3xl mx-auto px-8 py-12">
         <button
@@ -72,6 +72,9 @@ export function VehicleDetail() {
           </div>
         )}
       </main>
+
+      <Footer />
+
     </div>
   )
 }
