@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Vehicle } from '../types'
 import { VehicleCard } from '../components/VehicleCard'
-import { useNavigate } from 'react-router-dom'
 import { Footer } from '../components/Footer'
 import { Navbar } from '../components/Navbar'
 
@@ -21,7 +20,6 @@ export function Catalog() {
   const [minYear, setMinYear] = useState('')
   const [maxYear, setMaxYear] = useState('')
   const [showFilters, setShowFilters] = useState(false)
-  const navigate = useNavigate()
 
   useEffect(() => {
     const params = new URLSearchParams()
