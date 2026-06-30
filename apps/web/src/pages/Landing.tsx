@@ -3,6 +3,7 @@ import { Navbar } from '../components/Navbar'
 import { Footer } from '../components/Footer'
 import { Newsletter } from '../components/Newsletter'
 import { motion } from 'framer-motion'
+import { ParticleBackground } from '../components/ParticleBackground'
 
 const REVIEWS = [
   {
@@ -32,42 +33,46 @@ export function Landing() {
     <div className="min-h-screen bg-white">
       <Navbar />
       {/* Hero */}
-      <section className="bg-gray-950 text-white px-8 py-20 md:py-32 text-center">
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-red-500 text-sm uppercase tracking-widest mb-4"
-        >
-          Berlin · Seit 2000
-        </motion.p>
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-4xl md:text-6xl font-bold mb-6"
-        >
-          Ihr Fahrzeug.<br />Ihre Wahl.
-        </motion.h2>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-gray-400 text-lg md:text-xl mb-12 max-w-xl mx-auto"
-        >
-          Über 1.800 hochwertige Fahrzeuge aller führenden Hersteller — direkt aus Berlin.
-        </motion.p>
-        <motion.button
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => navigate('/fahrzeuge')}
-          className="bg-red-800 hover:bg-red-700 text-white px-8 py-3 rounded font-medium text-lg transition-colors"
-        >
-          Fahrzeuge entdecken
-        </motion.button>
+      <section className="relative overflow-hidden bg-gray-950 text-white px-8 py-20 md:py-32 text-center">
+        <ParticleBackground />
+          <div className="relative z-10">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-red-500 text-sm uppercase tracking-widest mb-4"
+            >
+              Berlin · Seit 2000
+            </motion.p>
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-4xl md:text-6xl font-bold mb-6"
+            >
+              Ihr Fahrzeug.<br />Ihre Wahl.
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="text-gray-400 text-lg md:text-xl mb-12 max-w-xl mx-auto"
+            >
+              Über 1.800 hochwertige Fahrzeuge aller führenden Hersteller — direkt aus Berlin.
+            </motion.p>
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate('/fahrzeuge')}
+              className="bg-red-800 hover:bg-red-700 text-white px-8 py-3 rounded font-medium text-lg transition-colors"
+            >
+              Fahrzeuge entdecken
+            </motion.button>
+          </div>
+        
       </section>
 
       {/* Stats */}
