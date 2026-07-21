@@ -18,6 +18,12 @@ Fullstack web application for a German car dealership built with React, NestJS, 
 - Landing page with reviews and footer
 - Contact, About, and Careers pages
 
+## Architecture
+
+![Architecture diagram](docs/architecture.svg)
+
+The app runs inside a VPC: the frontend is served from an S3 bucket, the backend API runs in the public subnet, and MySQL lives in the private subnet, only reachable from the backend.
+
 ## Getting Started
 
 ### Prerequisites
