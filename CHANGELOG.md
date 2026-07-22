@@ -7,6 +7,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ## [Unreleased]
 
 ### Added
+- `terraform/` module for the VPC networking layer: VPC, public subnet (backend), private subnet (MySQL), Internet Gateway, and route tables, matching `docs/architecture.svg`.
+  - **Why:** the app currently runs on Railway, not the AWS architecture documented in the README/diagram. This starts building that architecture for real via Infrastructure as Code, beginning with the networking foundation everything else (security groups, EC2, MySQL, S3) depends on.
+  - The private subnet's route table has no route to the Internet Gateway, so MySQL stays unreachable from the internet by construction, not just by convention.
 - `CONTRIBUTING.md` documenting the branch/PR workflow, branch naming (`feat/`, `fix/`, `chore/`, `docs/`), commit convention, and a pre-PR checklist.
   - **Why:** the project had no documented workflow — all commits were being pushed directly to `main` with no review step, which is risky for a team project with a live deployment (Railway).
 - `.github/PULL_REQUEST_TEMPLATE.md` so new PRs are pre-filled with a summary field, change-type checkboxes, and the checklist from `CONTRIBUTING.md`.

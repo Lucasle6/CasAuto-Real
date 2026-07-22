@@ -114,6 +114,7 @@ autohaus/
 ├── apps/
 │   ├── web/          # React frontend
 │   └── api/          # NestJS backend
+├── terraform/        # AWS infrastructure (VPC, EC2, S3, MySQL) - see terraform/README.md
 ├── docker-compose.yml
 └── package.json
 \`\`\`
