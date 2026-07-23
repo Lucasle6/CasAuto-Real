@@ -34,3 +34,8 @@ output "mysql_security_group_id" {
   description = "Security group ID for the MySQL instance"
   value       = aws_security_group.mysql.id
 }
+
+output "mysql_private_ip" {
+  description = "Private IP of the MySQL instance - use this as DATABASE_HOST for the backend"
+  value       = aws_instance.mysql.private_ip
+}

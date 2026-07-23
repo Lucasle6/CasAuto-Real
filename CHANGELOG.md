@@ -7,6 +7,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ## [Unreleased]
 
 ### Added
+- `terraform/mysql.tf`: self-hosted MySQL 8 on an EC2 instance in the private subnet (`templates/mysql_user_data.sh.tpl` installs MySQL Community Server 8 and creates the app database/user on boot), instead of RDS.
+  - **Why:** RDS availability/instance-type limits in the team's AWS training sandbox are unknown; a plain EC2 instance only needs basic compute, which every sandbox allows. `mysql_app_password`/`mysql_root_password` are required, sensitive Terraform variables with no default so they can never end up committed.
 - `terraform/security_groups.tf`: security groups for the backend EC2 instance (SSH + API port) and MySQL (only reachable from the backend's security group, referenced by ID rather than a CIDR).
   - **Why:** the private subnet already has no route to the internet, but a security group referencing the backend group specifically is a second, independent layer — MySQL stays locked down even if the subnet routing ever changes.
 - `terraform/` module for the VPC networking layer: VPC, public subnet (backend), private subnet (MySQL), Internet Gateway, and route tables, matching `docs/architecture.svg`.
