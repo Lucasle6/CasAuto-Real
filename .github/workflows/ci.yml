@@ -1,0 +1,54 @@
+name: CI
+
+# Builds and lints both apps on every pull request to main and on pushes to main,
+# enforcing the pre-PR checklist from CONTRIBUTING.md automatically.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# Cancel an in-progress run when new commits are pushed to the same branch/PR.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-lint:
+    name: ${{ matrix.app }}
+    runs-on: ubuntu-latest
+    strategy:
+      # Report both apps even if one fails, instead of stopping at the first.
+      fail-fast: false
+      matrix:
+        app: [apps/api, apps/web]
+    defaults:
+      run:
+        working-directory: ${{ matrix.app }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: ${{ matrix.app }}/pnpm-lock.yaml
+
+      # --no-frozen-lockfile: apps/api's no-op .pnpmfile.cjs yields a pnpmfileChecksum
+      # that drifts between pnpm 9.x releases, which a frozen install rejects. Dependency
+      # versions still come from the committed lockfile (package.json and lock agree).
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Build
+        run: pnpm build
