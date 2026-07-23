@@ -49,6 +49,7 @@ This project uses a **branch + pull request** workflow. Direct pushes to `main` 
 - [ ] Lint passes in both apps: `pnpm lint`
 - [ ] No `.env` files, credentials, or other secrets are committed
 - [ ] New environment variables are documented in the relevant `.env.example`
+- [ ] If the change affects what a part of the app does (new feature, changed behavior, different hosting), [ERKLAERUNG.md](ERKLAERUNG.md) is updated to match — it's the plain-language explanation of the app for non-technical readers, and it decays fast if forgotten
 
 ## Versioning
 

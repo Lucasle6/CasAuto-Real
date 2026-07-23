@@ -7,6 +7,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ## [Unreleased]
 
 ### Added
+- `ERKLAERUNG.md`: plain-language explanation of what the app does and how its parts (frontend, backend, database, hosting) fit together, for non-technical readers. Added a checklist item to `CONTRIBUTING.md` and the PR template requiring it to be kept up to date whenever a change affects what the app does.
+  - **Why:** `README.md` and `CHANGELOG.md` assume technical background; this gives a version that's actually usable to explain the project to someone without it, and ties its upkeep to the existing PR checklist so it doesn't go stale the way `.env.example` did.
 - `terraform/security_groups.tf`: security groups for the backend EC2 instance (SSH + API port) and MySQL (only reachable from the backend's security group, referenced by ID rather than a CIDR).
   - **Why:** the private subnet already has no route to the internet, but a security group referencing the backend group specifically is a second, independent layer — MySQL stays locked down even if the subnet routing ever changes.
 - `terraform/` module for the VPC networking layer: VPC, public subnet (backend), private subnet (MySQL), Internet Gateway, and route tables, matching `docs/architecture.svg`.
