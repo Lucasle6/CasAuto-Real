@@ -7,6 +7,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ## [Unreleased]
 
 ### Added
+- Vercel deployment for `apps/web` (`terraform`-independent, live at https://cas-auto-real-web.vercel.app/), plus `apps/web/vercel.json` with an SPA rewrite rule so React Router routes don't 404 on direct navigation.
+  - **Why:** gives the team and reviewers a permanent, free, always-on link to the frontend that doesn't depend on the Railway trial or the AWS sandbox (which resets periodically).
+- `terraform/bootstrap/` module creating an S3 bucket + DynamoDB table, and switched `terraform/main.tf` to a remote `s3` backend (partial config via `terraform/backend.hcl`, gitignored).
+  - **Why:** the team now shares one AWS sandbox account; with more than one person running `terraform apply`, local state would silently conflict between machines. Bootstrap is a separate module (with its own local state) because the S3 backend can't be used to store the state of the resources that create it.
 - `terraform/` module for the VPC networking layer: VPC, public subnet (backend), private subnet (MySQL), Internet Gateway, and route tables, matching `docs/architecture.svg`.
   - **Why:** the app currently runs on Railway, not the AWS architecture documented in the README/diagram. This starts building that architecture for real via Infrastructure as Code, beginning with the networking foundation everything else (security groups, EC2, MySQL, S3) depends on.
   - The private subnet's route table has no route to the Internet Gateway, so MySQL stays unreachable from the internet by construction, not just by convention.

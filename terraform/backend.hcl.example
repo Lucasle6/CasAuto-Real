@@ -1,0 +1,15 @@
+# Copy to backend.hcl (gitignored) after running `terraform apply` inside
+# ./bootstrap, filling in its outputs:
+#
+#   cd bootstrap && terraform init && terraform apply
+#   terraform output
+#
+# Then from terraform/:
+#   terraform init -backend-config=backend.hcl
+#
+# Re-run this whenever the sandbox resets and bootstrap gets re-applied,
+# since the bucket name includes the AWS account ID.
+
+bucket         = "casauto-tfstate-<ACCOUNT_ID>"
+region         = "eu-central-1"
+dynamodb_table = "casauto-tf-lock"
