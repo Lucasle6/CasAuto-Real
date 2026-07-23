@@ -1,0 +1,24 @@
+# Keeps the Docker build context small and secrets/artifacts out of the image.
+
+# Dependencies and build outputs (reinstalled/rebuilt inside the image)
+**/node_modules
+**/dist
+**/build
+**/coverage
+
+# Local env files with real secrets (the image gets its config at runtime).
+# .env.example is intentionally NOT ignored.
+**/.env
+**/.env.local
+**/.env.*.local
+
+# VCS / CI / editor / OS noise
+.git
+.github
+.gitignore
+**/*.log
+.DS_Store
+
+# Not needed to build or run the backend image
+terraform
+docs
