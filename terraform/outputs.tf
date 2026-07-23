@@ -44,3 +44,8 @@ output "mysql_public_ip" {
   description = "Public IP of the MySQL instance. It gets one because the public subnet's only route out is the Internet Gateway, which requires a public IP for outbound traffic (needed for the dnf install in user_data) - there's no NAT Gateway. Port 3306 is still restricted to the backend security group only; nothing else is open."
   value       = aws_instance.mysql.public_ip
 }
+
+output "backend_public_ip" {
+  description = "Public IP of the backend EC2 instance - the API is reachable at http://<this>:<backend_port>"
+  value       = aws_instance.backend.public_ip
+}
