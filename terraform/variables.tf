@@ -81,3 +81,27 @@ variable "mysql_root_password" {
   type        = string
   sensitive   = true
 }
+
+variable "backend_instance_type" {
+  description = "EC2 instance type for the backend"
+  type        = string
+  default     = "t3.micro"
+}
+
+variable "git_repo_url" {
+  description = "Git URL the backend instance clones to build its Docker image"
+  type        = string
+  default     = "https://github.com/Lucasle6/CasAuto-Real.git"
+}
+
+variable "git_branch" {
+  description = "Branch/ref to check out on the backend instance. Must contain apps/api/Dockerfile."
+  type        = string
+  default     = "main"
+}
+
+variable "jwt_secret" {
+  description = "Secret used to sign JWT auth tokens. Set via terraform.tfvars (gitignored) or TF_VAR_jwt_secret - never commit it."
+  type        = string
+  sensitive   = true
+}

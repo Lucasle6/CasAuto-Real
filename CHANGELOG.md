@@ -7,6 +7,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ## [Unreleased]
 
 ### Added
+- `terraform/ec2.tf` + `terraform/iam.tf`: backend EC2 instance in the public subnet, with an IAM role/instance profile granting only SSM Session Manager access. `templates/backend_user_data.sh.tpl` clones the repo, builds `apps/api/Dockerfile`, and runs it with the DB connection and JWT secret injected as env vars.
+  - **Why:** no container registry exists in this setup, so the instance builds its own image from source at boot rather than pulling a prebuilt one. The IAM role only grants SSM, not broader AWS access, because the app doesn't call any AWS APIs at runtime — SSM's value is shelling into the instance without managing SSH keys, on top of the existing (open by default) port-22 rule.
 - `terraform/mysql.tf`: self-hosted MySQL 8 on an EC2 instance in the private subnet (`templates/mysql_user_data.sh.tpl` installs MySQL Community Server 8 and creates the app database/user on boot), instead of RDS.
   - **Why:** RDS availability/instance-type limits in the team's AWS training sandbox are unknown; a plain EC2 instance only needs basic compute, which every sandbox allows. `mysql_app_password`/`mysql_root_password` are required, sensitive Terraform variables with no default so they can never end up committed.
 - `terraform/security_groups.tf`: security groups for the backend EC2 instance (SSH + API port) and MySQL (only reachable from the backend's security group, referenced by ID rather than a CIDR).

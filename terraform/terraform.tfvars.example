@@ -17,8 +17,14 @@ mysql_instance_type  = "t3.micro"
 mysql_database       = "autohaus_db"
 mysql_app_user       = "app"
 
-# mysql_app_password and mysql_root_password have NO default and are
-# marked sensitive - do NOT put real values in this file (it's committed).
-# Set them via terraform.tfvars (gitignored) or environment variables:
+backend_instance_type = "t3.micro"
+git_repo_url          = "https://github.com/Lucasle6/CasAuto-Real.git"
+git_branch            = "main"
+
+# mysql_app_password, mysql_root_password, and jwt_secret have NO default
+# and are marked sensitive - do NOT put real values in this file (it's
+# committed). Set them via terraform.tfvars (gitignored) or environment
+# variables instead:
 #   export TF_VAR_mysql_app_password="..."
 #   export TF_VAR_mysql_root_password="..."
+#   export TF_VAR_jwt_secret="..."

@@ -39,3 +39,8 @@ output "mysql_private_ip" {
   description = "Private IP of the MySQL instance - use this as DATABASE_HOST for the backend"
   value       = aws_instance.mysql.private_ip
 }
+
+output "backend_public_ip" {
+  description = "Public IP of the backend EC2 instance - the API is reachable at http://<this>:<backend_port>"
+  value       = aws_instance.backend.public_ip
+}
