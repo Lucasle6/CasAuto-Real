@@ -7,6 +7,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ## [Unreleased]
 
 ### Added
+- `ERKLAERUNG.md`: plain-language explanation of what the app does and how its parts (frontend, backend, database, hosting) fit together, for non-technical readers. Added a checklist item to `CONTRIBUTING.md` and the PR template requiring it to be kept up to date whenever a change affects what the app does.
+  - **Why:** `README.md` and `CHANGELOG.md` assume technical background; this gives a version that's actually usable to explain the project to someone without it, and ties its upkeep to the existing PR checklist so it doesn't go stale the way `.env.example` did.
 - `.github/workflows/ci.yml`: a GitHub Actions workflow that builds and lints both `apps/api` and `apps/web` on every pull request to `main` and on pushes to `main`.
   - **Why:** the pre-PR checklist in `CONTRIBUTING.md` (build + lint both apps) depended on contributors remembering to run it locally. Running it automatically on each PR turns those checks into an enforced gate and catches breakage before review, which matters more now that all changes flow through PRs.
 - `apps/api/Dockerfile` (multi-stage) and a root `.dockerignore`, producing a production image for the backend.
