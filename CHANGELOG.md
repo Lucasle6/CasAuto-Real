@@ -23,6 +23,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Synced version numbers across `package.json` (root), `apps/web/package.json`, and `apps/api/package.json` to `1.0.0`.
   - **Why:** frontend and backend are deployed together and are only meaningful as a pair — three different, unrelated version numbers for one deployed app was misleading rather than useful.
 
+### Fixed
+- `apps/api/.env.example` documented the database variables under the wrong names (`DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_USER`, `DATABASE_PASSWORD`, `DATABASE_NAME`), but the backend actually reads `MYSQLHOST`, `MYSQLPORT`, `MYSQLUSER`, `MYSQLPASSWORD`, `MYSQLDATABASE` (`apps/api/src/app.module.ts`). Corrected the names and added the previously undocumented `PORT` variable.
+  - **Why:** a new contributor copying `.env.example` to `.env` would end up with an app that silently fails to reach MySQL, because none of the documented names are the ones the code reads. The correct names are the ones Railway injects for its MySQL service, so the example now matches both the code and the deployment, and stays valid when the same variables are set manually on AWS later.
+
 ## [1.0.0] - 2026-07-21
 
 Baseline release, corresponding to the state of `main` prior to introducing formal versioning and changelog tracking. Earlier history is available via `git log`.
