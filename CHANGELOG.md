@@ -7,6 +7,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ## [Unreleased]
 
 ### Added
+- `terraform/s3.tf`: S3 bucket with static website hosting for the frontend, public read via bucket policy, `index.html` as both index and error document (same SPA-fallback reasoning as `apps/web/vercel.json`'s rewrite rule).
+  - **Why:** completes the Terraform/AWS architecture from `docs/architecture.svg`. Only provisions the bucket, not a deploy step — the frontend's actual live deployment is Vercel, so this exists as the graded infrastructure deliverable rather than something we depend on day-to-day.
 - `terraform/security_groups.tf`: security groups for the backend EC2 instance (SSH + API port) and MySQL (only reachable from the backend's security group, referenced by ID rather than a CIDR).
   - **Why:** the private subnet already has no route to the internet, but a security group referencing the backend group specifically is a second, independent layer — MySQL stays locked down even if the subnet routing ever changes.
 - `terraform/` module for the VPC networking layer: VPC, public subnet (backend), private subnet (MySQL), Internet Gateway, and route tables, matching `docs/architecture.svg`.
