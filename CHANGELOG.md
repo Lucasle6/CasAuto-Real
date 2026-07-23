@@ -7,6 +7,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ## [Unreleased]
 
 ### Added
+- `terraform/s3.tf`: S3 bucket with static website hosting for the frontend, public read via bucket policy, `index.html` as both index and error document (same SPA-fallback reasoning as `apps/web/vercel.json`'s rewrite rule).
+  - **Why:** completes the Terraform/AWS architecture from `docs/architecture.svg`. Only provisions the bucket, not a deploy step — the frontend's actual live deployment is Vercel, so this exists as the graded infrastructure deliverable rather than something we depend on day-to-day.
+  - Two known limitations, documented in `terraform/README.md`: the website endpoint is HTTP only (S3 doesn't support HTTPS directly, would need CloudFront), and the error document is served with a 404 status rather than a true 200 rewrite (inherent to S3 website hosting) - both fine for this deliverable, called out by Jose in review.
 - `.github/workflows/ci.yml`: a GitHub Actions workflow that builds and lints both `apps/api` and `apps/web` on every pull request to `main` and on pushes to `main`.
   - **Why:** the pre-PR checklist in `CONTRIBUTING.md` (build + lint both apps) depended on contributors remembering to run it locally. Running it automatically on each PR turns those checks into an enforced gate and catches breakage before review, which matters more now that all changes flow through PRs.
 - `apps/api/Dockerfile` (multi-stage) and a root `.dockerignore`, producing a production image for the backend.

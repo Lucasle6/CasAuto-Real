@@ -49,3 +49,13 @@ output "backend_public_ip" {
   description = "Public IP of the backend EC2 instance - the API is reachable at http://<this>:<backend_port>"
   value       = aws_instance.backend.public_ip
 }
+
+output "frontend_bucket_name" {
+  description = "S3 bucket name - target for `aws s3 sync apps/web/dist s3://<this>`"
+  value       = aws_s3_bucket.frontend.id
+}
+
+output "frontend_website_endpoint" {
+  description = "S3 static website URL for the frontend (HTTP only - see terraform/README.md)"
+  value       = aws_s3_bucket_website_configuration.frontend.website_endpoint
+}
