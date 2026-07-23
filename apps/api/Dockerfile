@@ -22,16 +22,11 @@ RUN corepack enable && corepack prepare pnpm@9 --activate
 # Root manifest is the target of apps/api's "file:../.." dependency.
 COPY package.json ./package.json
 # Backend manifest, lockfile, and pnpm config first, so this install layer stays
-# cached until they change. .pnpmfile.cjs is checksummed inside the lockfile, so a
-# --frozen-lockfile install fails if it is missing.
-COPY apps/api/package.json apps/api/pnpm-lock.yaml apps/api/.pnpmfile.cjs apps/api/pnpm.yaml ./apps/api/
+# cached until they change.
+COPY apps/api/package.json apps/api/pnpm-lock.yaml apps/api/pnpm.yaml ./apps/api/
 
 WORKDIR /app/apps/api
-# --no-frozen-lockfile: the repo's no-op .pnpmfile.cjs yields a pnpmfileChecksum that
-# drifts between pnpm 9.x patch releases, which a frozen install rejects. The file does
-# nothing and package.json still agrees with the lockfile, so resolved dependency
-# versions are unchanged, only the checksum is tolerated.
-RUN pnpm install --no-frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 # Backend source, then compile to dist/.
 COPY apps/api/ ./
