@@ -39,3 +39,15 @@ variable "private_subnet_cidr" {
   type        = string
   default     = "10.0.2.0/24"
 }
+
+variable "ssh_allowed_cidr" {
+  description = "CIDR allowed to SSH into the backend EC2 instance. Override in terraform.tfvars to restrict to your own IP (e.g. \"203.0.113.4/32\")."
+  type        = string
+  default     = "0.0.0.0/0"
+}
+
+variable "backend_port" {
+  description = "Port the NestJS API listens on"
+  type        = number
+  default     = 3000
+}

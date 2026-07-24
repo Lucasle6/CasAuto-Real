@@ -24,3 +24,13 @@ output "private_subnet_id" {
   description = "ID of the private subnet (for the MySQL instance)"
   value       = aws_subnet.private.id
 }
+
+output "backend_security_group_id" {
+  description = "Security group ID for the backend EC2 instance"
+  value       = aws_security_group.backend.id
+}
+
+output "mysql_security_group_id" {
+  description = "Security group ID for the MySQL instance"
+  value       = aws_security_group.mysql.id
+}
