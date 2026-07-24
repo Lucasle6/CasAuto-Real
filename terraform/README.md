@@ -5,10 +5,10 @@ Provisions the AWS architecture described in the [root README](../README.md#arch
 ## Status
 
 - [x] VPC, subnets, Internet Gateway, route tables (`vpc.tf`)
-- [ ] Security groups
+- [x] Security groups (`security_groups.tf`) — backend (SSH + API port) and MySQL (only reachable from the backend group)
 - [ ] MySQL instance in the private subnet
 - [ ] EC2 for the backend + IAM roles
-- [ ] S3 + static hosting for the frontend
+- [ ] S3 + static hosting for the frontend (lower priority — frontend is already live on Vercel: https://cas-auto-real-web.vercel.app/)
 
 ## Usage
 
