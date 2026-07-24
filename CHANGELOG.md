@@ -7,6 +7,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ## [Unreleased]
 
 ### Added
+- `apps/web/vercel.json`: an `/api/:path*` rewrite that proxies to the AWS backend (`http://52.59.222.217:3000`), listed before the SPA catch-all so it matches first.
+  - **Why:** the frontend on Vercel is served over HTTPS but the backend EC2 only serves HTTP, so the browser would block direct calls as mixed content. Routing API calls through a same-origin `/api` path lets Vercel proxy them to the backend server-side over HTTP, which the browser never sees, so it sidesteps both mixed content and CORS. With `VITE_API_URL` set to `/api` in Vercel, every existing `${VITE_API_URL}/...` call resolves to the proxied path with no other code change. The catch-all SPA rewrite stays last because Vercel applies the first matching rewrite. Note the backend IP is the instance's public IP, which changes if the instance is replaced without an Elastic IP.
 - `.github/workflows/ci.yml`: a GitHub Actions workflow that builds and lints both `apps/api` and `apps/web` on every pull request to `main` and on pushes to `main`.
   - **Why:** the pre-PR checklist in `CONTRIBUTING.md` (build + lint both apps) depended on contributors remembering to run it locally. Running it automatically on each PR turns those checks into an enforced gate and catches breakage before review, which matters more now that all changes flow through PRs.
 - `apps/api/Dockerfile` (multi-stage) and a root `.dockerignore`, producing a production image for the backend.
@@ -37,6 +39,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ### Fixed
 - `terraform/templates/mysql_user_data.sh.tpl` failed to fully provision MySQL on the first real apply, in two places: `dnf install mysql-community-server` hit `GPG check FAILED` (the `mysql80-community-release-el9` RPM ships the 2022 signing key, but the current 8.0.46 packages use the 2023 key, now imported before the install), and the final `sed` targeted `/etc/my.cnf.d/mysql-server.cnf`, which does not exist on Amazon Linux 2023, so it failed the whole script under `set -e` (replaced with a `bind-address` drop-in config). Also documented the MySQL password-policy and shell-safety requirements in `terraform.tfvars.example`.
   - **Why:** each bug left MySQL running but unconfigured (no app database or user), so the backend could never connect. Found by running the first real `terraform apply` end to end.
+- `apps/web/src/components/AppointmentForm.tsx` called `http://localhost:3000/appointments` directly instead of `${import.meta.env.VITE_API_URL}/appointments` like every other component.
+  - **Why:** booking a test drive only worked against a local dev backend and silently did nothing in production, and it would have bypassed the new `/api` proxy entirely. It now uses the same configured base URL as the rest of the app.
 - `terraform/mysql.tf` originally placed MySQL in the private subnet, which has no NAT Gateway - `user_data`'s `dnf install` would have silently failed with no internet route to reach it. Moved to the public subnet; see the "Added" entry above for the trade-off.
   - **Why:** caught in review (thanks Jose) before this was ever applied - would have produced a MySQL instance stuck at boot with no working install.
 - `apps/api/src/main.ts` awaited an already-resolved value: `(await app).enableCors()` is now `app.enableCors()` (`app` is already awaited on the line above).
