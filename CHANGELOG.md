@@ -28,6 +28,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ### Fixed
 - `apps/api/src/main.ts` awaited an already-resolved value: `(await app).enableCors()` is now `app.enableCors()` (`app` is already awaited on the line above).
   - **Why:** the extra `await` is a no-op at runtime but trips `@typescript-eslint/await-thenable` as an error, which fails the lint step and would block the CI pipeline.
+- `apps/api/.env.example` documented the database variables under the wrong names (`DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_USER`, `DATABASE_PASSWORD`, `DATABASE_NAME`), but the backend actually reads `MYSQLHOST`, `MYSQLPORT`, `MYSQLUSER`, `MYSQLPASSWORD`, `MYSQLDATABASE` (`apps/api/src/app.module.ts`). Corrected the names and added the previously undocumented `PORT` variable.
+  - **Why:** a new contributor copying `.env.example` to `.env` would end up with an app that silently fails to reach MySQL, because none of the documented names are the ones the code reads. The correct names are the ones Railway injects for its MySQL service, so the example now matches both the code and the deployment, and stays valid when the same variables are set manually on AWS later.
 
 ## [1.0.0] - 2026-07-21
 
