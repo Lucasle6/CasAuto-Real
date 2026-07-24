@@ -23,6 +23,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Synced version numbers across `package.json` (root), `apps/web/package.json`, and `apps/api/package.json` to `1.0.0`.
   - **Why:** frontend and backend are deployed together and are only meaningful as a pair — three different, unrelated version numbers for one deployed app was misleading rather than useful.
 
+### Fixed
+- `apps/api/src/main.ts` awaited an already-resolved value: `(await app).enableCors()` is now `app.enableCors()` (`app` is already awaited on the line above).
+  - **Why:** the extra `await` is a no-op at runtime but trips `@typescript-eslint/await-thenable` as an error, which fails the lint step and would block the CI pipeline.
+
 ## [1.0.0] - 2026-07-21
 
 Baseline release, corresponding to the state of `main` prior to introducing formal versioning and changelog tracking. Earlier history is available via `git log`.
