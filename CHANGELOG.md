@@ -7,6 +7,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ## [Unreleased]
 
 ### Added
+- `.github/workflows/ci.yml`: a GitHub Actions workflow that builds and lints both `apps/api` and `apps/web` on every pull request to `main` and on pushes to `main`.
+  - **Why:** the pre-PR checklist in `CONTRIBUTING.md` (build + lint both apps) depended on contributors remembering to run it locally. Running it automatically on each PR turns those checks into an enforced gate and catches breakage before review, which matters more now that all changes flow through PRs.
 - `apps/api/Dockerfile` (multi-stage) and a root `.dockerignore`, producing a production image for the backend.
   - **Why:** deploying to EC2, unlike Railway, needs the app packaged as a self-contained runnable artifact. The builder stage compiles the TypeScript and the runtime stage ships only the compiled `dist/` plus production dependencies on a slim, non-root image, keeping it small and free of source/dev tooling. The build context is the repo root because `apps/api` links to the workspace root via `file:../..`.
 - `terraform/security_groups.tf`: security groups for the backend EC2 instance (SSH + API port) and MySQL (only reachable from the backend's security group, referenced by ID rather than a CIDR).
