@@ -35,7 +35,7 @@ variable "public_subnet_cidr" {
 }
 
 variable "private_subnet_cidr" {
-  description = "CIDR block for the private subnet (MySQL)"
+  description = "CIDR block for the private subnet (currently unused - see mysql.tf for why MySQL runs in the public subnet instead)"
   type        = string
   default     = "10.0.2.0/24"
 }
@@ -50,4 +50,34 @@ variable "backend_port" {
   description = "Port the NestJS API listens on"
   type        = number
   default     = 3000
+}
+
+variable "mysql_instance_type" {
+  description = "EC2 instance type for the self-hosted MySQL instance"
+  type        = string
+  default     = "t3.micro"
+}
+
+variable "mysql_database" {
+  description = "Name of the application database to create"
+  type        = string
+  default     = "autohaus_db"
+}
+
+variable "mysql_app_user" {
+  description = "MySQL user the backend connects as"
+  type        = string
+  default     = "app"
+}
+
+variable "mysql_app_password" {
+  description = "Password for the backend's MySQL user. Set via terraform.tfvars (gitignored) or TF_VAR_mysql_app_password - never commit it."
+  type        = string
+  sensitive   = true
+}
+
+variable "mysql_root_password" {
+  description = "MySQL root password. Set via terraform.tfvars (gitignored) or TF_VAR_mysql_root_password - never commit it."
+  type        = string
+  sensitive   = true
 }
