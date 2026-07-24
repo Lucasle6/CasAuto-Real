@@ -41,11 +41,10 @@ jobs:
           cache: pnpm
           cache-dependency-path: ${{ matrix.app }}/pnpm-lock.yaml
 
-      # --no-frozen-lockfile: apps/api's no-op .pnpmfile.cjs yields a pnpmfileChecksum
-      # that drifts between pnpm 9.x releases, which a frozen install rejects. Dependency
-      # versions still come from the committed lockfile (package.json and lock agree).
+      # --frozen-lockfile: fail if the committed lockfile is out of sync with
+      # package.json, so CI installs exactly what is locked and never silently updates it.
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Lint
         run: pnpm lint
