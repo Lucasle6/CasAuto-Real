@@ -35,7 +35,7 @@ variable "public_subnet_cidr" {
 }
 
 variable "private_subnet_cidr" {
-  description = "CIDR block for the private subnet (MySQL)"
+  description = "CIDR block for the private subnet (currently unused - see mysql.tf for why MySQL runs in the public subnet instead)"
   type        = string
   default     = "10.0.2.0/24"
 }

@@ -24,6 +24,8 @@ Fullstack web application for a German car dealership built with React, NestJS, 
 
 The app runs inside a VPC: the frontend is served from an S3 bucket, the backend API runs in the public subnet, and MySQL lives in the private subnet, only reachable from the backend.
 
+> **Note:** the current Terraform implementation runs MySQL in the public subnet instead, restricted to the backend by security group rather than subnet isolation - see [terraform/README.md](terraform/README.md) for why. The diagram above shows the target design this deviates from.
+
 ## Getting Started
 
 ### Prerequisites

@@ -1,6 +1,14 @@
-# Self-hosted MySQL 8 on a plain EC2 instance in the private subnet -
-# chosen over RDS because the sandbox account's RDS availability/limits
-# are unknown, and a bare EC2 instance works in any sandbox.
+# Self-hosted MySQL 8 on a plain EC2 instance - chosen over RDS because the
+# sandbox account's RDS availability/limits are unknown, and a bare EC2
+# instance works in any sandbox.
+#
+# Runs in the PUBLIC subnet, not the private one: the private subnet has no
+# route to the internet (no NAT), so user_data's `dnf install` of MySQL
+# would silently fail there. Putting it in the public subnet instead of
+# adding a NAT Gateway avoids that ongoing cost. This does trade away the
+# "no route out of the subnet at all" isolation - what still stands between
+# MySQL and the internet is security_groups.tf's aws_security_group.mysql,
+# which only allows port 3306 from the backend's security group, nothing else.
 
 data "aws_ami" "amazon_linux" {
   most_recent = true
@@ -20,7 +28,7 @@ data "aws_ami" "amazon_linux" {
 resource "aws_instance" "mysql" {
   ami                    = data.aws_ami.amazon_linux.id
   instance_type          = var.mysql_instance_type
-  subnet_id              = aws_subnet.private.id
+  subnet_id              = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.mysql.id]
 
   user_data = templatefile("${path.module}/templates/mysql_user_data.sh.tpl", {
