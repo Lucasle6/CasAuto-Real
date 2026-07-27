@@ -29,8 +29,11 @@ git_branch            = "main"
 #   export TF_VAR_mysql_root_password="..."
 #   export TF_VAR_jwt_secret="..."
 #
-# The MySQL passwords must satisfy MySQL 8's default validate_password policy
-# (>= 8 chars with upper, lower, digit, and a special character), or the ALTER USER
-# / CREATE USER in mysql_user_data.sh.tpl fails. Also pick characters that are safe
-# both unquoted in a shell (the backend passes the password to `docker run -e`
-# without quotes) and inside single-quoted SQL: avoid ' " ` \ and $. Underscore works.
+# The MySQL passwords (and jwt_secret) must satisfy MySQL 8's default
+# validate_password policy (>= 8 chars with upper, lower, digit, and a special
+# character), or the ALTER USER / CREATE USER in mysql_user_data.sh.tpl fails.
+# Also avoid ' " ` \ and $ - mysql_app_password/mysql_root_password go into a
+# single-quoted SQL string, and mysql_app_password/jwt_secret also into a
+# double-quoted docker run -e value (backend_user_data.sh.tpl), and those four
+# characters are unsafe in both contexts. Everything else (spaces, & ; ( ) etc.)
+# is fine now that both templates quote their interpolated values.
