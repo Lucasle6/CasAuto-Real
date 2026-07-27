@@ -7,6 +7,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ## [Unreleased]
 
 ### Added
+- `terraform/s3.tf`: S3 bucket with static website hosting for the frontend, public read via bucket policy, `index.html` as both index and error document (same SPA-fallback reasoning as `apps/web/vercel.json`'s rewrite rule).
+  - **Why:** completes the Terraform/AWS architecture from `docs/architecture.svg`. Only provisions the bucket, not a deploy step — the frontend's actual live deployment is Vercel, so this exists as the graded infrastructure deliverable rather than something we depend on day-to-day.
+  - Two known limitations, documented in `terraform/README.md`: the website endpoint is HTTP only (S3 doesn't support HTTPS directly, would need CloudFront), and the error document is served with a 404 status rather than a true 200 rewrite (inherent to S3 website hosting) - both fine for this deliverable, called out by Jose in review.
 - `ERKLAERUNG.md`: plain-language explanation of what the app does and how its parts (frontend, backend, database, hosting) fit together, for non-technical readers. Added a checklist item to `CONTRIBUTING.md` and the PR template requiring it to be kept up to date whenever a change affects what the app does.
   - **Why:** `README.md` and `CHANGELOG.md` assume technical background; this gives a version that's actually usable to explain the project to someone without it, and ties its upkeep to the existing PR checklist so it doesn't go stale the way `.env.example` did.
 - `.github/workflows/ci.yml`: a GitHub Actions workflow that builds and lints both `apps/api` and `apps/web` on every pull request to `main` and on pushes to `main`.

@@ -10,9 +10,13 @@ Provisions the AWS architecture described in the [root README](../README.md#arch
 - [x] Security groups (`security_groups.tf`) — backend (SSH + API port) and MySQL (only reachable from the backend group)
 - [x] MySQL instance (`mysql.tf`) — self-hosted MySQL 8 on EC2, not RDS (RDS availability in the sandbox is unknown). Runs in the **public** subnet, not private as originally planned - the private subnet has no NAT, so `dnf install` in `user_data` couldn't reach the internet there. Locked down to the backend's security group only (port 3306, nothing else). See the comment in `mysql.tf`.
 - [x] EC2 for the backend + IAM roles (`ec2.tf`, `iam.tf`) — builds `apps/api/Dockerfile` from a fresh git clone on boot and runs it
-- [ ] S3 + static hosting for the frontend (lower priority — frontend is already live on Vercel: https://cas-auto-real-web.vercel.app/)
+- [x] S3 + static hosting for the frontend (`s3.tf`) — provisions the bucket only; `apps/web/dist` still needs to be synced there manually or via CI. The frontend is already live on Vercel: https://cas-auto-real-web.vercel.app/, so this is the Terraform/architecture deliverable, not the primary deployment.
 
 **Note:** the backend instance needs `apps/api/Dockerfile` to exist on whatever branch `git_branch` points at (default `main`) — merge the backend-dockerfile PR before applying this.
+
+**S3 limitations (fine for this deliverable, worth knowing):**
+- The website endpoint is **HTTP only** - S3 static website hosting doesn't support HTTPS directly. Getting HTTPS in front of it would mean adding CloudFront (or another CDN/proxy), which is out of scope here since the frontend's real deployment is Vercel anyway.
+- `error_document` (`index.html`, for React Router's client-side routes) is served with an actual **404 status code**, not a 200 - S3 website hosting always does this for the configured error document, there's no way to make it a true rewrite without CloudFront + a rewrite function. The page still renders correctly since the browser gets the HTML regardless of status code, but this differs from `apps/web/vercel.json`'s rewrite, which returns 200.
 
 ## Usage
 
