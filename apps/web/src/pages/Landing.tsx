@@ -30,7 +30,7 @@ export function Landing() {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       {/* Hero */}
       <section className="relative overflow-hidden bg-gray-950 text-white px-8 py-20 md:py-32 text-center">
