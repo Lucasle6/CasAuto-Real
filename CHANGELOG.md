@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Fixed
+- `terraform/templates/backend_user_data.sh.tpl` passed `mysql_app_password`/`jwt_secret` (and the other `docker run -e` values) unquoted, so shell metacharacters in them weren't just risky - confirmed exploitable: a password containing `&` split the command into two, and a value containing `$(...)` executed as a real command substitution on the instance at boot. Quoted every interpolated value; updated the character-avoidance note in `terraform.tfvars.example` to reflect that only `' " \` and `$` remain unsafe now (previously incomplete - it also missed jwt_secret entirely).
+  - **Why:** found during a full review of the applied infrastructure, not from a live incident - the passwords chosen so far happened not to contain the dangerous characters. Since MySQL's own password policy commonly produces exactly those characters (`&`, `(`, `)`, `#`, etc.), the next password rotation could easily have hit it.
+
 ### Added
 - `terraform/eip.tf`: an Elastic IP allocated to the backend instance, plus `ignore_changes = [ami, user_data]` on both EC2 instances (`ec2.tf`, `mysql.tf`).
   - **Why:** the backend's public IP is hardcoded in `apps/web/vercel.json`'s `/api` proxy target, and an auto-assigned public IP changes whenever the instance is replaced, silently breaking the proxy — the Elastic IP pins the address. The `ignore_changes` guards a worse failure found while adding the EIP: `data.aws_ami` (`most_recent = true`) had already drifted to a newer Amazon Linux image, so the next `terraform apply` wanted to replace both instances, which would have destroyed the MySQL database (the migrated vehicle data) as a side effect of an unrelated change. Pinning the AMI keeps the running instances in place; `user_data` is ignored too because it only runs on first boot, so updating it in place is pointless churn that just stops/starts the instance.

@@ -16,11 +16,11 @@ docker run -d \
   --name casauto-api \
   --restart unless-stopped \
   -p ${backend_port}:${backend_port} \
-  -e PORT=${backend_port} \
-  -e MYSQLHOST=${mysql_host} \
-  -e MYSQLPORT=${mysql_port} \
-  -e MYSQLUSER=${mysql_user} \
-  -e MYSQLPASSWORD=${mysql_password} \
-  -e MYSQLDATABASE=${mysql_database} \
-  -e JWT_SECRET=${jwt_secret} \
+  -e PORT="${backend_port}" \
+  -e MYSQLHOST="${mysql_host}" \
+  -e MYSQLPORT="${mysql_port}" \
+  -e MYSQLUSER="${mysql_user}" \
+  -e MYSQLPASSWORD="${mysql_password}" \
+  -e MYSQLDATABASE="${mysql_database}" \
+  -e JWT_SECRET="${jwt_secret}" \
   casauto-api
