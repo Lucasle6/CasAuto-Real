@@ -41,4 +41,15 @@ resource "aws_instance" "mysql" {
   tags = {
     Name = "${var.project_name}-mysql"
   }
+
+  # Keep this already-provisioned instance stable across unrelated applies.
+  # - ami: `data.aws_ami` (most_recent) drifts as AWS publishes new Amazon Linux
+  #   images, and a changed AMI forces replacement, which for MySQL means
+  #   destroying the database and the migrated data. Pinning avoids that.
+  # - user_data: only runs on first boot, so updating it on a running instance
+  #   has no effect but stops/starts it (brief downtime, new public IP). Ignore it
+  #   here; if the provisioning script must change, replace the instance deliberately.
+  lifecycle {
+    ignore_changes = [ami, user_data]
+  }
 }

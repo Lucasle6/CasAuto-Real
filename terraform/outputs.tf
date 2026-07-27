@@ -50,6 +50,11 @@ output "backend_public_ip" {
   value       = aws_instance.backend.public_ip
 }
 
+output "backend_elastic_ip" {
+  description = "Stable Elastic IP of the backend. This is the address to put in apps/web/vercel.json's /api rewrite - it survives instance replacement, unlike backend_public_ip."
+  value       = aws_eip.backend.public_ip
+}
+
 output "frontend_bucket_name" {
   description = "S3 bucket name - target for `aws s3 sync apps/web/dist s3://<this>`"
   value       = aws_s3_bucket.frontend.id
