@@ -20,7 +20,7 @@ export function VehicleDetail() {
   if (!vehicle) return <div className="min-h-screen bg-gray-50 flex items-center justify-center text-gray-500">Cargando...</div>
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar/>
 
       <main className="max-w-3xl mx-auto px-8 py-12">

@@ -4,7 +4,7 @@ export function Footer() {
   const navigate = useNavigate()
 
   return (
-    <footer className="bg-gray-950 text-gray-400 px-8 py-12">
+    <footer className="mt-auto bg-gray-950 text-gray-400 px-8 py-12">
       <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
           <h4 className="text-white font-bold tracking-widest uppercase text-sm mb-4">CasAuto Real</h4>
