@@ -18,6 +18,7 @@
 - [ ] Tested manually locally
 - [ ] No secrets, `.env` files, or credentials included
 - [ ] `.env.example` updated if new env vars were added
+- [ ] `ERKLAERUNG.md` updated if this changes what a part of the app does
 
 ## Screenshots (if UI change)
 
