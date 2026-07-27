@@ -27,4 +27,12 @@ resource "aws_instance" "backend" {
   tags = {
     Name = "${var.project_name}-backend"
   }
+
+  # See mysql.tf for the rationale. AMI drift would force a rebuild (new IP,
+  # ~minutes of downtime while it re-clones and rebuilds the image); user_data
+  # only runs on first boot so updating it in place is pointless churn. The
+  # Elastic IP (eip.tf) keeps the address stable regardless.
+  lifecycle {
+    ignore_changes = [ami, user_data]
+  }
 }
