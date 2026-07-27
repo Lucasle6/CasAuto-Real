@@ -8,8 +8,15 @@ terraform {
     }
   }
 
-  # Local state for now (single maintainer, tight deadline).
-  # Migrate to an S3 + DynamoDB backend later if the team needs shared state.
+  # Remote state, shared across the team's AWS sandbox account.
+  # Bucket/table are created by ./bootstrap (run once) and only known
+  # afterwards, so this is a partial config - run:
+  #   terraform init -backend-config=backend.hcl
+  # See backend.hcl.example.
+  backend "s3" {
+    key     = "casauto/terraform.tfstate"
+    encrypt = true
+  }
 }
 
 provider "aws" {
