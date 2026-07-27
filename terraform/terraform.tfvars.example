@@ -28,3 +28,9 @@ git_branch            = "main"
 #   export TF_VAR_mysql_app_password="..."
 #   export TF_VAR_mysql_root_password="..."
 #   export TF_VAR_jwt_secret="..."
+#
+# The MySQL passwords must satisfy MySQL 8's default validate_password policy
+# (>= 8 chars with upper, lower, digit, and a special character), or the ALTER USER
+# / CREATE USER in mysql_user_data.sh.tpl fails. Also pick characters that are safe
+# both unquoted in a shell (the backend passes the password to `docker run -e`
+# without quotes) and inside single-quoted SQL: avoid ' " ` \ and $. Underscore works.

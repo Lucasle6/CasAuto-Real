@@ -35,6 +35,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
   - **Why:** frontend and backend are deployed together and are only meaningful as a pair — three different, unrelated version numbers for one deployed app was misleading rather than useful.
 
 ### Fixed
+- `terraform/templates/mysql_user_data.sh.tpl` failed to fully provision MySQL on the first real apply, in two places: `dnf install mysql-community-server` hit `GPG check FAILED` (the `mysql80-community-release-el9` RPM ships the 2022 signing key, but the current 8.0.46 packages use the 2023 key, now imported before the install), and the final `sed` targeted `/etc/my.cnf.d/mysql-server.cnf`, which does not exist on Amazon Linux 2023, so it failed the whole script under `set -e` (replaced with a `bind-address` drop-in config). Also documented the MySQL password-policy and shell-safety requirements in `terraform.tfvars.example`.
+  - **Why:** each bug left MySQL running but unconfigured (no app database or user), so the backend could never connect. Found by running the first real `terraform apply` end to end.
 - `terraform/mysql.tf` originally placed MySQL in the private subnet, which has no NAT Gateway - `user_data`'s `dnf install` would have silently failed with no internet route to reach it. Moved to the public subnet; see the "Added" entry above for the trade-off.
   - **Why:** caught in review (thanks Jose) before this was ever applied - would have produced a MySQL instance stuck at boot with no working install.
 - `apps/api/src/main.ts` awaited an already-resolved value: `(await app).enableCors()` is now `app.enableCors()` (`app` is already awaited on the line above).
