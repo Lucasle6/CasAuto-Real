@@ -12,6 +12,17 @@ resource "aws_instance" "backend" {
   vpc_security_group_ids = [aws_security_group.backend.id]
   iam_instance_profile   = aws_iam_instance_profile.backend.name
 
+  # Pin the root disk size explicitly instead of inheriting the AMI default.
+  # The AMI (data.aws_ami.amazon_linux, most_recent) drifted to an image whose
+  # default root volume is only 2 GB, which is too small to `docker build` the
+  # Node monorepo on boot ("no space left on device"). ignore_changes=[ami]
+  # guards normal applies, but a forced -replace still launches from the current
+  # (drifted) AMI, so the size must be set here, not left to the AMI.
+  root_block_device {
+    volume_size = 30
+    volume_type = "gp3"
+  }
+
   user_data = templatefile("${path.module}/templates/backend_user_data.sh.tpl", {
     git_repo_url   = var.git_repo_url
     git_branch     = var.git_branch

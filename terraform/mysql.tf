@@ -31,6 +31,17 @@ resource "aws_instance" "mysql" {
   subnet_id              = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.mysql.id]
 
+  # Pin the root disk size explicitly instead of inheriting the AMI default.
+  # MySQL and its data live on this root volume, and the drifted AMI
+  # (data.aws_ami, most_recent) defaults to a 2 GB root - far too small. Since
+  # ignore_changes=[ami] does not pin the AMI for a forced -replace, a deliberate
+  # replacement of this instance would otherwise come up with a 2 GB disk. See
+  # ec2.tf, where the same trap took the backend down on boot.
+  root_block_device {
+    volume_size = 30
+    volume_type = "gp3"
+  }
+
   user_data = templatefile("${path.module}/templates/mysql_user_data.sh.tpl", {
     db_name          = var.mysql_database
     db_user          = var.mysql_app_user
