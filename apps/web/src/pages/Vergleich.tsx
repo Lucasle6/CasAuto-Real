@@ -96,9 +96,9 @@ export function Vergleich() {
             {compared.map(v => (
               <div
                 key={v.id}
-                className="flex-1 min-w-[200px] bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow flex flex-col overflow-hidden"
+                className="relative flex-1 min-w-[200px] bg-white border border-green-200 rounded-xl shadow-sm flex flex-col overflow-hidden transition-all duration-200 hover:border-green-500 hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] hover:z-10"
               >
-                <div className={`${HEADER_H} px-5 flex items-start justify-between gap-2 bg-gray-50/70 border-b border-gray-100`}>
+                <div className={`${HEADER_H} px-5 flex items-start justify-between gap-2 bg-green-50/50 border-b border-green-100`}>
                   <button
                     onClick={() => navigate(`/vehicles/${v.id}`)}
                     className="text-left pt-5 hover:text-red-800 transition-colors"
