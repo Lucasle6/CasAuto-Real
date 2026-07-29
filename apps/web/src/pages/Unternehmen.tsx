@@ -11,8 +11,8 @@ export function Unternehmen() {
         <p className="text-red-800 text-lg mb-12">Ihr Partner für hochwertige Fahrzeuge seit 2000</p>
 
         <div className="space-y-8 text-gray-600 leading-relaxed">
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          <p>CasAuto wurde im Jahr 2000 in Berlin gegründet – mit dem Ziel, den Autokauf einfacher und transparenter zu machen. Aus einem einzelnen Standort ist über die Jahre einer der größeren unabhängigen Fahrzeughändler im Berliner Raum geworden, mit Standorten in Berlin, Schönefeld und Ludwigsfelde.</p>
+          <p>Unser Bestand umfasst Neu- und Gebrauchtwagen aller führenden Hersteller – von BMW über Mercedes-Benz bis Audi und Volkswagen. Jedes Fahrzeug wird vor dem Verkauf technisch geprüft, damit Sie sich auf das verlassen können, was Sie sehen.</p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-8">
             <div className="text-center">
@@ -29,7 +29,7 @@ export function Unternehmen() {
             </div>
           </div>
 
-          <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+          <p>Am wichtigsten ist uns dabei die persönliche Beratung: Unser Verkaufsteam nimmt sich Zeit, Ihre Anforderungen zu verstehen, statt Ihnen einfach das nächstbeste Fahrzeug vom Hof zu verkaufen. Mit über 1.800 Fahrzeugen im Bestand, mehr als 24 Jahren Erfahrung und sechsfacher Auszeichnung als AutoBild Top-Händler stehen wir für Kontinuität und Vertrauen in einer Branche, in der beides nicht selbstverständlich ist.</p>
         </div>
       </main>
 
