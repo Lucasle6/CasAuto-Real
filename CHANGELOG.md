@@ -7,6 +7,16 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ## [Unreleased]
 
 ### Changed
+- The fuel type on vehicle cards (`/fahrzeuge`) is now a clearly labeled row with a ⛽ icon, instead of a small unlabeled gray tag easy to miss next to the price.
+  - **Why:** Marco pointed out fuel type is an important detail for buyers and felt it wasn't showing on the catalog page - it was technically already there, just too subtle to register as information rather than decoration.
+
+### Fixed
+- `VehicleEdit.tsx`'s fuel type dropdown had `<option value="benzin">`/`"diesel"`/`"hybrid"`/`"elektro"` (lowercase, partly German) instead of the backend's actual enum values (`Gasoline`/`Diesel`/`Hybrid`/`Electric`) - editing a vehicle and changing its fuel type would have submitted a value the database enum doesn't accept.
+  - **Why:** found while auditing English/mixed-language UI text (Marco's report), not from a bug report - `VehicleForm.tsx` (create) had the correct values, only the edit form had drifted from them. Fixed as part of separating enum *values* (must match the backend exactly) from their *display labels* (translated to German) - see the "Changed" entry below.
+
+### Changed
+- All vehicle/appointment enum values that were being displayed raw (`Gasoline`, `Available`, `New`, `test_drive`, `pending`, etc.) now show a German label instead, across the catalog, vehicle detail, comparison, and both admin tables. New `apps/web/src/data/enumLabels.ts` maps each backend enum value to its German label; the underlying values sent to/from the API are unchanged. Also fixed two more English/Spanish leftovers found in the same sweep: `Catalog.tsx`'s filter toggle read "Filtros verbergen" (Spanish) instead of "Filter verbergen", and `VehicleDetail.tsx`'s loading state read "Cargando..." (Spanish) instead of "Lädt…", matching the wording already used on `/merkliste` and `/vergleich`.
+  - **Why:** Marco noticed raw English values like "Gasoline" showing up instead of German ("Benzin") and asked for a full sweep of every page, not just that one spot - searched all of `apps/web/src` rather than fixing only the reported instance.
 - Replaced the Lorem Ipsum placeholder paragraphs on the "Über uns" page (`Unternehmen.tsx`) with real copy about the company - founding year, locations, and service philosophy - written to match facts already shown elsewhere on the site (the 1.800+/24+/6x stats on this same page and the landing page, the Berlin/Schönefeld/Ludwigsfelde locations from the careers page) rather than invented separately. Checked the rest of the project for other leftover Lorem Ipsum text - this was the only instance.
   - **Why:** Marco noticed the About page was still template placeholder text - the kind of thing that immediately signals an unfinished/generic site to anyone reading it.
 - Vehicle cards and the detail page show a real photo per brand instead of just the manufacturer's logo. New `apps/web/src/data/brandPhotos.ts`, shared by `VehicleCard.tsx` and `VehicleDetail.tsx` (which previously showed no image at all).

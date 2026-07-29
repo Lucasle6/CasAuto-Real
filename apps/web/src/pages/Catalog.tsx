@@ -3,6 +3,14 @@ import type { Vehicle } from '../types'
 import { VehicleCard } from '../components/VehicleCard'
 import { Footer } from '../components/Footer'
 import { Navbar } from '../components/Navbar'
+import { categoryLabel, vehicleStatusLabel, fuelTypeLabel } from '../data/enumLabels'
+
+// 'All' is a frontend-only sentinel meaning "no filter" (see the effect
+// below) - it's never sent to the backend, so only its displayed label
+// needs translating, not the value itself.
+function filterLabel(value: string, translate: (v: string) => string): string {
+  return value === 'All' ? 'Alle' : translate(value)
+}
 
 const BRANDS = ['All', 'BMW', 'Mercedes', 'Audi', 'Volkswagen']
 const CATEGORIES = ['All', 'New', 'Used']
@@ -58,7 +66,7 @@ export function Catalog() {
           onClick={() => setShowFilters(!showFilters)}
           className="md:hidden w-full border border-gray-200 rounded-lg px-4 py-2 text-sm text-gray-600 bg-white shadow-sm mb-2"
         >
-          {showFilters ? 'Filtros verbergen ✕' : 'Filter anzeigen ☰'}
+          {showFilters ? 'Filter verbergen ✕' : 'Filter anzeigen ☰'}
         </button>
         {/* Sidebar */}
         <aside className={`w-full md:w-64 md:shrink-0 ${showFilters ? 'block' : 'hidden'} md:block`}>
@@ -84,7 +92,7 @@ export function Catalog() {
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                     }`}
                   >
-                    {brand}
+                    {filterLabel(brand, v => v)}
                   </button>
                 ))}
               </div>
@@ -104,7 +112,7 @@ export function Catalog() {
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                     }`}
                   >
-                    {cat}
+                    {filterLabel(cat, categoryLabel)}
                   </button>
                 ))}
               </div>
@@ -124,7 +132,7 @@ export function Catalog() {
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                     }`}
                   >
-                    {fuel}
+                    {filterLabel(fuel, fuelTypeLabel)}
                   </button>
                 ))}
               </div>
@@ -144,7 +152,7 @@ export function Catalog() {
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                     }`}
                   >
-                    {status}
+                    {filterLabel(status, vehicleStatusLabel)}
                   </button>
                 ))}
               </div>

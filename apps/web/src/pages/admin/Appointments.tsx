@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { appointmentTypeLabel, appointmentStatusLabel } from '../../data/enumLabels'
 
 interface Appointment {
   id: string
@@ -69,12 +70,12 @@ export function Appointments() {
                   <td className="px-6 py-4 text-gray-600">{a.date}</td>
                   <td className="px-6 py-4">
                     <span className="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700">
-                      {a.type}
+                      {appointmentTypeLabel(a.type)}
                     </span>
                   </td>
                   <td className="px-6 py-4">
                     <span className="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-700">
-                      {a.status}
+                      {appointmentStatusLabel(a.status)}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-gray-500">{a.notes || '—'}</td>

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { Vehicle } from '../../types'
 import { useAuthStore } from '../../store/authStore'
+import { categoryLabel, vehicleStatusLabel } from '../../data/enumLabels'
 
 export function Dashboard() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
@@ -79,10 +80,10 @@ export function Dashboard() {
                   <td className="px-6 py-4 text-red-800 font-medium">€{Number(v.price).toLocaleString()}</td>
                   <td className="px-6 py-4">
                     <span className={`text-xs px-2 py-1 rounded-full ${v.status === 'Available' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
-                      {v.status}
+                      {vehicleStatusLabel(v.status)}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-gray-600">{v.category}</td>
+                  <td className="px-6 py-4 text-gray-600">{categoryLabel(v.category)}</td>
                   <td className="px-6 py-4 flex gap-3 justify-end">
                     <button
                       onClick={() => navigate(`/admin/vehicles/${v.id}/edit`)}

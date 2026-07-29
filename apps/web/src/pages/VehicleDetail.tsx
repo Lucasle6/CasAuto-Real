@@ -7,6 +7,7 @@ import { Footer } from '../components/Footer'
 import { useFavoritesStore } from '../store/favoritesStore'
 import { useCompareStore } from '../store/compareStore'
 import { getVehiclePhoto } from '../data/brandPhotos'
+import { categoryLabel, vehicleStatusLabel, fuelTypeLabel } from '../data/enumLabels'
 
 export function VehicleDetail() {
   const { id } = useParams()
@@ -24,7 +25,7 @@ export function VehicleDetail() {
       .then(data => setVehicle(data))
   }, [id])
 
-  if (!vehicle) return <div className="min-h-screen bg-gray-50 flex items-center justify-center text-gray-500">Cargando...</div>
+  if (!vehicle) return <div className="min-h-screen bg-gray-50 flex items-center justify-center text-gray-500">Lädt…</div>
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -50,10 +51,10 @@ export function VehicleDetail() {
 
           <div className="p-8">
           <div className="flex justify-between items-start mb-6">
-            <span className="text-xs uppercase tracking-widest text-gray-400">{vehicle.category}</span>
+            <span className="text-xs uppercase tracking-widest text-gray-400">{categoryLabel(vehicle.category)}</span>
             <div className="flex items-center gap-3">
               <span className={`text-xs px-2 py-1 rounded-full ${vehicle.status === 'Available' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
-                {vehicle.status}
+                {vehicleStatusLabel(vehicle.status)}
               </span>
               <button
                 onClick={() => toggleFavorite(vehicle.id)}
@@ -85,11 +86,11 @@ export function VehicleDetail() {
           <div className="grid grid-cols-2 gap-4 mb-8">
             <div className="bg-gray-50 rounded p-4 border border-gray-100">
               <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">Kraftstoff</p>
-              <p className="text-gray-900 font-medium">{vehicle.fuelType}</p>
+              <p className="text-gray-900 font-medium">{fuelTypeLabel(vehicle.fuelType)}</p>
             </div>
             <div className="bg-gray-50 rounded p-4 border border-gray-100">
               <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">Kategorie</p>
-              <p className="text-gray-900 font-medium">{vehicle.category}</p>
+              <p className="text-gray-900 font-medium">{categoryLabel(vehicle.category)}</p>
             </div>
           </div>
 

@@ -4,13 +4,14 @@ import type { Vehicle } from '../types'
 import { Footer } from '../components/Footer'
 import { Navbar } from '../components/Navbar'
 import { useCompareStore, MAX_COMPARE } from '../store/compareStore'
+import { categoryLabel, vehicleStatusLabel, fuelTypeLabel } from '../data/enumLabels'
 
 const ROWS: { label: string; render: (v: Vehicle) => string }[] = [
   { label: 'Preis', render: v => `€${v.price.toLocaleString()}` },
   { label: 'Baujahr', render: v => String(v.year) },
-  { label: 'Kategorie', render: v => v.category },
-  { label: 'Kraftstoff', render: v => v.fuelType },
-  { label: 'Status', render: v => v.status },
+  { label: 'Kategorie', render: v => categoryLabel(v.category) },
+  { label: 'Kraftstoff', render: v => fuelTypeLabel(v.fuelType) },
+  { label: 'Status', render: v => vehicleStatusLabel(v.status) },
 ]
 
 export function Vergleich() {
