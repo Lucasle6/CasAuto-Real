@@ -27,6 +27,7 @@ Gebaut mit React (einer Technik für interaktive Websites). Enthält:
 - **Fahrzeugvergleich** — bis zu drei Fahrzeuge per ⇄-Symbol auswählen und auf `/vergleich` in einer Tabelle nebeneinander vergleichen (Preis, Baujahr, Kraftstoff, …). Ebenfalls nur im Browser gespeichert
 - **Kontakt-, Über-uns- und Karriere-Seiten**
 - **Newsletter-Anmeldung**
+- **Sprachauswahl** — die gesamte Oberfläche gibt es auf Deutsch, Englisch und Spanisch, umschaltbar über DE/EN/ES in der Navigationsleiste. Die Wahl wird im Browser gemerkt
 - **Login/Registrierung** für Kunden
 - **Admin-Bereich** (nur fürs Autohaus-Personal, mit Passwort geschützt) — hier können Fahrzeuge hinzugefügt, bearbeitet, gelöscht und eingegangene Probefahrt-Termine eingesehen werden
 

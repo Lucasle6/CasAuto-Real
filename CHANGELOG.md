@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Added
+- Multi-language UI (German, English, Spanish) with a DE/EN/ES switcher in the navbar. New `apps/web/src/i18n/` (string dictionaries, enum label maps for fuel/status/category, a locale-aware `formatPrice`, and a `useTranslation` hook with `{token}` interpolation) plus `store/languageStore.ts` (Zustand + `localStorage`, same persistence pattern as `authStore`/`favoritesStore`). German is the default and fallback; every user-facing page and shared component renders through it.
+  - **Why:** the UI had drifted into a mix of three languages by accident — German chrome, English enum values on the cards (`Available`, `Used`, `Gasoline`), and a stray `Cargando…` (Spanish) on the vehicle-detail loading state. Proper i18n both delivers the requested language options and removes that inconsistency at the source. It also fixes the price rendering as `€35000.00`: the API returns the MySQL `DECIMAL` as a string, so `String.toLocaleString()` was a no-op; `formatPrice` coerces to a number and formats per locale (e.g. `35.000 €`). The four backend enum values are mapped to display labels per language while the raw English value is still used for all logic/filtering, so no backend change was needed.
+
 ### Changed
 - Replaced the Lorem Ipsum placeholder paragraphs on the "Über uns" page (`Unternehmen.tsx`) with real copy about the company - founding year, locations, and service philosophy - written to match facts already shown elsewhere on the site (the 1.800+/24+/6x stats on this same page and the landing page, the Berlin/Schönefeld/Ludwigsfelde locations from the careers page) rather than invented separately. Checked the rest of the project for other leftover Lorem Ipsum text - this was the only instance.
   - **Why:** Marco noticed the About page was still template placeholder text - the kind of thing that immediately signals an unfinished/generic site to anyone reading it.

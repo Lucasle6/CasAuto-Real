@@ -7,10 +7,13 @@ import { Footer } from '../components/Footer'
 import { useFavoritesStore } from '../store/favoritesStore'
 import { useCompareStore } from '../store/compareStore'
 import { getVehiclePhoto } from '../data/brandPhotos'
+import { useTranslation } from '../i18n/useTranslation'
+import { categoryLabels, statusLabels, fuelLabels } from '../i18n/translations'
 
 export function VehicleDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { t, price, lang } = useTranslation()
   const [vehicle, setVehicle] = useState<Vehicle | null>(null)
   const [showForm, setShowForm] = useState(false)
   const isFavorite = useFavoritesStore(state => vehicle ? state.isFavorite(vehicle.id) : false)
@@ -24,7 +27,7 @@ export function VehicleDetail() {
       .then(data => setVehicle(data))
   }, [id])
 
-  if (!vehicle) return <div className="min-h-screen bg-gray-50 flex items-center justify-center text-gray-500">Cargando...</div>
+  if (!vehicle) return <div className="min-h-screen bg-gray-50 flex items-center justify-center text-gray-500">{t('common.loading')}</div>
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -35,7 +38,7 @@ export function VehicleDetail() {
           onClick={() => navigate(-1)}
           className="text-gray-400 hover:text-gray-900 mb-8 flex items-center gap-2 transition-colors"
         >
-          ← Zurück
+          ← {t('common.back')}
         </button>
 
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm mb-6 overflow-hidden">
@@ -50,14 +53,14 @@ export function VehicleDetail() {
 
           <div className="p-8">
           <div className="flex justify-between items-start mb-6">
-            <span className="text-xs uppercase tracking-widest text-gray-400">{vehicle.category}</span>
+            <span className="text-xs uppercase tracking-widest text-gray-400">{categoryLabels[lang][vehicle.category]}</span>
             <div className="flex items-center gap-3">
               <span className={`text-xs px-2 py-1 rounded-full ${vehicle.status === 'Available' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
-                {vehicle.status}
+                {statusLabels[lang][vehicle.status]}
               </span>
               <button
                 onClick={() => toggleFavorite(vehicle.id)}
-                aria-label={isFavorite ? 'Von der Merkliste entfernen' : 'Zur Merkliste hinzufügen'}
+                aria-label={isFavorite ? t('card.removeFavorite') : t('card.addFavorite')}
                 aria-pressed={isFavorite}
                 className="text-2xl leading-none transition-transform hover:scale-110"
               >
@@ -74,7 +77,7 @@ export function VehicleDetail() {
                     : 'border-gray-300 text-gray-500 hover:border-red-800 hover:text-red-800'
                 }`}
               >
-                {isComparing ? '✓ Im Vergleich' : '⇄ Vergleichen'}
+                {isComparing ? `✓ ${t('detail.inCompare')}` : `⇄ ${t('card.compare')}`}
               </button>
             </div>
           </div>
@@ -84,23 +87,23 @@ export function VehicleDetail() {
 
           <div className="grid grid-cols-2 gap-4 mb-8">
             <div className="bg-gray-50 rounded p-4 border border-gray-100">
-              <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">Kraftstoff</p>
-              <p className="text-gray-900 font-medium">{vehicle.fuelType}</p>
+              <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">{t('catalog.fuel')}</p>
+              <p className="text-gray-900 font-medium">{fuelLabels[lang][vehicle.fuelType]}</p>
             </div>
             <div className="bg-gray-50 rounded p-4 border border-gray-100">
-              <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">Kategorie</p>
-              <p className="text-gray-900 font-medium">{vehicle.category}</p>
+              <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">{t('catalog.category')}</p>
+              <p className="text-gray-900 font-medium">{categoryLabels[lang][vehicle.category]}</p>
             </div>
           </div>
 
           <div className="flex justify-between items-center">
-            <span className="text-red-800 font-bold text-3xl">€{vehicle.price.toLocaleString()}</span>
+            <span className="text-red-800 font-bold text-3xl">{price(vehicle.price)}</span>
             {vehicle.status === 'Available' && (
               <button
                 onClick={() => setShowForm(true)}
                 className="bg-red-800 hover:bg-orange-500 text-white px-6 py-2 rounded font-medium transition-colors"
               >
-                Probefahrt buchen
+                {t('detail.bookTestDrive')}
               </button>
             )}
           </div>

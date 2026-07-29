@@ -3,6 +3,8 @@ import type { Vehicle } from '../types'
 import { VehicleCard } from '../components/VehicleCard'
 import { Footer } from '../components/Footer'
 import { Navbar } from '../components/Navbar'
+import { useTranslation } from '../i18n/useTranslation'
+import { categoryLabels, fuelLabels, statusLabels } from '../i18n/translations'
 
 const BRANDS = ['All', 'BMW', 'Mercedes', 'Audi', 'Volkswagen']
 const CATEGORIES = ['All', 'New', 'Used']
@@ -10,6 +12,7 @@ const FUEL_TYPES = ['All', 'Gasoline', 'Diesel', 'Hybrid', 'Electric']
 const STATUSES = ['All', 'Available', 'Reserved']
 
 export function Catalog() {
+  const { t, lang } = useTranslation()
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
   const [selectedBrand, setSelectedBrand] = useState('All')
   const [selectedCategory, setSelectedCategory] = useState('All')
@@ -20,6 +23,13 @@ export function Catalog() {
   const [minYear, setMinYear] = useState('')
   const [maxYear, setMaxYear] = useState('')
   const [showFilters, setShowFilters] = useState(false)
+
+  // The filter arrays keep the raw values the backend expects; only the labels
+  // shown to the user are translated. 'All' is the localized "any" option.
+  const brandLabel = (v: string) => (v === 'All' ? t('catalog.all') : v)
+  const categoryLabel = (v: string) => (v === 'All' ? t('catalog.all') : categoryLabels[lang][v as Vehicle['category']])
+  const fuelLabel = (v: string) => (v === 'All' ? t('catalog.all') : fuelLabels[lang][v as Vehicle['fuelType']])
+  const statusLabel = (v: string) => (v === 'All' ? t('catalog.all') : statusLabels[lang][v as Vehicle['status']])
 
   useEffect(() => {
     const params = new URLSearchParams()
@@ -58,21 +68,21 @@ export function Catalog() {
           onClick={() => setShowFilters(!showFilters)}
           className="md:hidden w-full border border-gray-200 rounded-lg px-4 py-2 text-sm text-gray-600 bg-white shadow-sm mb-2"
         >
-          {showFilters ? 'Filtros verbergen ✕' : 'Filter anzeigen ☰'}
+          {showFilters ? `${t('catalog.hideFilters')} ✕` : `${t('catalog.showFilters')} ☰`}
         </button>
         {/* Sidebar */}
         <aside className={`w-full md:w-64 md:shrink-0 ${showFilters ? 'block' : 'hidden'} md:block`}>
           <div className="bg-white border border-gray-200 rounded-lg p-6 space-y-6 shadow-sm">
             <div className="flex justify-between items-center">
-              <h2 className="text-sm uppercase tracking-widest text-gray-400">Filter</h2>
+              <h2 className="text-sm uppercase tracking-widest text-gray-400">{t('catalog.filter')}</h2>
               <button onClick={resetFilters} className="text-xs text-red-800 hover:text-orange-500">
-                Reset
+                {t('catalog.reset')}
               </button>
             </div>
 
             {/* Marke */}
             <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider mb-3">Marke</p>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-3">{t('catalog.brand')}</p>
               <div className="space-y-1">
                 {BRANDS.map(brand => (
                   <button
@@ -84,7 +94,7 @@ export function Catalog() {
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                     }`}
                   >
-                    {brand}
+                    {brandLabel(brand)}
                   </button>
                 ))}
               </div>
@@ -92,7 +102,7 @@ export function Catalog() {
 
             {/* Kategorie */}
             <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider mb-3">Kategorie</p>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-3">{t('catalog.category')}</p>
               <div className="space-y-1">
                 {CATEGORIES.map(cat => (
                   <button
@@ -104,7 +114,7 @@ export function Catalog() {
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                     }`}
                   >
-                    {cat}
+                    {categoryLabel(cat)}
                   </button>
                 ))}
               </div>
@@ -112,7 +122,7 @@ export function Catalog() {
 
             {/* Kraftstoff */}
             <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider mb-3">Kraftstoff</p>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-3">{t('catalog.fuel')}</p>
               <div className="space-y-1">
                 {FUEL_TYPES.map(fuel => (
                   <button
@@ -124,7 +134,7 @@ export function Catalog() {
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                     }`}
                   >
-                    {fuel}
+                    {fuelLabel(fuel)}
                   </button>
                 ))}
               </div>
@@ -132,7 +142,7 @@ export function Catalog() {
 
             {/* Status */}
             <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider mb-3">Status</p>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-3">{t('catalog.status')}</p>
               <div className="space-y-1">
                 {STATUSES.map(status => (
                   <button
@@ -144,7 +154,7 @@ export function Catalog() {
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                     }`}
                   >
-                    {status}
+                    {statusLabel(status)}
                   </button>
                 ))}
               </div>
@@ -152,18 +162,18 @@ export function Catalog() {
 
             {/* Preis */}
             <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider mb-3">Preis (€)</p>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-3">{t('catalog.price')}</p>
               <div className="space-y-2">
                 <input
                   type="number"
-                  placeholder="Min"
+                  placeholder={t('catalog.min')}
                   value={minPrice}
                   onChange={e => setMinPrice(e.target.value)}
                   className="w-full bg-gray-50 border border-gray-200 rounded px-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-red-800 text-sm"
                 />
                 <input
                   type="number"
-                  placeholder="Max"
+                  placeholder={t('catalog.max')}
                   value={maxPrice}
                   onChange={e => setMaxPrice(e.target.value)}
                   className="w-full bg-gray-50 border border-gray-200 rounded px-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-red-800 text-sm"
@@ -173,18 +183,18 @@ export function Catalog() {
 
             {/* Jahr */}
             <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider mb-3">Jahr</p>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-3">{t('catalog.year')}</p>
               <div className="space-y-2">
                 <input
                   type="number"
-                  placeholder="Von"
+                  placeholder={t('catalog.from')}
                   value={minYear}
                   onChange={e => setMinYear(e.target.value)}
                   className="w-full bg-gray-50 border border-gray-200 rounded px-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-red-800 text-sm"
                 />
                 <input
                   type="number"
-                  placeholder="Bis"
+                  placeholder={t('catalog.to')}
                   value={maxYear}
                   onChange={e => setMaxYear(e.target.value)}
                   className="w-full bg-gray-50 border border-gray-200 rounded px-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-red-800 text-sm"
@@ -196,17 +206,13 @@ export function Catalog() {
 
         {/* Grid */}
         <main className="flex-1">
-          <p className="text-gray-400 text-sm mb-6">{vehicles.length} Fahrzeuge gefunden</p>
+          <p className="text-gray-400 text-sm mb-6">{t('catalog.vehiclesFound', { n: vehicles.length })}</p>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {vehicles.map((v: Vehicle) => (
               <VehicleCard key={v.id} vehicle={v} />
             ))}
           </div>
         </main>
-        {/* Footer */}
-        
-        
-        
         </div>
         <Footer />
     </div>

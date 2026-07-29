@@ -4,23 +4,27 @@ import type { Vehicle } from '../types'
 import { Footer } from '../components/Footer'
 import { Navbar } from '../components/Navbar'
 import { useCompareStore, MAX_COMPARE } from '../store/compareStore'
-
-const ROWS: { label: string; render: (v: Vehicle) => string }[] = [
-  { label: 'Preis', render: v => `€${v.price.toLocaleString()}` },
-  { label: 'Baujahr', render: v => String(v.year) },
-  { label: 'Kategorie', render: v => v.category },
-  { label: 'Kraftstoff', render: v => v.fuelType },
-  { label: 'Status', render: v => v.status },
-]
+import { useTranslation } from '../i18n/useTranslation'
+import { categoryLabels, fuelLabels, statusLabels } from '../i18n/translations'
 
 export function Vergleich() {
   const navigate = useNavigate()
+  const { t, price, lang } = useTranslation()
   const compareIds = useCompareStore(state => state.compareIds)
   const removeFromCompare = useCompareStore(state => state.removeFromCompare)
   const clearCompare = useCompareStore(state => state.clearCompare)
   const pruneCompare = useCompareStore(state => state.pruneCompare)
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
   const [loading, setLoading] = useState(true)
+
+  // Built inside the component so labels and values follow the active language.
+  const rows: { label: string; render: (v: Vehicle) => string }[] = [
+    { label: t('compare.rowPrice'), render: v => price(v.price) },
+    { label: t('compare.rowYear'), render: v => String(v.year) },
+    { label: t('catalog.category'), render: v => categoryLabels[lang][v.category] },
+    { label: t('catalog.fuel'), render: v => fuelLabels[lang][v.fuelType] },
+    { label: t('catalog.status'), render: v => statusLabels[lang][v.status] },
+  ]
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/vehicles`)
@@ -45,20 +49,20 @@ export function Vergleich() {
 
       <main className="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 w-full flex-1">
         <div className="flex justify-between items-center mb-2">
-          <h1 className="text-2xl font-bold text-gray-900">Fahrzeugvergleich</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{t('compare.title')}</h1>
           {compared.length > 0 && (
             <button onClick={clearCompare} className="text-xs text-red-800 hover:text-orange-500">
-              Alle entfernen
+              {t('compare.clearAll')}
             </button>
           )}
         </div>
         <p className="text-gray-400 text-sm mb-8">
-          {loading ? 'Lädt…' : `${compared.length} von maximal ${MAX_COMPARE} Fahrzeugen ausgewählt`}
+          {loading ? t('common.loading') : t('compare.selected', { n: compared.length, max: MAX_COMPARE })}
         </p>
 
         {!loading && compared.length === 0 && (
           <div className="bg-white border border-gray-200 rounded-lg p-12 text-center text-gray-400">
-            Noch keine Fahrzeuge zum Vergleich ausgewählt. Klicke im Katalog auf das ⇄-Symbol, um bis zu {MAX_COMPARE} Fahrzeuge nebeneinander zu vergleichen.
+            {t('compare.empty', { max: MAX_COMPARE })}
           </div>
         )}
 
@@ -80,7 +84,7 @@ export function Vergleich() {
                         </button>
                         <button
                           onClick={() => removeFromCompare(v.id)}
-                          aria-label={`${v.brand} ${v.model} vom Vergleich entfernen`}
+                          aria-label={`${v.brand} ${v.model} ${t('compare.removeSuffix')}`}
                           className="text-gray-300 hover:text-red-800 transition-colors text-lg leading-none"
                         >
                           ✕
@@ -91,7 +95,7 @@ export function Vergleich() {
                 </tr>
               </thead>
               <tbody>
-                {ROWS.map(row => (
+                {rows.map(row => (
                   <tr key={row.label} className="border-b border-gray-100 last:border-0">
                     <td className="p-4 text-gray-400 text-xs uppercase tracking-wider">{row.label}</td>
                     {compared.map(v => (
