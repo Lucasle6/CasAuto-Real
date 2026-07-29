@@ -5,6 +5,8 @@ import { Footer } from '../components/Footer'
 import { Navbar } from '../components/Navbar'
 import { useTranslation } from '../i18n/useTranslation'
 import { categoryLabels, fuelLabels, statusLabels } from '../i18n/translations'
+import { CompareView } from '../components/CompareView'
+import { useCompareStore, MAX_COMPARE } from '../store/compareStore'
 
 const BRANDS = ['All', 'BMW', 'Mercedes', 'Audi', 'Volkswagen']
 const CATEGORIES = ['All', 'New', 'Used']
@@ -23,6 +25,10 @@ export function Catalog() {
   const [minYear, setMinYear] = useState('')
   const [maxYear, setMaxYear] = useState('')
   const [showFilters, setShowFilters] = useState(false)
+  const [showCompare, setShowCompare] = useState(false)
+  const [allVehicles, setAllVehicles] = useState<Vehicle[]>([])
+  const compareCount = useCompareStore(state => state.compareIds.length)
+  const clearCompare = useCompareStore(state => state.clearCompare)
 
   // The filter arrays keep the raw values the backend expects; only the labels
   // shown to the user are translated. 'All' is the localized "any" option.
@@ -48,6 +54,14 @@ export function Catalog() {
       .then(data => setVehicles(data))
   }, [selectedBrand, selectedCategory, selectedFuel, selectedStatus, minPrice, maxPrice, minYear, maxYear])
 
+  // Full, unfiltered list for the compare drawer, so the active filters can
+  // never hide (or prune) a vehicle the user picked for comparison.
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/vehicles`)
+      .then(res => res.json())
+      .then((data: Vehicle[]) => setAllVehicles(data))
+  }, [])
+
   function resetFilters() {
     setSelectedBrand('All')
     setSelectedCategory('All')
@@ -72,6 +86,14 @@ export function Catalog() {
         </button>
         {/* Sidebar */}
         <aside className={`w-full md:w-64 md:shrink-0 ${showFilters ? 'block' : 'hidden'} md:block`}>
+          <button
+            onClick={() => setShowCompare(true)}
+            disabled={compareCount === 0}
+            className="w-full mb-4 flex items-center justify-center gap-2 bg-red-800 enabled:hover:bg-red-700 text-white rounded-lg px-4 py-2.5 text-sm font-medium shadow-sm transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <span aria-hidden="true">⇄</span> {t('nav.compare')}
+            <span className="bg-white/25 rounded-full px-2 py-0.5 text-xs tabular-nums">{compareCount}/{MAX_COMPARE}</span>
+          </button>
           <div className="bg-white border border-gray-200 rounded-lg p-6 space-y-6 shadow-sm">
             <div className="flex justify-between items-center">
               <h2 className="text-sm uppercase tracking-widest text-gray-400">{t('catalog.filter')}</h2>
@@ -215,6 +237,44 @@ export function Catalog() {
         </main>
         </div>
         <Footer />
+
+        {/* Compare drawer — slides in from the right over the catalog */}
+        <div className={`fixed inset-0 z-50 ${showCompare ? '' : 'pointer-events-none'}`} aria-hidden={!showCompare}>
+          <div
+            onClick={() => setShowCompare(false)}
+            className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${showCompare ? 'opacity-100' : 'opacity-0'}`}
+          />
+          <aside
+            role="dialog"
+            aria-modal="true"
+            aria-label={t('compare.title')}
+            className={`absolute top-0 right-0 h-full w-full max-w-4xl bg-gray-50 shadow-2xl flex flex-col transition-transform duration-300 ${showCompare ? 'translate-x-0' : 'translate-x-full'}`}
+          >
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-white">
+              <div>
+                <h2 className="text-lg font-bold text-gray-900">{t('compare.title')}</h2>
+                <p className="text-xs text-gray-400">{t('compare.selected', { n: compareCount, max: MAX_COMPARE })}</p>
+              </div>
+              <div className="flex items-center gap-4">
+                {compareCount > 0 && (
+                  <button onClick={clearCompare} className="text-xs text-red-800 hover:text-orange-500">
+                    {t('compare.clearAll')}
+                  </button>
+                )}
+                <button
+                  onClick={() => setShowCompare(false)}
+                  aria-label={t('common.close')}
+                  className="text-gray-400 hover:text-gray-900 text-2xl leading-none"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+            <div className="flex-1 overflow-y-auto p-6">
+              <CompareView vehicles={allVehicles} />
+            </div>
+          </aside>
+        </div>
     </div>
   )
 }

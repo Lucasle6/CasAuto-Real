@@ -17,6 +17,7 @@ export const translations = {
     // common
     'common.loading': 'Lädt…',
     'common.back': 'Zurück',
+    'common.close': 'Schließen',
     // nav
     'nav.vehicles': 'Fahrzeuge',
     'nav.watchlist': 'Merkliste',
@@ -142,6 +143,7 @@ export const translations = {
   en: {
     'common.loading': 'Loading…',
     'common.back': 'Back',
+    'common.close': 'Close',
     'nav.vehicles': 'Vehicles',
     'nav.watchlist': 'Watchlist',
     'nav.compare': 'Compare',
@@ -252,6 +254,7 @@ export const translations = {
   es: {
     'common.loading': 'Cargando…',
     'common.back': 'Volver',
+    'common.close': 'Cerrar',
     'nav.vehicles': 'Vehículos',
     'nav.watchlist': 'Favoritos',
     'nav.compare': 'Comparar',
