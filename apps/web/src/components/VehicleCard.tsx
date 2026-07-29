@@ -4,6 +4,7 @@ import {motion} from 'framer-motion'
 import { useFavoritesStore } from '../store/favoritesStore'
 import { useCompareStore } from '../store/compareStore'
 import { getVehiclePhoto } from '../data/brandPhotos'
+import { categoryLabel, vehicleStatusLabel, fuelTypeLabel } from '../data/enumLabels'
 
 interface Props {
   vehicle: Vehicle
@@ -58,16 +59,16 @@ export function VehicleCard({ vehicle }: Props) {
 
       <div className="p-6">
         <div className="flex justify-between items-start mb-4">
-          <span className="text-xs uppercase tracking-widest text-gray-400">{vehicle.category}</span>
+          <span className="text-xs uppercase tracking-widest text-gray-400">{categoryLabel(vehicle.category)}</span>
           <span className={`text-xs px-2 py-1 rounded-full ${vehicle.status === 'Available' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
-            {vehicle.status}
+            {vehicleStatusLabel(vehicle.status)}
           </span>
         </div>
         <h3 className="text-xl font-semibold text-gray-900">{vehicle.brand}</h3>
         <p className="text-gray-500 mb-4">{vehicle.model} · {vehicle.year}</p>
         <div className="flex justify-between items-center">
           <span className="text-red-800 font-bold text-lg">€{vehicle.price.toLocaleString()}</span>
-          <span className="text-xs text-gray-400 uppercase">{vehicle.fuelType}</span>
+          <span className="text-xs text-gray-400 uppercase">{fuelTypeLabel(vehicle.fuelType)}</span>
         </div>
       </div>
     </motion.div>
