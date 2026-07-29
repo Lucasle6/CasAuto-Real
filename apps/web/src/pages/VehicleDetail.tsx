@@ -6,6 +6,7 @@ import { Navbar } from '../components/Navbar'
 import { Footer } from '../components/Footer'
 import { useFavoritesStore } from '../store/favoritesStore'
 import { useCompareStore } from '../store/compareStore'
+import { BRAND_PHOTOS } from '../data/brandPhotos'
 
 export function VehicleDetail() {
   const { id } = useParams()
@@ -37,7 +38,17 @@ export function VehicleDetail() {
           ← Zurück
         </button>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm mb-6">
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm mb-6 overflow-hidden">
+          <div className="bg-gray-100 h-64 md:h-80">
+            <img
+              src={BRAND_PHOTOS[vehicle.brand]}
+              alt={`${vehicle.brand} ${vehicle.model}`}
+              className="w-full h-full object-cover"
+              onError={(e) => (e.currentTarget.style.display = 'none')}
+            />
+          </div>
+
+          <div className="p-8">
           <div className="flex justify-between items-start mb-6">
             <span className="text-xs uppercase tracking-widest text-gray-400">{vehicle.category}</span>
             <div className="flex items-center gap-3">
@@ -92,6 +103,7 @@ export function VehicleDetail() {
                 Probefahrt buchen
               </button>
             )}
+          </div>
           </div>
         </div>
 

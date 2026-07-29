@@ -3,13 +3,7 @@ import type{ Vehicle } from '../types'
 import {motion} from 'framer-motion'
 import { useFavoritesStore } from '../store/favoritesStore'
 import { useCompareStore } from '../store/compareStore'
-
-const BRAND_IMAGES: Record<string, string> = {
-  BMW: 'https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg',
-  Mercedes: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Mercedes-Logo.svg',
-  Audi: 'https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg',
-  Volkswagen: 'https://upload.wikimedia.org/wikipedia/commons/6/6d/Volkswagen_logo_2019.svg',
-}
+import { BRAND_PHOTOS } from '../data/brandPhotos'
 
 interface Props {
   vehicle: Vehicle
@@ -52,11 +46,12 @@ export function VehicleCard({ vehicle }: Props) {
         {isComparing ? '✓' : '⇄'}
       </button>
 
-      <div className="bg-gray-50 h-40 flex items-center justify-center border-b border-gray-100">
+      <div className="bg-gray-100 h-40 border-b border-gray-100 overflow-hidden">
         <img
-          src={BRAND_IMAGES[vehicle.brand]}
-          alt={vehicle.brand}
-          className="h-20 object-contain opacity-80"
+          src={BRAND_PHOTOS[vehicle.brand]}
+          alt={`${vehicle.brand} ${vehicle.model}`}
+          loading="lazy"
+          className="w-full h-full object-cover"
           onError={(e) => (e.currentTarget.style.display = 'none')}
         />
       </div>
