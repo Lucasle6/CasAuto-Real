@@ -78,7 +78,7 @@ export function Vergleich() {
         )}
 
         {compared.length > 0 && (
-          <div className="flex gap-4 overflow-x-auto pb-2">
+          <div className="flex gap-4 overflow-x-auto px-1 pt-3 pb-4">
             {/* Label column (hidden on mobile - labels move inline into each card) */}
             <div className="shrink-0 hidden sm:flex flex-col w-28">
               <div className={HEADER_H} />
