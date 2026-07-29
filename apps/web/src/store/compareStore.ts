@@ -22,6 +22,7 @@ interface CompareStore {
   toggleCompare: (id: string) => void
   removeFromCompare: (id: string) => void
   clearCompare: () => void
+  pruneCompare: (existingIds: string[]) => void
 }
 
 export const useCompareStore = create<CompareStore>((set, get) => ({
@@ -50,6 +51,17 @@ export const useCompareStore = create<CompareStore>((set, get) => ({
   clearCompare: () => {
     saveCompareIds([])
     set({ compareIds: [] })
+  },
+  // Drops IDs that no longer correspond to a real vehicle (e.g. deleted by
+  // an admin) - without this, the navbar badge count drifts from what
+  // /vergleich actually shows, forever, since nothing else removes them.
+  pruneCompare: (existingIds: string[]) => {
+    const current = get().compareIds
+    const next = current.filter(id => existingIds.includes(id))
+    if (next.length !== current.length) {
+      saveCompareIds(next)
+      set({ compareIds: next })
+    }
   },
 }))
 

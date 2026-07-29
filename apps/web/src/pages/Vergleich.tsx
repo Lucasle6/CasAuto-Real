@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import type { Vehicle } from '../types'
 import { Footer } from '../components/Footer'
 import { Navbar } from '../components/Navbar'
-import { useCompareStore } from '../store/compareStore'
+import { useCompareStore, MAX_COMPARE } from '../store/compareStore'
 
 const ROWS: { label: string; render: (v: Vehicle) => string }[] = [
   { label: 'Preis', render: v => `€${v.price.toLocaleString()}` },
@@ -18,15 +18,21 @@ export function Vergleich() {
   const compareIds = useCompareStore(state => state.compareIds)
   const removeFromCompare = useCompareStore(state => state.removeFromCompare)
   const clearCompare = useCompareStore(state => state.clearCompare)
+  const pruneCompare = useCompareStore(state => state.pruneCompare)
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/vehicles`)
       .then(res => res.json())
-      .then(data => setVehicles(data))
+      .then((data: Vehicle[]) => {
+        setVehicles(data)
+        // Drop any selected IDs that no longer correspond to a real vehicle
+        // (e.g. deleted in the admin panel), so the navbar badge stays accurate.
+        pruneCompare(data.map(v => v.id))
+      })
       .finally(() => setLoading(false))
-  }, [])
+  }, [pruneCompare])
 
   // Keep the order the user picked them in, not the fetch order.
   const compared = compareIds
@@ -47,12 +53,12 @@ export function Vergleich() {
           )}
         </div>
         <p className="text-gray-400 text-sm mb-8">
-          {loading ? 'Lädt…' : `${compared.length} von maximal 3 Fahrzeugen ausgewählt`}
+          {loading ? 'Lädt…' : `${compared.length} von maximal ${MAX_COMPARE} Fahrzeugen ausgewählt`}
         </p>
 
         {!loading && compared.length === 0 && (
           <div className="bg-white border border-gray-200 rounded-lg p-12 text-center text-gray-400">
-            Noch keine Fahrzeuge zum Vergleich ausgewählt. Klicke im Katalog auf das ⇄-Symbol, um bis zu drei Fahrzeuge nebeneinander zu vergleichen.
+            Noch keine Fahrzeuge zum Vergleich ausgewählt. Klicke im Katalog auf das ⇄-Symbol, um bis zu {MAX_COMPARE} Fahrzeuge nebeneinander zu vergleichen.
           </div>
         )}
 
