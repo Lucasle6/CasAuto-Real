@@ -4,12 +4,15 @@ import type { Vehicle } from '../types'
 import { AppointmentForm } from '../components/AppointmentForm'
 import { Navbar } from '../components/Navbar'
 import { Footer } from '../components/Footer'
+import { useFavoritesStore } from '../store/favoritesStore'
 
 export function VehicleDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
   const [vehicle, setVehicle] = useState<Vehicle | null>(null)
   const [showForm, setShowForm] = useState(false)
+  const isFavorite = useFavoritesStore(state => vehicle ? state.isFavorite(vehicle.id) : false)
+  const toggleFavorite = useFavoritesStore(state => state.toggleFavorite)
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/vehicles/${id}`)
@@ -34,9 +37,21 @@ export function VehicleDetail() {
         <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm mb-6">
           <div className="flex justify-between items-start mb-6">
             <span className="text-xs uppercase tracking-widest text-gray-400">{vehicle.category}</span>
-            <span className={`text-xs px-2 py-1 rounded-full ${vehicle.status === 'Available' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
-              {vehicle.status}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className={`text-xs px-2 py-1 rounded-full ${vehicle.status === 'Available' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                {vehicle.status}
+              </span>
+              <button
+                onClick={() => toggleFavorite(vehicle.id)}
+                aria-label={isFavorite ? 'Von der Merkliste entfernen' : 'Zur Merkliste hinzufügen'}
+                aria-pressed={isFavorite}
+                className="text-2xl leading-none transition-transform hover:scale-110"
+              >
+                <span className={isFavorite ? 'text-red-800' : 'text-gray-300'}>
+                  {isFavorite ? '♥' : '♡'}
+                </span>
+              </button>
+            </div>
           </div>
 
           <h2 className="text-4xl font-bold text-gray-900 mb-1">{vehicle.brand}</h2>
