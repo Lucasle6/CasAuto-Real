@@ -5,6 +5,7 @@ import { AppointmentForm } from '../components/AppointmentForm'
 import { Navbar } from '../components/Navbar'
 import { Footer } from '../components/Footer'
 import { useFavoritesStore } from '../store/favoritesStore'
+import { useCompareStore } from '../store/compareStore'
 
 export function VehicleDetail() {
   const { id } = useParams()
@@ -13,6 +14,8 @@ export function VehicleDetail() {
   const [showForm, setShowForm] = useState(false)
   const isFavorite = useFavoritesStore(state => vehicle ? state.isFavorite(vehicle.id) : false)
   const toggleFavorite = useFavoritesStore(state => state.toggleFavorite)
+  const isComparing = useCompareStore(state => vehicle ? state.isComparing(vehicle.id) : false)
+  const toggleCompare = useCompareStore(state => state.toggleCompare)
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/vehicles/${id}`)
@@ -50,6 +53,17 @@ export function VehicleDetail() {
                 <span className={isFavorite ? 'text-red-800' : 'text-gray-300'}>
                   {isFavorite ? '♥' : '♡'}
                 </span>
+              </button>
+              <button
+                onClick={() => toggleCompare(vehicle.id)}
+                aria-pressed={isComparing}
+                className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
+                  isComparing
+                    ? 'bg-red-800 border-red-800 text-white'
+                    : 'border-gray-300 text-gray-500 hover:border-red-800 hover:text-red-800'
+                }`}
+              >
+                {isComparing ? '✓ Im Vergleich' : '⇄ Vergleichen'}
               </button>
             </div>
           </div>

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
 import { useFavoritesStore } from '../store/favoritesStore'
+import { useCompareStore } from '../store/compareStore'
 
 
 export function Navbar() {
@@ -10,6 +11,7 @@ export function Navbar() {
   const location = useLocation()
   const { isAuthenticated, logout } = useAuthStore()
   const favoriteCount = useFavoritesStore(state => state.favoriteIds.length)
+  const compareCount = useCompareStore(state => state.compareIds.length)
 
   function isActive(path: string) {
     return location.pathname === path
@@ -33,6 +35,14 @@ export function Navbar() {
             {favoriteCount > 0 && (
               <span className="bg-red-800 text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">
                 {favoriteCount}
+              </span>
+            )}
+          </button>
+          <button onClick={() => navigate('/vergleich')} className={`text-sm transition-colors flex items-center gap-1.5 ${isActive('/vergleich') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>
+            Vergleich
+            {compareCount > 0 && (
+              <span className="bg-red-800 text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">
+                {compareCount}
               </span>
             )}
           </button>
@@ -71,6 +81,14 @@ export function Navbar() {
             {favoriteCount > 0 && (
               <span className="bg-red-800 text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">
                 {favoriteCount}
+              </span>
+            )}
+          </button>
+          <button onClick={() => { navigate('/vergleich'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left flex items-center gap-1.5">
+            Vergleich
+            {compareCount > 0 && (
+              <span className="bg-red-800 text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">
+                {compareCount}
               </span>
             )}
           </button>

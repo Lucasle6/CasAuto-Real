@@ -13,6 +13,7 @@ Fullstack web application for a German car dealership built with React, NestJS, 
 - Vehicle catalog with filters (brand, category, fuel type, price, year)
 - Vehicle detail page with test drive booking
 - Favorites/watchlist — save vehicles and revisit them on `/merkliste` (stored in `localStorage`, no account needed)
+- Vehicle comparison — select up to 3 vehicles and compare them side by side on `/vergleich` (also `localStorage`-only)
 - Admin panel (protected with JWT)
   - Add, edit, and delete vehicles
   - View appointments

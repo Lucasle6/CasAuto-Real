@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Catalog } from './pages/Catalog'
 import { VehicleDetail } from './pages/VehicleDetail'
 import { Favoriten } from './pages/Favoriten'
+import { Vergleich } from './pages/Vergleich'
 import { Dashboard } from './pages/admin/Dashboard'
 import { VehicleForm } from './pages/admin/VehicleForm'
 import { VehicleEdit } from './pages/admin/VehicleEdit'
@@ -39,6 +40,7 @@ function App() {
         <Route path="/fahrzeuge" element={<PageWrapper><Catalog /></PageWrapper>} />
         <Route path="/vehicles/:id" element={<PageWrapper><VehicleDetail /></PageWrapper>} />
         <Route path="/merkliste" element={<PageWrapper><Favoriten /></PageWrapper>} />
+        <Route path="/vergleich" element={<PageWrapper><Vergleich /></PageWrapper>} />
         <Route path="/kontakt" element={<PageWrapper><Kontakt /></PageWrapper>} />
         <Route path="/unternehmen" element={<PageWrapper><Unternehmen /></PageWrapper>} />
         <Route path="/karriere" element={<PageWrapper><Karriere /></PageWrapper>} />

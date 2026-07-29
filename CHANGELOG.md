@@ -7,6 +7,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ## [Unreleased]
 
 ### Added
+- Fahrzeugvergleich (comparison): a ⇄-toggle on vehicle cards and the detail page to select up to 3 vehicles, a new `/vergleich` page showing them side by side in a spec table (price, year, category, fuel type, status), and a count badge in the navbar. `apps/web/src/store/compareStore.ts` persists selected IDs to `localStorage`, same pattern as `favoritesStore.ts`; selecting a 4th vehicle drops the oldest selection rather than refusing the click. No backend changes - `/vergleich` fetches `/vehicles` and filters client-side, like `/merkliste`.
+  - **Why:** the other purely-frontend idea from the same brainstorm as the favorites feature - lets visitors weigh options against each other instead of opening tabs to compare manually, without needing a backend endpoint or an account.
 - Merkliste (favorites): a heart-toggle button on vehicle cards and the vehicle detail page, a new `/merkliste` page listing favorited vehicles, and a count badge in the navbar. `apps/web/src/store/favoritesStore.ts` persists favorited vehicle IDs to `localStorage` (same manual-persistence pattern as `authStore.ts`); the `/merkliste` page fetches `/vehicles` and filters client-side, so no backend changes were needed. Listed in `README.md`'s Features section and `ERKLAERUNG.md`.
   - **Why:** low-effort, purely frontend way to make the catalog feel less like a generic listing site - lets visitors build a shortlist without an account. Storing only IDs (not full vehicle data) in `localStorage` keeps it small and always in sync with the backend's actual vehicle data.
 
