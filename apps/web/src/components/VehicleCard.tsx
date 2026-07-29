@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import type{ Vehicle } from '../types'
 import {motion} from 'framer-motion'
 import { useFavoritesStore } from '../store/favoritesStore'
+import { useCompareStore } from '../store/compareStore'
 
 const BRAND_IMAGES: Record<string, string> = {
   BMW: 'https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg',
@@ -18,6 +19,8 @@ export function VehicleCard({ vehicle }: Props) {
   const navigate = useNavigate()
   const isFavorite = useFavoritesStore(state => state.isFavorite(vehicle.id))
   const toggleFavorite = useFavoritesStore(state => state.toggleFavorite)
+  const isComparing = useCompareStore(state => state.isComparing(vehicle.id))
+  const toggleCompare = useCompareStore(state => state.toggleCompare)
 
   return (
     <motion.div
@@ -35,6 +38,18 @@ export function VehicleCard({ vehicle }: Props) {
         <span className={isFavorite ? 'text-red-800' : 'text-gray-300'}>
           {isFavorite ? '♥' : '♡'}
         </span>
+      </button>
+
+      <button
+        onClick={(e) => { e.stopPropagation(); toggleCompare(vehicle.id) }}
+        aria-label={isComparing ? 'Vom Vergleich entfernen' : 'Zum Vergleich hinzufügen'}
+        aria-pressed={isComparing}
+        title="Vergleichen"
+        className={`absolute top-3 left-3 z-10 w-9 h-9 rounded-full shadow-sm flex items-center justify-center text-sm font-medium transition-transform hover:scale-110 ${
+          isComparing ? 'bg-red-800 text-white' : 'bg-white/90 text-gray-300'
+        }`}
+      >
+        {isComparing ? '✓' : '⇄'}
       </button>
 
       <div className="bg-gray-50 h-40 flex items-center justify-center border-b border-gray-100">

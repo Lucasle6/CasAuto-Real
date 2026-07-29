@@ -24,6 +24,7 @@ Gebaut mit React (einer Technik für interaktive Websites). Enthält:
 - **Fahrzeugkatalog** — alle Fahrzeuge, mit Filtern nach Marke, Kategorie, Kraftstoffart, Preis und Baujahr
 - **Fahrzeug-Detailseite** — Infos zu einem einzelnen Fahrzeug, inkl. Formular für eine Probefahrt-Anfrage
 - **Merkliste** — Fahrzeuge per Herz-Symbol merken und auf einer eigenen Seite (`/merkliste`) wiederfinden. Wird nur im Browser gespeichert (kein Login nötig, keine Serveränderung)
+- **Fahrzeugvergleich** — bis zu drei Fahrzeuge per ⇄-Symbol auswählen und auf `/vergleich` in einer Tabelle nebeneinander vergleichen (Preis, Baujahr, Kraftstoff, …). Ebenfalls nur im Browser gespeichert
 - **Kontakt-, Über-uns- und Karriere-Seiten**
 - **Newsletter-Anmeldung**
 - **Login/Registrierung** für Kunden
