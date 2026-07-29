@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Changed
+- The fuel type on vehicle cards (`/fahrzeuge`) is now a clearly labeled row with a ⛽ icon, instead of a small unlabeled gray tag easy to miss next to the price.
+  - **Why:** Marco pointed out fuel type is an important detail for buyers and felt it wasn't showing on the catalog page - it was technically already there, just too subtle to register as information rather than decoration.
+
 ### Fixed
 - `VehicleEdit.tsx`'s fuel type dropdown had `<option value="benzin">`/`"diesel"`/`"hybrid"`/`"elektro"` (lowercase, partly German) instead of the backend's actual enum values (`Gasoline`/`Diesel`/`Hybrid`/`Electric`) - editing a vehicle and changing its fuel type would have submitted a value the database enum doesn't accept.
   - **Why:** found while auditing English/mixed-language UI text (Marco's report), not from a bug report - `VehicleForm.tsx` (create) had the correct values, only the edit form had drifted from them. Fixed as part of separating enum *values* (must match the backend exactly) from their *display labels* (translated to German) - see the "Changed" entry below.
