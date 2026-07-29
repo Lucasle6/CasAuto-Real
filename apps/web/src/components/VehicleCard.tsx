@@ -3,7 +3,7 @@ import type{ Vehicle } from '../types'
 import {motion} from 'framer-motion'
 import { useFavoritesStore } from '../store/favoritesStore'
 import { useCompareStore } from '../store/compareStore'
-import { BRAND_PHOTOS } from '../data/brandPhotos'
+import { getVehiclePhoto } from '../data/brandPhotos'
 
 interface Props {
   vehicle: Vehicle
@@ -48,7 +48,7 @@ export function VehicleCard({ vehicle }: Props) {
 
       <div className="bg-gray-100 h-40 border-b border-gray-100 overflow-hidden">
         <img
-          src={BRAND_PHOTOS[vehicle.brand]}
+          src={getVehiclePhoto(vehicle.brand)}
           alt={`${vehicle.brand} ${vehicle.model}`}
           loading="lazy"
           className="w-full h-full object-cover"

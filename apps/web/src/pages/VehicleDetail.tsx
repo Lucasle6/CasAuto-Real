@@ -6,7 +6,7 @@ import { Navbar } from '../components/Navbar'
 import { Footer } from '../components/Footer'
 import { useFavoritesStore } from '../store/favoritesStore'
 import { useCompareStore } from '../store/compareStore'
-import { BRAND_PHOTOS } from '../data/brandPhotos'
+import { getVehiclePhoto } from '../data/brandPhotos'
 
 export function VehicleDetail() {
   const { id } = useParams()
@@ -41,7 +41,7 @@ export function VehicleDetail() {
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm mb-6 overflow-hidden">
           <div className="bg-gray-100 h-64 md:h-80">
             <img
-              src={BRAND_PHOTOS[vehicle.brand]}
+              src={getVehiclePhoto(vehicle.brand)}
               alt={`${vehicle.brand} ${vehicle.model}`}
               className="w-full h-full object-cover"
               onError={(e) => (e.currentTarget.style.display = 'none')}
