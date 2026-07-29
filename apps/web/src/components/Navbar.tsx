@@ -12,13 +12,43 @@ export function Navbar() {
   const navigate = useNavigate()
   const location = useLocation()
   const { t } = useTranslation()
-  const { isAuthenticated, logout } = useAuthStore()
+  const { isAuthenticated, isAdmin, logout } = useAuthStore()
   const favoriteCount = useFavoritesStore(state => state.favoriteIds.length)
   const compareCount = useCompareStore(state => state.compareIds.length)
 
   function isActive(path: string) {
     return location.pathname === path
   }
+
+  const linkClass = (path: string) =>
+    `text-sm transition-colors ${isActive(path) ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`
+
+  // Admins get quick links back to the admin panel (which otherwise has no entry
+  // point from the public site); everyone else gets the marketing pages.
+  function go(path: string) {
+    navigate(path)
+    setMenuOpen(false)
+  }
+
+  const secondaryLinks = isAdmin
+    ? [
+        { path: '/admin', label: t('nav.dashboard') },
+        { path: '/admin/appointments', label: t('nav.appointments') },
+      ]
+    : [
+        { path: '/unternehmen', label: t('nav.company') },
+        { path: '/karriere', label: t('nav.careers') },
+        { path: '/kontakt', label: t('nav.contact') },
+      ]
+
+  const authButton = (
+    <button
+      onClick={() => { if (isAuthenticated) { logout() } ; go(isAuthenticated ? '/' : '/register') }}
+      className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-800 hover:bg-red-50 transition-colors"
+    >
+      {isAuthenticated ? t('nav.logout') : t('nav.register')}
+    </button>
+  )
 
   return (
     <header className="bg-white border-b border-gray-200 px-8 py-4 shadow-sm">
@@ -32,8 +62,8 @@ export function Navbar() {
 
         {/* Desktop nav */}
         <nav className="hidden md:flex gap-6 items-center">
-          <button onClick={() => navigate('/fahrzeuge')} className={`text-sm transition-colors ${isActive('/fahrzeuge') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>{t('nav.vehicles')}</button>
-          <button onClick={() => navigate('/merkliste')} className={`text-sm transition-colors flex items-center gap-1.5 ${isActive('/merkliste') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>
+          <button onClick={() => go('/fahrzeuge')} className={linkClass('/fahrzeuge')}>{t('nav.vehicles')}</button>
+          <button onClick={() => go('/merkliste')} className={`${linkClass('/merkliste')} flex items-center gap-1.5`}>
             {t('nav.watchlist')}
             {favoriteCount > 0 && (
               <span className="bg-red-800 text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">
@@ -41,7 +71,7 @@ export function Navbar() {
               </span>
             )}
           </button>
-          <button onClick={() => navigate('/vergleich')} className={`text-sm transition-colors flex items-center gap-1.5 ${isActive('/vergleich') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>
+          <button onClick={() => go('/vergleich')} className={`${linkClass('/vergleich')} flex items-center gap-1.5`}>
             {t('nav.compare')}
             {compareCount > 0 && (
               <span className="bg-red-800 text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">
@@ -49,24 +79,10 @@ export function Navbar() {
               </span>
             )}
           </button>
-          <button onClick={() => navigate('/unternehmen')} className={`text-sm transition-colors ${isActive('/unternehmen') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>{t('nav.company')}</button>
-          <button onClick={() => navigate('/karriere')} className={`text-sm transition-colors ${isActive('/karriere') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>{t('nav.careers')}</button>
-          <button onClick={() => navigate('/kontakt')} className={`text-sm transition-colors ${isActive('/kontakt') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>{t('nav.contact')}</button>
-          {isAuthenticated ? (
-            <button
-              onClick={() => { logout(); navigate('/') }}
-              className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-800 hover:bg-red-50 transition-colors"
-            >
-              {t('nav.logout')}
-            </button>
-          ) : (
-            <button
-              onClick={() => navigate('/register')}
-              className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-800 hover:bg-red-50 transition-colors"
-            >
-              {t('nav.register')}
-            </button>
-          )}
+          {secondaryLinks.map(link => (
+            <button key={link.path} onClick={() => go(link.path)} className={linkClass(link.path)}>{link.label}</button>
+          ))}
+          {authButton}
           <LanguageSwitcher />
         </nav>
 
@@ -79,8 +95,8 @@ export function Navbar() {
       {/* Mobile menu */}
       {menuOpen && (
         <nav className="md:hidden pt-4 pb-2 flex flex-col gap-3 border-t border-gray-100 mt-4">
-          <button onClick={() => { navigate('/fahrzeuge'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left">{t('nav.vehicles')}</button>
-          <button onClick={() => { navigate('/merkliste'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left flex items-center gap-1.5">
+          <button onClick={() => go('/fahrzeuge')} className="text-sm text-gray-500 hover:text-gray-900 text-left">{t('nav.vehicles')}</button>
+          <button onClick={() => go('/merkliste')} className="text-sm text-gray-500 hover:text-gray-900 text-left flex items-center gap-1.5">
             {t('nav.watchlist')}
             {favoriteCount > 0 && (
               <span className="bg-red-800 text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">
@@ -88,7 +104,7 @@ export function Navbar() {
               </span>
             )}
           </button>
-          <button onClick={() => { navigate('/vergleich'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left flex items-center gap-1.5">
+          <button onClick={() => go('/vergleich')} className="text-sm text-gray-500 hover:text-gray-900 text-left flex items-center gap-1.5">
             {t('nav.compare')}
             {compareCount > 0 && (
               <span className="bg-red-800 text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">
@@ -96,24 +112,10 @@ export function Navbar() {
               </span>
             )}
           </button>
-          <button onClick={() => { navigate('/unternehmen'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left">{t('nav.company')}</button>
-          <button onClick={() => { navigate('/karriere'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left">{t('nav.careers')}</button>
-          <button onClick={() => { navigate('/kontakt'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left">{t('nav.contact')}</button>
-          {isAuthenticated ? (
-            <button
-              onClick={() => { logout(); navigate('/') }}
-              className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-800 hover:bg-red-50 transition-colors"
-            >
-              {t('nav.logout')}
-            </button>
-          ) : (
-            <button
-              onClick={() => navigate('/register')}
-              className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-800 hover:bg-red-50 transition-colors"
-            >
-              {t('nav.register')}
-            </button>
-          )}
+          {secondaryLinks.map(link => (
+            <button key={link.path} onClick={() => go(link.path)} className="text-sm text-gray-500 hover:text-gray-900 text-left">{link.label}</button>
+          ))}
+          {authButton}
           <div className="pt-1"><LanguageSwitcher /></div>
         </nav>
       )}
