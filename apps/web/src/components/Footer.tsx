@@ -10,8 +10,8 @@ export function Footer() {
       <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
           <h4 className="text-white font-bold tracking-widest uppercase text-sm mb-4">CasAuto Real</h4>
-          <p className="text-sm">Bessemerstraße 42A</p>
-          <p className="text-sm">12103 Berlin</p>
+          <p className="text-sm">Kottbusser Damm 31</p>
+          <p className="text-sm">10967 Berlin</p>
         </div>
         <div>
           <h4 className="text-white font-bold tracking-widest uppercase text-sm mb-4">{t('footer.navigation')}</h4>
@@ -25,7 +25,7 @@ export function Footer() {
         <div>
           <h4 className="text-white font-bold tracking-widest uppercase text-sm mb-4">{t('nav.contact')}</h4>
           <p className="text-sm">+49 30 800 935 833</p>
-          <p className="text-sm">verkauf@autohaus-royal.de</p>
+          <p className="text-sm">ventas@casauto-real.com</p>
           <p className="text-sm mt-4">{t('footer.hoursWeek')}</p>
           <p className="text-sm">{t('footer.hoursSat')}</p>
         </div>

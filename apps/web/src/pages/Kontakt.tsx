@@ -88,8 +88,8 @@ export function Kontakt() {
           <div className="space-y-6">
             <div>
               <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('kontakt.address')}</p>
-              <p className="text-gray-700">Bessemerstraße 42A</p>
-              <p className="text-gray-700">12103 Berlin</p>
+              <p className="text-gray-700">Kottbusser Damm 31</p>
+              <p className="text-gray-700">10967 Berlin</p>
             </div>
             <div>
               <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('form.phone')}</p>
@@ -97,7 +97,7 @@ export function Kontakt() {
             </div>
             <div>
               <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('form.email')}</p>
-              <p className="text-gray-700">verkauf@autohaus-royal.de</p>
+              <p className="text-gray-700">ventas@casauto-real.com</p>
             </div>
             <div>
               <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('kontakt.hours')}</p>
