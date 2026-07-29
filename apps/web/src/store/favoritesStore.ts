@@ -19,6 +19,7 @@ interface FavoritesStore {
   favoriteIds: string[]
   isFavorite: (id: string) => boolean
   toggleFavorite: (id: string) => void
+  pruneFavorites: (existingIds: string[]) => void
 }
 
 export const useFavoritesStore = create<FavoritesStore>((set, get) => ({
@@ -31,5 +32,16 @@ export const useFavoritesStore = create<FavoritesStore>((set, get) => ({
       : [...current, id]
     saveFavorites(next)
     set({ favoriteIds: next })
+  },
+  // Drops IDs that no longer correspond to a real vehicle (e.g. deleted by
+  // an admin) - without this, the navbar badge count drifts from what
+  // /merkliste actually shows, forever, since nothing else removes them.
+  pruneFavorites: (existingIds: string[]) => {
+    const current = get().favoriteIds
+    const next = current.filter(id => existingIds.includes(id))
+    if (next.length !== current.length) {
+      saveFavorites(next)
+      set({ favoriteIds: next })
+    }
   },
 }))

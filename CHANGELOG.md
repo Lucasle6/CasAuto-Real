@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Fixed
+- `favoritesStore.ts` never removed a favorited ID once its vehicle no longer existed (e.g. deleted in the admin panel) - `/merkliste` correctly filtered it out of the displayed list, but the navbar badge count never reflected that, silently drifting above what the page actually shows.
+  - **Why:** found while reviewing the same issue in the newer comparison feature - the two stores share the exact same gap. Added `pruneFavorites(existingIds)`, called once `/merkliste` has fetched the real vehicle list, mirroring `compareStore.pruneCompare`.
+
 ### Added
 - Merkliste (favorites): a heart-toggle button on vehicle cards and the vehicle detail page, a new `/merkliste` page listing favorited vehicles, and a count badge in the navbar. `apps/web/src/store/favoritesStore.ts` persists favorited vehicle IDs to `localStorage` (same manual-persistence pattern as `authStore.ts`); the `/merkliste` page fetches `/vehicles` and filters client-side, so no backend changes were needed. Listed in `README.md`'s Features section and `ERKLAERUNG.md`.
   - **Why:** low-effort, purely frontend way to make the catalog feel less like a generic listing site - lets visitors build a shortlist without an account. Storing only IDs (not full vehicle data) in `localStorage` keeps it small and always in sync with the backend's actual vehicle data.
