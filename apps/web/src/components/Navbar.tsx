@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
+import { useFavoritesStore } from '../store/favoritesStore'
 
 
 export function Navbar() {
@@ -8,6 +9,7 @@ export function Navbar() {
   const navigate = useNavigate()
   const location = useLocation()
   const { isAuthenticated, logout } = useAuthStore()
+  const favoriteCount = useFavoritesStore(state => state.favoriteIds.length)
 
   function isActive(path: string) {
     return location.pathname === path
@@ -26,6 +28,14 @@ export function Navbar() {
         {/* Desktop nav */}
         <nav className="hidden md:flex gap-6">
           <button onClick={() => navigate('/fahrzeuge')} className={`text-sm transition-colors ${isActive('/fahrzeuge') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>Fahrzeuge</button>
+          <button onClick={() => navigate('/merkliste')} className={`text-sm transition-colors flex items-center gap-1.5 ${isActive('/merkliste') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>
+            Merkliste
+            {favoriteCount > 0 && (
+              <span className="bg-red-800 text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">
+                {favoriteCount}
+              </span>
+            )}
+          </button>
           <button onClick={() => navigate('/unternehmen')} className={`text-sm transition-colors ${isActive('/unternehmen') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>Unternehmen</button>
           <button onClick={() => navigate('/karriere')} className={`text-sm transition-colors ${isActive('/karriere') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>Karriere</button>
           <button onClick={() => navigate('/kontakt')} className={`text-sm transition-colors ${isActive('/kontakt') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>Kontakt</button>
@@ -56,6 +66,14 @@ export function Navbar() {
       {menuOpen && (
         <nav className="md:hidden pt-4 pb-2 flex flex-col gap-3 border-t border-gray-100 mt-4">
           <button onClick={() => { navigate('/fahrzeuge'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left">Fahrzeuge</button>
+          <button onClick={() => { navigate('/merkliste'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left flex items-center gap-1.5">
+            Merkliste
+            {favoriteCount > 0 && (
+              <span className="bg-red-800 text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">
+                {favoriteCount}
+              </span>
+            )}
+          </button>
           <button onClick={() => { navigate('/unternehmen'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left">Unternehmen</button>
           <button onClick={() => { navigate('/karriere'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left">Karriere</button>
           <button onClick={() => { navigate('/kontakt'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left">Kontakt</button>

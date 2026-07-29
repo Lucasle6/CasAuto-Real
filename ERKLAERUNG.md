@@ -23,6 +23,7 @@ Gebaut mit React (einer Technik für interaktive Websites). Enthält:
 - **Startseite** mit Vorstellung des Autohauses und Kundenbewertungen
 - **Fahrzeugkatalog** — alle Fahrzeuge, mit Filtern nach Marke, Kategorie, Kraftstoffart, Preis und Baujahr
 - **Fahrzeug-Detailseite** — Infos zu einem einzelnen Fahrzeug, inkl. Formular für eine Probefahrt-Anfrage
+- **Merkliste** — Fahrzeuge per Herz-Symbol merken und auf einer eigenen Seite (`/merkliste`) wiederfinden. Wird nur im Browser gespeichert (kein Login nötig, keine Serveränderung)
 - **Kontakt-, Über-uns- und Karriere-Seiten**
 - **Newsletter-Anmeldung**
 - **Login/Registrierung** für Kunden

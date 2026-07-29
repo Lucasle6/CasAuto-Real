@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import type{ Vehicle } from '../types'
 import {motion} from 'framer-motion'
+import { useFavoritesStore } from '../store/favoritesStore'
 
 const BRAND_IMAGES: Record<string, string> = {
   BMW: 'https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg',
@@ -15,14 +16,27 @@ interface Props {
 
 export function VehicleCard({ vehicle }: Props) {
   const navigate = useNavigate()
+  const isFavorite = useFavoritesStore(state => state.isFavorite(vehicle.id))
+  const toggleFavorite = useFavoritesStore(state => state.toggleFavorite)
 
   return (
     <motion.div
         onClick={() => navigate(`/vehicles/${vehicle.id}`)}
         whileHover={{ y: -4, boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}
         transition={{ duration: 0.2 }}
-        className="bg-white border border-gray-200 rounded-lg overflow-hidden cursor-pointer"
+        className="relative bg-white border border-gray-200 rounded-lg overflow-hidden cursor-pointer"
       >
+      <button
+        onClick={(e) => { e.stopPropagation(); toggleFavorite(vehicle.id) }}
+        aria-label={isFavorite ? 'Von der Merkliste entfernen' : 'Zur Merkliste hinzufügen'}
+        aria-pressed={isFavorite}
+        className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-white/90 shadow-sm flex items-center justify-center text-lg transition-transform hover:scale-110"
+      >
+        <span className={isFavorite ? 'text-red-800' : 'text-gray-300'}>
+          {isFavorite ? '♥' : '♡'}
+        </span>
+      </button>
+
       <div className="bg-gray-50 h-40 flex items-center justify-center border-b border-gray-100">
         <img
           src={BRAND_IMAGES[vehicle.brand]}

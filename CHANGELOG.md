@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Added
+- Merkliste (favorites): a heart-toggle button on vehicle cards and the vehicle detail page, a new `/merkliste` page listing favorited vehicles, and a count badge in the navbar. `apps/web/src/store/favoritesStore.ts` persists favorited vehicle IDs to `localStorage` (same manual-persistence pattern as `authStore.ts`); the `/merkliste` page fetches `/vehicles` and filters client-side, so no backend changes were needed.
+  - **Why:** low-effort, purely frontend way to make the catalog feel less like a generic listing site - lets visitors build a shortlist without an account. Storing only IDs (not full vehicle data) in `localStorage` keeps it small and always in sync with the backend's actual vehicle data.
+
 ### Fixed
 - `terraform/ec2.tf` and `terraform/mysql.tf` now pin the instance root volume with an explicit `root_block_device { volume_size = 30, volume_type = "gp3" }` instead of inheriting the AMI default.
   - **Why:** a targeted `terraform apply -replace=aws_instance.backend` (rolling the quoted-secrets fix onto the running backend) launched the new instance from the drifted `data.aws_ami` (`most_recent`) image, whose default root volume is only 2 GB - too small for the on-boot `docker build` of the Node monorepo (`no space left on device`), so the API never started and the site's `/api` was down until the disk was pinned and the instance re-replaced. `ignore_changes = [ami]` guards *normal* applies but does not pin the AMI for a forced `-replace`, so the size must be set here, not left to the AMI default. `mysql.tf` gets the same fix pre-emptively: MySQL's data lives on its root volume, so a future replace inheriting a 2 GB disk would be worse there.
