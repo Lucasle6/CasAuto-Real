@@ -7,15 +7,21 @@ import { useFavoritesStore } from '../store/favoritesStore'
 
 export function Favoriten() {
   const favoriteIds = useFavoritesStore(state => state.favoriteIds)
+  const pruneFavorites = useFavoritesStore(state => state.pruneFavorites)
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/vehicles`)
       .then(res => res.json())
-      .then(data => setVehicles(data))
+      .then((data: Vehicle[]) => {
+        setVehicles(data)
+        // Drop any favorited IDs that no longer correspond to a real vehicle
+        // (e.g. deleted in the admin panel), so the navbar badge stays accurate.
+        pruneFavorites(data.map(v => v.id))
+      })
       .finally(() => setLoading(false))
-  }, [])
+  }, [pruneFavorites])
 
   const favorites = vehicles.filter(v => favoriteIds.includes(v.id))
 

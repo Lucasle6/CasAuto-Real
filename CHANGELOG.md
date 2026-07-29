@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Fixed
+- `favoritesStore.ts` never removed a favorited ID once its vehicle no longer existed (e.g. deleted in the admin panel) - `/merkliste` correctly filtered it out of the displayed list, but the navbar badge count never reflected that, silently drifting above what the page actually shows.
+  - **Why:** found while reviewing the same issue in the newer comparison feature - the two stores share the exact same gap. Added `pruneFavorites(existingIds)`, called once `/merkliste` has fetched the real vehicle list, mirroring `compareStore.pruneCompare`.
+
 ### Added
 - Fahrzeugvergleich (comparison): a ⇄-toggle on vehicle cards and the detail page to select up to `MAX_COMPARE` (3) vehicles, a new `/vergleich` page showing them side by side in a spec table (price, year, category, fuel type, status), and a count badge in the navbar. `apps/web/src/store/compareStore.ts` persists selected IDs to `localStorage`, same pattern as `favoritesStore.ts`; selecting a 4th vehicle drops the oldest selection rather than refusing the click. No backend changes - `/vergleich` fetches `/vehicles` and filters client-side, like `/merkliste`.
   - **Why:** the other purely-frontend idea from the same brainstorm as the favorites feature - lets visitors weigh options against each other instead of opening tabs to compare manually, without needing a backend endpoint or an account.
