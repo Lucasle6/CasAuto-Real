@@ -42,8 +42,10 @@ export function Navbar() {
       ]
 
   const authButton = isAuthenticated ? (
-    <div className="flex flex-col items-start gap-1">
-      <span className="text-[11px] leading-none text-gray-400">
+    // On desktop the email is absolutely positioned above the button so it never
+    // pushes the logout button out of line; on mobile it just stacks above it.
+    <div className="relative flex flex-col items-start gap-1 md:block md:gap-0">
+      <span className="text-[11px] leading-none text-gray-400 whitespace-nowrap md:absolute md:bottom-full md:right-0 md:mb-1">
         {t('nav.loggedInAs')} <span className="text-gray-600 font-medium">{userEmail}</span>
       </span>
       <button
