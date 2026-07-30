@@ -18,19 +18,19 @@ export function Navbar() {
   }
 
   return (
-    <header className="bg-white border-b border-gray-200 px-8 py-4 shadow-sm">
+    <header className="bg-gray-950 border-b border-gray-800 px-8 py-4">
       <div className="flex justify-between items-center">
-        <h1 
-          onClick={() => navigate('/')} 
-          className="text-2xl font-bold tracking-widest uppercase text-red-800 cursor-pointer select-none"
+        <h1
+          onClick={() => navigate('/')}
+          className="text-2xl font-bold tracking-widest uppercase text-red-500 cursor-pointer select-none"
         >
           CasAuto Real
         </h1>
 
         {/* Desktop nav */}
         <nav className="hidden md:flex gap-6">
-          <button onClick={() => navigate('/fahrzeuge')} className={`text-sm transition-colors ${isActive('/fahrzeuge') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>Fahrzeuge</button>
-          <button onClick={() => navigate('/merkliste')} className={`text-sm transition-colors flex items-center gap-1.5 ${isActive('/merkliste') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>
+          <button onClick={() => navigate('/fahrzeuge')} className={`text-sm transition-colors ${isActive('/fahrzeuge') ? 'text-red-500 font-medium' : 'text-gray-400 hover:text-white'}`}>Fahrzeuge</button>
+          <button onClick={() => navigate('/merkliste')} className={`text-sm transition-colors flex items-center gap-1.5 ${isActive('/merkliste') ? 'text-red-500 font-medium' : 'text-gray-400 hover:text-white'}`}>
             Merkliste
             {favoriteCount > 0 && (
               <span className="bg-red-800 text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">
@@ -38,7 +38,7 @@ export function Navbar() {
               </span>
             )}
           </button>
-          <button onClick={() => navigate('/vergleich')} className={`text-sm transition-colors flex items-center gap-1.5 ${isActive('/vergleich') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>
+          <button onClick={() => navigate('/vergleich')} className={`text-sm transition-colors flex items-center gap-1.5 ${isActive('/vergleich') ? 'text-red-500 font-medium' : 'text-gray-400 hover:text-white'}`}>
             Vergleich
             {compareCount > 0 && (
               <span className="bg-red-800 text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">
@@ -46,20 +46,20 @@ export function Navbar() {
               </span>
             )}
           </button>
-          <button onClick={() => navigate('/unternehmen')} className={`text-sm transition-colors ${isActive('/unternehmen') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>Unternehmen</button>
-          <button onClick={() => navigate('/karriere')} className={`text-sm transition-colors ${isActive('/karriere') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>Karriere</button>
-          <button onClick={() => navigate('/kontakt')} className={`text-sm transition-colors ${isActive('/kontakt') ? 'text-red-800 font-medium' : 'text-gray-500 hover:text-gray-900'}`}>Kontakt</button>
+          <button onClick={() => navigate('/unternehmen')} className={`text-sm transition-colors ${isActive('/unternehmen') ? 'text-red-500 font-medium' : 'text-gray-400 hover:text-white'}`}>Unternehmen</button>
+          <button onClick={() => navigate('/karriere')} className={`text-sm transition-colors ${isActive('/karriere') ? 'text-red-500 font-medium' : 'text-gray-400 hover:text-white'}`}>Karriere</button>
+          <button onClick={() => navigate('/kontakt')} className={`text-sm transition-colors ${isActive('/kontakt') ? 'text-red-500 font-medium' : 'text-gray-400 hover:text-white'}`}>Kontakt</button>
           {isAuthenticated ? (
             <button
               onClick={() => { logout(); navigate('/') }}
-              className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-800 hover:bg-red-50 transition-colors"
+              className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-500 hover:bg-red-950 transition-colors"
             >
               Abmelden
             </button>
           ) : (
             <button
               onClick={() => navigate('/register')}
-              className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-800 hover:bg-red-50 transition-colors"
+              className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-500 hover:bg-red-950 transition-colors"
             >
               Registrieren
             </button>
@@ -67,16 +67,16 @@ export function Navbar() {
         </nav>
 
         {/* Mobile hamburger */}
-        <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-gray-600 text-xl">
+        <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-gray-300 text-xl">
           {menuOpen ? '✕' : '☰'}
         </button>
       </div>
 
       {/* Mobile menu */}
       {menuOpen && (
-        <nav className="md:hidden pt-4 pb-2 flex flex-col gap-3 border-t border-gray-100 mt-4">
-          <button onClick={() => { navigate('/fahrzeuge'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left">Fahrzeuge</button>
-          <button onClick={() => { navigate('/merkliste'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left flex items-center gap-1.5">
+        <nav className="md:hidden pt-4 pb-2 flex flex-col gap-3 border-t border-gray-800 mt-4">
+          <button onClick={() => { navigate('/fahrzeuge'); setMenuOpen(false) }} className="text-sm text-gray-400 hover:text-white text-left">Fahrzeuge</button>
+          <button onClick={() => { navigate('/merkliste'); setMenuOpen(false) }} className="text-sm text-gray-400 hover:text-white text-left flex items-center gap-1.5">
             Merkliste
             {favoriteCount > 0 && (
               <span className="bg-red-800 text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">
@@ -84,7 +84,7 @@ export function Navbar() {
               </span>
             )}
           </button>
-          <button onClick={() => { navigate('/vergleich'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left flex items-center gap-1.5">
+          <button onClick={() => { navigate('/vergleich'); setMenuOpen(false) }} className="text-sm text-gray-400 hover:text-white text-left flex items-center gap-1.5">
             Vergleich
             {compareCount > 0 && (
               <span className="bg-red-800 text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">
@@ -92,20 +92,20 @@ export function Navbar() {
               </span>
             )}
           </button>
-          <button onClick={() => { navigate('/unternehmen'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left">Unternehmen</button>
-          <button onClick={() => { navigate('/karriere'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left">Karriere</button>
-          <button onClick={() => { navigate('/kontakt'); setMenuOpen(false) }} className="text-sm text-gray-500 hover:text-gray-900 text-left">Kontakt</button>
+          <button onClick={() => { navigate('/unternehmen'); setMenuOpen(false) }} className="text-sm text-gray-400 hover:text-white text-left">Unternehmen</button>
+          <button onClick={() => { navigate('/karriere'); setMenuOpen(false) }} className="text-sm text-gray-400 hover:text-white text-left">Karriere</button>
+          <button onClick={() => { navigate('/kontakt'); setMenuOpen(false) }} className="text-sm text-gray-400 hover:text-white text-left">Kontakt</button>
           {isAuthenticated ? (
             <button
               onClick={() => { logout(); navigate('/') }}
-              className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-800 hover:bg-red-50 transition-colors"
+              className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-500 hover:bg-red-950 transition-colors"
             >
               Abmelden
             </button>
           ) : (
             <button
               onClick={() => navigate('/register')}
-              className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-800 hover:bg-red-50 transition-colors"
+              className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-500 hover:bg-red-950 transition-colors"
             >
               Registrieren
             </button>
