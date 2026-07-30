@@ -67,11 +67,12 @@ export function VehicleCard({ vehicle }: Props) {
           </span>
         </div>
         <h3 className="text-xl font-semibold text-gray-900">{vehicle.brand}</h3>
-        <p className="text-gray-500 mb-4">{vehicle.model} · {vehicle.year}</p>
-        <div className="flex justify-between items-center">
-          <span className="text-red-800 font-bold text-lg">{price(vehicle.price)}</span>
-          <span className="text-xs text-gray-400 uppercase">{fuelLabels[lang][vehicle.fuelType]}</span>
-        </div>
+        <p className="text-gray-500 mb-1">{vehicle.model} · {vehicle.year}</p>
+        <p className="text-gray-500 text-sm mb-4 flex items-center gap-1.5">
+          <span aria-hidden="true">⛽</span>
+          {fuelLabels[lang][vehicle.fuelType]}
+        </p>
+        <span className="text-red-800 font-bold text-lg">{price(vehicle.price)}</span>
       </div>
     </motion.div>
   )

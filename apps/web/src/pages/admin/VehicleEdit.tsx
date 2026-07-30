@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { FUEL_TYPE_LABELS, VEHICLE_STATUS_LABELS, CATEGORY_LABELS } from '../../data/enumLabels'
 
 const INITIAL_FORM = {
   brand: '',
@@ -115,10 +116,9 @@ export function VehicleEdit() {
               onChange={handleChange}
               className="w-full bg-gray-50 border border-gray-200 rounded px-3 py-2 text-gray-900 focus:outline-none focus:border-red-800 text-sm"
             >
-              <option value="benzin">Gasoline</option>
-              <option value="diesel">Diesel</option>
-              <option value="hybrid">Hybrid</option>
-              <option value="elektro">Electric</option>
+              {Object.entries(FUEL_TYPE_LABELS).map(([value, label]) => (
+                <option key={value} value={value}>{label}</option>
+              ))}
             </select>
           </div>
 
@@ -130,9 +130,9 @@ export function VehicleEdit() {
               onChange={handleChange}
               className="w-full bg-gray-50 border border-gray-200 rounded px-3 py-2 text-gray-900 focus:outline-none focus:border-red-800 text-sm"
             >
-              <option value="Available">Available</option>
-              <option value="Reserved">Reserved</option>
-              <option value="Sold">Sold</option>
+              {Object.entries(VEHICLE_STATUS_LABELS).map(([value, label]) => (
+                <option key={value} value={value}>{label}</option>
+              ))}
             </select>
           </div>
 
@@ -144,8 +144,9 @@ export function VehicleEdit() {
               onChange={handleChange}
               className="w-full bg-gray-50 border border-gray-200 rounded px-3 py-2 text-gray-900 focus:outline-none focus:border-red-800 text-sm"
             >
-              <option value="New">New</option>
-              <option value="Used">Used</option>
+              {Object.entries(CATEGORY_LABELS).map(([value, label]) => (
+                <option key={value} value={value}>{label}</option>
+              ))}
             </select>
           </div>
 
