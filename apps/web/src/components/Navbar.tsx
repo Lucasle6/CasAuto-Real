@@ -12,7 +12,7 @@ export function Navbar() {
   const navigate = useNavigate()
   const location = useLocation()
   const { t } = useTranslation()
-  const { isAuthenticated, isAdmin, logout } = useAuthStore()
+  const { isAuthenticated, isAdmin, userEmail, logout } = useAuthStore()
   const favoriteCount = useFavoritesStore(state => state.favoriteIds.length)
   const compareCount = useCompareStore(state => state.compareIds.length)
 
@@ -41,12 +41,24 @@ export function Navbar() {
         { path: '/kontakt', label: t('nav.contact') },
       ]
 
-  const authButton = (
+  const authButton = isAuthenticated ? (
+    <div className="flex flex-col items-start gap-1">
+      <span className="text-[11px] leading-none text-gray-400">
+        {t('nav.loggedInAs')} <span className="text-gray-600 font-medium">{userEmail}</span>
+      </span>
+      <button
+        onClick={() => { logout(); go('/') }}
+        className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-800 hover:bg-red-50 transition-colors"
+      >
+        {t('nav.logout')}
+      </button>
+    </div>
+  ) : (
     <button
-      onClick={() => { if (isAuthenticated) { logout() } ; go(isAuthenticated ? '/' : '/register') }}
+      onClick={() => go('/register')}
       className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-800 hover:bg-red-50 transition-colors"
     >
-      {isAuthenticated ? t('nav.logout') : t('nav.register')}
+      {t('nav.register')}
     </button>
   )
 

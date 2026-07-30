@@ -29,6 +29,7 @@ export const translations = {
     'nav.register': 'Registrieren',
     'nav.dashboard': 'Dashboard',
     'nav.appointments': 'Termine',
+    'nav.loggedInAs': 'Angemeldet als',
     // vehicle card
     'card.addFavorite': 'Zur Merkliste hinzufügen',
     'card.removeFavorite': 'Von der Merkliste entfernen',
@@ -156,6 +157,7 @@ export const translations = {
     'nav.register': 'Register',
     'nav.dashboard': 'Dashboard',
     'nav.appointments': 'Appointments',
+    'nav.loggedInAs': 'Logged in as',
     'card.addFavorite': 'Add to watchlist',
     'card.removeFavorite': 'Remove from watchlist',
     'card.addCompare': 'Add to comparison',
@@ -269,6 +271,7 @@ export const translations = {
     'nav.register': 'Registrarse',
     'nav.dashboard': 'Panel',
     'nav.appointments': 'Citas',
+    'nav.loggedInAs': 'Conectado como',
     'card.addFavorite': 'Añadir a favoritos',
     'card.removeFavorite': 'Quitar de favoritos',
     'card.addCompare': 'Añadir a comparar',
