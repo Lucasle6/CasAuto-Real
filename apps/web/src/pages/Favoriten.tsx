@@ -4,8 +4,10 @@ import { VehicleCard } from '../components/VehicleCard'
 import { Footer } from '../components/Footer'
 import { Navbar } from '../components/Navbar'
 import { useFavoritesStore } from '../store/favoritesStore'
+import { useTranslation } from '../i18n/useTranslation'
 
 export function Favoriten() {
+  const { t } = useTranslation()
   const favoriteIds = useFavoritesStore(state => state.favoriteIds)
   const pruneFavorites = useFavoritesStore(state => state.pruneFavorites)
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
@@ -30,14 +32,18 @@ export function Favoriten() {
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 w-full flex-1">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Merkliste</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('nav.watchlist')}</h1>
         <p className="text-gray-400 text-sm mb-8">
-          {loading ? 'Lädt…' : `${favorites.length} gemerkte ${favorites.length === 1 ? 'Fahrzeug' : 'Fahrzeuge'}`}
+          {loading
+            ? t('common.loading')
+            : favorites.length === 1
+              ? t('fav.savedOne')
+              : t('fav.savedMany', { n: favorites.length })}
         </p>
 
         {!loading && favorites.length === 0 && (
           <div className="bg-white border border-gray-200 rounded-lg p-12 text-center text-gray-400">
-            Noch keine Fahrzeuge gemerkt. Klicke im Katalog auf das Herz-Symbol, um Fahrzeuge hier zu sammeln.
+            {t('fav.empty')}
           </div>
         )}
 

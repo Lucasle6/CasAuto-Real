@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { Appointment } from '../types'
+import { useTranslation } from '../i18n/useTranslation'
 
 interface Props {
   vehicleId: string
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export function AppointmentForm({ vehicleId, onClose }: Props) {
+  const { t } = useTranslation()
   const [form, setForm] = useState<Appointment>({
     vehicleId,
     customerName: '',
@@ -33,18 +35,18 @@ export function AppointmentForm({ vehicleId, onClose }: Props) {
 
   if (success) return (
     <div className="text-center py-8">
-      <p className="text-green-400 text-xl mb-4">✓ Termin erfolgreich gebucht!</p>
-      <button onClick={onClose} className="text-gray-400 hover:text-white">Zurück</button>
+      <p className="text-green-400 text-xl mb-4">✓ {t('appointment.success')}</p>
+      <button onClick={onClose} className="text-gray-400 hover:text-white">{t('common.back')}</button>
     </div>
   )
 
   return (
     <div className="space-y-4">
-      <h3 className="text-xl font-semibold mb-6">Probefahrt buchen</h3>
+      <h3 className="text-xl font-semibold mb-6">{t('detail.bookTestDrive')}</h3>
 
       <input
         name="customerName"
-        placeholder="Name"
+        placeholder={t('form.name')}
         value={form.customerName}
         onChange={handleChange}
         className="w-full bg-gray-800 border border-gray-700 rounded px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-red-500"
@@ -52,7 +54,7 @@ export function AppointmentForm({ vehicleId, onClose }: Props) {
 
       <input
         name="customerEmail"
-        placeholder="Email"
+        placeholder={t('form.email')}
         value={form.customerEmail}
         onChange={handleChange}
         className="w-full bg-gray-800 border border-gray-700 rounded px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-red-500"
@@ -60,7 +62,7 @@ export function AppointmentForm({ vehicleId, onClose }: Props) {
 
       <input
         name="customerPhone"
-        placeholder="Telefon"
+        placeholder={t('form.phone')}
         value={form.customerPhone}
         onChange={handleChange}
         className="w-full bg-gray-800 border border-gray-700 rounded px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-red-500"
@@ -80,14 +82,14 @@ export function AppointmentForm({ vehicleId, onClose }: Props) {
         onChange={handleChange}
         className="w-full bg-gray-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-red-500"
       >
-        <option value="test_drive">Probefahrt</option>
-        <option value="service">Service</option>
-        <option value="consultation">Beratung</option>
+        <option value="test_drive">{t('appointment.typeTestDrive')}</option>
+        <option value="service">{t('appointment.typeService')}</option>
+        <option value="consultation">{t('appointment.typeConsultation')}</option>
       </select>
 
       <textarea
         name="notes"
-        placeholder="Notizen (optional)"
+        placeholder={t('appointment.notes')}
         value={form.notes}
         onChange={handleChange}
         className="w-full bg-gray-800 border border-gray-700 rounded px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-red-500"
@@ -99,13 +101,13 @@ export function AppointmentForm({ vehicleId, onClose }: Props) {
           onClick={handleSubmit}
           className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded font-medium transition-colors"
         >
-          Termin buchen
+          {t('appointment.submit')}
         </button>
         <button
           onClick={onClose}
           className="flex-1 border border-gray-700 text-gray-400 hover:text-white py-2 rounded transition-colors"
         >
-          Abbrechen
+          {t('appointment.cancel')}
         </button>
       </div>
     </div>

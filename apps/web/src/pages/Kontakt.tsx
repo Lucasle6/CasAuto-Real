@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { Navbar } from '../components/Navbar'
 import { Footer } from '../components/Footer'
+import { useTranslation } from '../i18n/useTranslation'
 
 export function Kontakt() {
+  const { t } = useTranslation()
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -24,20 +26,20 @@ export function Kontakt() {
       <Navbar/>
 
       <main className="max-w-4xl mx-auto px-8 py-16">
-        <h2 className="text-4xl font-bold text-gray-900 mb-4">Kontakt</h2>
-        <p className="text-red-800 text-lg mb-12">Wir freuen uns von Ihnen zu hören</p>
+        <h2 className="text-4xl font-bold text-gray-900 mb-4">{t('nav.contact')}</h2>
+        <p className="text-red-800 text-lg mb-12">{t('kontakt.subtitle')}</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
             {sent ? (
               <div className="text-center py-8">
-                <p className="text-green-700 text-xl font-medium mb-2">Nachricht gesendet</p>
-                <p className="text-gray-500 text-sm">Wir melden uns so schnell wie möglich.</p>
+                <p className="text-green-700 text-xl font-medium mb-2">{t('kontakt.sentTitle')}</p>
+                <p className="text-gray-500 text-sm">{t('kontakt.sentBody')}</p>
               </div>
             ) : (
               <div className="space-y-4">
                 <div>
-                  <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">Name</label>
+                  <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">{t('form.name')}</label>
                   <input
                     name="name"
                     value={form.name}
@@ -46,7 +48,7 @@ export function Kontakt() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">Email</label>
+                  <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">{t('form.email')}</label>
                   <input
                     name="email"
                     value={form.email}
@@ -55,7 +57,7 @@ export function Kontakt() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">Telefon</label>
+                  <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">{t('form.phone')}</label>
                   <input
                     name="phone"
                     value={form.phone}
@@ -64,7 +66,7 @@ export function Kontakt() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">Nachricht</label>
+                  <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">{t('form.message')}</label>
                   <textarea
                     name="message"
                     value={form.message}
@@ -77,7 +79,7 @@ export function Kontakt() {
                   onClick={handleSubmit}
                   className="w-full bg-red-800 hover:bg-red-700 text-white py-2 rounded font-medium transition-colors"
                 >
-                  Nachricht senden
+                  {t('kontakt.send')}
                 </button>
               </div>
             )}
@@ -85,32 +87,32 @@ export function Kontakt() {
 
           <div className="space-y-6">
             <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Adresse</p>
-              <p className="text-gray-700">Bessemerstraße 42A</p>
-              <p className="text-gray-700">12103 Berlin</p>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('kontakt.address')}</p>
+              <p className="text-gray-700">Kottbusser Damm 31</p>
+              <p className="text-gray-700">10967 Berlin</p>
             </div>
             <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Telefon</p>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('form.phone')}</p>
               <p className="text-gray-700">+49 30 800 935 833</p>
             </div>
             <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Email</p>
-              <p className="text-gray-700">verkauf@autohaus-royal.de</p>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('form.email')}</p>
+              <p className="text-gray-700">ventas@casauto-real.com</p>
             </div>
             <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Öffnungszeiten</p>
-              <p className="text-gray-700">Mo–Fr: 09:00 – 19:00 Uhr</p>
-              <p className="text-gray-700">Sa: 09:00 – 16:00 Uhr</p>
-              <p className="text-gray-500">So: geschlossen</p>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('kontakt.hours')}</p>
+              <p className="text-gray-700">{t('footer.hoursWeek')}</p>
+              <p className="text-gray-700">{t('footer.hoursSat')}</p>
+              <p className="text-gray-500">{t('kontakt.sundayClosed')}</p>
             </div>
           </div>
 
-          
+
         </div>
       </main>
 
-      <Footer />  
-      
+      <Footer />
+
     </div>
   )
 }
