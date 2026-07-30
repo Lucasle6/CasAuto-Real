@@ -7,6 +7,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ## [Unreleased]
 
 ### Changed
+- The landing page hero now shows a dealership showroom photo behind the particle animation (dark gradient overlay for text legibility), instead of a plain dark background. Vehicle card photos on the catalog page are also taller (`h-40` → `h-56`), so they read as a proper photo rather than a thumbnail.
+  - **Why:** matches the "large vehicle photos front and center" look Marco wanted for the site, so it reads less like a generic template and more like an actual dealership.
 - The fuel type on vehicle cards (`/fahrzeuge`) is now a clearly labeled row with a ⛽ icon, instead of a small unlabeled gray tag easy to miss next to the price.
   - **Why:** Marco pointed out fuel type is an important detail for buyers and felt it wasn't showing on the catalog page - it was technically already there, just too subtle to register as information rather than decoration.
 

@@ -5,6 +5,10 @@ import { Newsletter } from '../components/Newsletter'
 import { motion } from 'framer-motion'
 import { ParticleBackground } from '../components/ParticleBackground'
 
+// Kamux dealership showroom, CC BY-SA 4.0 (Wikimedia Commons, uploaded by LauriArpiainen):
+// https://commons.wikimedia.org/wiki/File:Kamux_store_inside_2024.jpg
+const HERO_PHOTO = 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Kamux_store_inside_2024.jpg/1280px-Kamux_store_inside_2024.jpg'
+
 const REVIEWS = [
   {
     name: 'Thomas M.',
@@ -34,6 +38,15 @@ export function Landing() {
       <Navbar />
       {/* Hero */}
       <section className="relative overflow-hidden bg-gray-950 text-white px-8 py-20 md:py-32 text-center">
+        <div className="absolute inset-0">
+          <img
+            src={HERO_PHOTO}
+            alt=""
+            aria-hidden="true"
+            className="w-full h-full object-cover opacity-40"
+          />
+          <div className="absolute inset-0 bg-linear-to-b from-gray-950/85 via-gray-950/75 to-gray-950" />
+        </div>
         <ParticleBackground />
           <div className="relative z-10">
             <motion.p
