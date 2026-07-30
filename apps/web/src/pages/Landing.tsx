@@ -4,10 +4,11 @@ import { Footer } from '../components/Footer'
 import { Newsletter } from '../components/Newsletter'
 import { motion } from 'framer-motion'
 import { ParticleBackground } from '../components/ParticleBackground'
+import { useVehicleCount } from '../hooks/useVehicleCount'
 
-// Kamux dealership showroom, CC BY-SA 4.0 (Wikimedia Commons, uploaded by LauriArpiainen):
-// https://commons.wikimedia.org/wiki/File:Kamux_store_inside_2024.jpg
-const HERO_PHOTO = 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Kamux_store_inside_2024.jpg/1280px-Kamux_store_inside_2024.jpg'
+// Black Mercedes-Benz C350 AVANTGARDE, CC BY-SA 4.0 (Wikimedia Commons):
+// https://commons.wikimedia.org/wiki/File:Mercedes-Benz_C350_AVANTGARDE_(W204)_front.JPG
+const HERO_PHOTO = 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Mercedes-Benz_C350_AVANTGARDE_(W204)_front.JPG/1280px-Mercedes-Benz_C350_AVANTGARDE_(W204)_front.JPG'
 
 const REVIEWS = [
   {
@@ -32,6 +33,7 @@ const REVIEWS = [
 
 export function Landing() {
   const navigate = useNavigate()
+  const vehicleCount = useVehicleCount()
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -43,9 +45,9 @@ export function Landing() {
             src={HERO_PHOTO}
             alt=""
             aria-hidden="true"
-            className="w-full h-full object-cover opacity-40"
+            className="w-full h-full object-cover grayscale brightness-[0.45] contrast-125"
           />
-          <div className="absolute inset-0 bg-linear-to-b from-gray-950/85 via-gray-950/75 to-gray-950" />
+          <div className="absolute inset-0 bg-linear-to-b from-gray-950/60 via-transparent to-gray-950" />
         </div>
         <ParticleBackground />
           <div className="relative z-10">
@@ -71,7 +73,7 @@ export function Landing() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="text-gray-400 text-lg md:text-xl mb-12 max-w-xl mx-auto"
             >
-              Über 1.800 hochwertige Fahrzeuge aller führenden Hersteller — direkt aus Berlin.
+              Handverlesene Fahrzeuge aller führenden Hersteller — direkt aus Berlin.
             </motion.p>
             <motion.button
               initial={{ opacity: 0, y: 20 }}
@@ -92,7 +94,7 @@ export function Landing() {
       <section className="border-b border-gray-100 px-8 py-16">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {[
-            { value: '1.800+', label: 'Fahrzeuge' },
+            { value: vehicleCount === null ? '…' : String(vehicleCount), label: 'Fahrzeuge im Bestand' },
             { value: '24+', label: 'Jahre Erfahrung' },
             { value: '6x', label: 'AutoBild Award' },
           ].map((stat, i) => (
