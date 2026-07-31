@@ -1,5 +1,3 @@
-import { useRef } from 'react'
-import { motion } from 'framer-motion'
 import { useTranslation } from '../i18n/useTranslation'
 import type { TranslationKey } from '../i18n/translations'
 
@@ -40,67 +38,53 @@ function Avatar({ src }: { src: string }) {
 
 export function ReviewsCarousel() {
   const { t } = useTranslation()
-  const trackRef = useRef<HTMLDivElement>(null)
 
-  // Nudge the strip by most of a viewport-width of cards, letting scroll-snap
-  // settle it onto a card edge.
-  function scrollByCards(dir: 1 | -1) {
-    const el = trackRef.current
-    if (!el) return
-    el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: 'smooth' })
-  }
+  // The strip auto-scrolls forever. Rendering the list twice and translating by
+  // exactly -50% loops seamlessly (the second half is identical to the first).
+  // Hovering the section pauses it; the clones are hidden from screen readers.
+  const loop = [...REVIEWS, ...REVIEWS]
 
   return (
-    <section className="relative px-8 py-20 bg-gray-50">
-      <div className="max-w-6xl mx-auto relative">
-        {/* Prev / next controls, hidden on touch-first small screens where the
-            strip is simply swiped. */}
-        <button
-          onClick={() => scrollByCards(-1)}
-          aria-label={t('reviews.prev')}
-          className="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-white border border-gray-200 shadow-sm text-gray-500 hover:text-red-800 hover:border-red-800 transition-colors"
-        >
-          ‹
-        </button>
-        <button
-          onClick={() => scrollByCards(1)}
-          aria-label={t('reviews.next')}
-          className="hidden md:flex absolute -right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-white border border-gray-200 shadow-sm text-gray-500 hover:text-red-800 hover:border-red-800 transition-colors"
-        >
-          ›
-        </button>
+    <section className="group relative py-20 bg-gray-50 overflow-hidden">
+      <style>{`
+        @keyframes reviews-marquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .reviews-track { animation: none !important; }
+        }
+      `}</style>
 
-        {/* Fade the strip out at both edges so cards look like they slide off. */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-10 z-10 bg-gradient-to-r from-gray-50 to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-10 z-10 bg-gradient-to-l from-gray-50 to-transparent" />
+      {/* Fade the strip out at both edges so cards look like they slide off. */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-16 z-10 bg-gradient-to-r from-gray-50 to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-16 z-10 bg-gradient-to-l from-gray-50 to-transparent" />
 
-        <div
-          ref={trackRef}
-          className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth py-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        >
-          {REVIEWS.map((r) => (
-            <motion.article
-              key={r.key}
-              whileHover={{ y: -6 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-              className="snap-start shrink-0 w-56 h-64 bg-white border border-gray-200 rounded-xl shadow-sm p-6 flex flex-col"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <Avatar src={r.photo} />
-                <div className="min-w-0">
-                  <p className="font-semibold text-gray-900 text-sm truncate">{r.name}</p>
-                  <p className="text-xs text-gray-400">{r.platform}</p>
-                </div>
+      <div
+        className="reviews-track flex w-max group-hover:[animation-play-state:paused]"
+        style={{ animation: 'reviews-marquee 40s linear infinite' }}
+      >
+        {loop.map((r, i) => (
+          <article
+            key={i}
+            aria-hidden={i >= REVIEWS.length}
+            className="shrink-0 w-56 h-64 mr-4 bg-white border border-gray-200 rounded-xl shadow-sm p-6 flex flex-col transition-transform duration-200 hover:-translate-y-1"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <Avatar src={r.photo} />
+              <div className="min-w-0">
+                <p className="font-semibold text-gray-900 text-sm truncate">{r.name}</p>
+                <p className="text-xs text-gray-400">{r.platform}</p>
               </div>
-              <div className="flex gap-0.5 mb-3" aria-label={`${r.rating}/5`}>
-                {Array.from({ length: 5 }).map((_, j) => (
-                  <span key={j} className={j < r.rating ? 'text-yellow-400' : 'text-gray-200'}>★</span>
-                ))}
-              </div>
-              <p className="text-gray-600 text-sm leading-relaxed line-clamp-5">{t(r.key)}</p>
-            </motion.article>
-          ))}
-        </div>
+            </div>
+            <div className="flex gap-0.5 mb-3" aria-label={`${r.rating}/5`}>
+              {Array.from({ length: 5 }).map((_, j) => (
+                <span key={j} className={j < r.rating ? 'text-yellow-400' : 'text-gray-200'}>★</span>
+              ))}
+            </div>
+            <p className="text-gray-600 text-sm leading-relaxed line-clamp-5">{t(r.key)}</p>
+          </article>
+        ))}
       </div>
     </section>
   )
