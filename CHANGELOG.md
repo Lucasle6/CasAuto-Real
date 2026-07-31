@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Added
+- Multi-language UI (German, English, Spanish) with a DE/EN/ES switcher in the navbar. New `apps/web/src/i18n/` (string dictionaries, enum label maps for fuel/status/category, a locale-aware `formatPrice`, and a `useTranslation` hook with `{token}` interpolation) plus `store/languageStore.ts` (Zustand + `localStorage`, same persistence pattern as `authStore`/`favoritesStore`). German is the default and fallback; every user-facing page and shared component renders through it.
+  - **Why:** the UI had drifted into a mix of three languages by accident — German chrome, English enum values on the cards (`Available`, `Used`, `Gasoline`), and a stray `Cargando…` (Spanish) on the vehicle-detail loading state. Proper i18n both delivers the requested language options and removes that inconsistency at the source. It also fixes the price rendering as `€35000.00`: the API returns the MySQL `DECIMAL` as a string, so `String.toLocaleString()` was a no-op; `formatPrice` coerces to a number and formats per locale (e.g. `35.000 €`). The four backend enum values are mapped to display labels per language while the raw English value is still used for all logic/filtering, so no backend change was needed.
+
 ### Changed
 - The navbar is now dark (`bg-gray-950`, matching the hero and footer) instead of white, with its text/link colors adjusted for contrast on a dark background.
   - **Why:** Marco wanted a darker, more upscale look overall - the footer and hero were already dark, the navbar was the one "brand" element still light and out of step with the rest. Catalog, forms, and the admin area stay on their light background for readability while browsing/filling in data; the request was scoped to the recurring chrome (navbar/hero/footer), not a full site-wide dark theme, since that would touch nearly every file Jose's still-open i18n PR also touches.

@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Navbar } from '../components/Navbar'
+import { useTranslation } from '../i18n/useTranslation'
 
 export function Register() {
+  const { t } = useTranslation()
   const [form, setForm] = useState({ email: '', password: '', confirmPassword: '' })
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
@@ -16,12 +18,12 @@ export function Register() {
     setError('')
 
     if (form.password !== form.confirmPassword) {
-      setError('Passwörter stimmen nicht überein')
+      setError(t('register.errMismatch'))
       return
     }
 
     if (form.password.length < 6) {
-      setError('Passwort muss mindestens 6 Zeichen haben')
+      setError(t('register.errShort'))
       return
     }
 
@@ -34,7 +36,7 @@ export function Register() {
     if (res.ok) {
       setSuccess(true)
     } else {
-      setError('Email bereits registriert')
+      setError(t('register.errEmailTaken'))
     }
   }
 
@@ -42,13 +44,13 @@ export function Register() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <div className="max-w-md mx-auto px-8 py-32 text-center">
-        <p className="text-green-700 text-xl font-medium mb-2">Konto erfolgreich erstellt</p>
-        <p className="text-gray-500 text-sm mb-8">Sie können sich jetzt anmelden.</p>
+        <p className="text-green-700 text-xl font-medium mb-2">{t('register.successTitle')}</p>
+        <p className="text-gray-500 text-sm mb-8">{t('register.successBody')}</p>
         <button
           onClick={() => navigate('/admin/login')}
           className="bg-red-800 hover:bg-red-700 text-white px-6 py-2 rounded font-medium transition-colors"
         >
-          Zum Login
+          {t('register.toLogin')}
         </button>
       </div>
     </div>
@@ -58,12 +60,12 @@ export function Register() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <main className="max-w-md mx-auto px-8 py-16">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Konto erstellen</h2>
-        <p className="text-gray-500 mb-8">Registrieren Sie sich für ein Konto</p>
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('register.title')}</h2>
+        <p className="text-gray-500 mb-8">{t('register.subtitle')}</p>
 
         <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm space-y-4">
           <div>
-            <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">Email</label>
+            <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">{t('form.email')}</label>
             <input
               name="email"
               type="email"
@@ -73,7 +75,7 @@ export function Register() {
             />
           </div>
           <div>
-            <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">Passwort</label>
+            <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">{t('form.password')}</label>
             <input
               name="password"
               type="password"
@@ -83,7 +85,7 @@ export function Register() {
             />
           </div>
           <div>
-            <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">Passwort bestätigen</label>
+            <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">{t('register.confirmPassword')}</label>
             <input
               name="confirmPassword"
               type="password"
@@ -99,13 +101,13 @@ export function Register() {
             onClick={handleSubmit}
             className="w-full bg-red-800 hover:bg-red-700 text-white py-2 rounded font-medium transition-colors"
           >
-            Registrieren
+            {t('nav.register')}
           </button>
 
           <p className="text-center text-sm text-gray-500">
-            Bereits ein Konto?{' '}
+            {t('register.haveAccount')}{' '}
             <span onClick={() => navigate('/admin/login')} className="text-red-800 cursor-pointer hover:underline">
-              Anmelden
+              {t('register.login')}
             </span>
           </p>
         </div>
