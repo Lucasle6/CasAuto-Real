@@ -60,7 +60,7 @@ export function Navbar() {
       onClick={() => go('/register')}
       className="text-sm px-4 py-2 rounded-md border border-red-800 text-red-500 hover:bg-red-950 transition-colors"
     >
-      {t('nav.register')}
+      {t('nav.loginRegister')}
     </button>
   )
 
