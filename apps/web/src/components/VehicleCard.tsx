@@ -49,7 +49,7 @@ export function VehicleCard({ vehicle }: Props) {
         {isComparing ? '✓' : '⇄'}
       </button>
 
-      <div className="bg-gray-100 h-40 border-b border-gray-100 overflow-hidden">
+      <div className="bg-gray-100 h-56 border-b border-gray-100 overflow-hidden">
         <img
           src={getVehiclePhoto(vehicle.brand)}
           alt={`${vehicle.brand} ${vehicle.model}`}

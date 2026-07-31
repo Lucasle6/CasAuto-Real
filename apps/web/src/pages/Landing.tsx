@@ -5,10 +5,16 @@ import { Newsletter } from '../components/Newsletter'
 import { motion } from 'framer-motion'
 import { ParticleBackground } from '../components/ParticleBackground'
 import { useTranslation } from '../i18n/useTranslation'
+import { useVehicleCount } from '../hooks/useVehicleCount'
+
+// Black Mercedes-Benz C350 AVANTGARDE, CC BY-SA 4.0 (Wikimedia Commons):
+// https://commons.wikimedia.org/wiki/File:Mercedes-Benz_C350_AVANTGARDE_(W204)_front.JPG
+const HERO_PHOTO = 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Mercedes-Benz_C350_AVANTGARDE_(W204)_front.JPG/1280px-Mercedes-Benz_C350_AVANTGARDE_(W204)_front.JPG'
 
 export function Landing() {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const vehicleCount = useVehicleCount()
 
   const reviews = [
     { name: 'Thomas M.', rating: 5, platform: 'Google', text: t('landing.review1') },
@@ -17,7 +23,7 @@ export function Landing() {
   ]
 
   const stats = [
-    { value: '1.800+', label: t('landing.statVehicles') },
+    { value: vehicleCount === null ? '…' : String(vehicleCount), label: t('landing.statVehicles') },
     { value: '24+', label: t('landing.statExperience') },
     { value: '6x', label: t('landing.statAward') },
   ]
@@ -27,6 +33,15 @@ export function Landing() {
       <Navbar />
       {/* Hero */}
       <section className="relative overflow-hidden bg-gray-950 text-white px-8 py-20 md:py-32 text-center">
+        <div className="absolute inset-0">
+          <img
+            src={HERO_PHOTO}
+            alt=""
+            aria-hidden="true"
+            className="w-full h-full object-cover grayscale brightness-[0.45] contrast-125"
+          />
+          <div className="absolute inset-0 bg-linear-to-b from-gray-950/60 via-transparent to-gray-950" />
+        </div>
         <ParticleBackground />
           <div className="relative z-10">
             <motion.p
