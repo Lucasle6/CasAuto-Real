@@ -4,6 +4,7 @@ import { Footer } from '../components/Footer'
 import { Newsletter } from '../components/Newsletter'
 import { motion } from 'framer-motion'
 import { ParticleBackground } from '../components/ParticleBackground'
+import { ReviewsCarousel } from '../components/ReviewsCarousel'
 import { useTranslation } from '../i18n/useTranslation'
 import { useVehicleCount } from '../hooks/useVehicleCount'
 
@@ -15,12 +16,6 @@ export function Landing() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const vehicleCount = useVehicleCount()
-
-  const reviews = [
-    { name: 'Thomas M.', rating: 5, platform: 'Google', text: t('landing.review1') },
-    { name: 'Sarah K.', rating: 5, platform: 'AutoScout24', text: t('landing.review2') },
-    { name: 'Michael R.', rating: 4, platform: 'mobile.de', text: t('landing.review3') },
-  ]
 
   const stats = [
     { value: vehicleCount === null ? '…' : String(vehicleCount), label: t('landing.statVehicles') },
@@ -102,33 +97,7 @@ export function Landing() {
       </section>
 
       {/* Reviews */}
-      <section className="px-8 py-20 bg-gray-50">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {reviews.map((r, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.15 }}
-              className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm"
-            >
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <p className="font-semibold text-gray-900">{r.name}</p>
-                  <p className="text-xs text-gray-400">{r.platform}</p>
-                </div>
-                <div className="flex gap-1">
-                  {Array.from({ length: r.rating }).map((_, j) => (
-                    <span key={j} className="text-yellow-400">★</span>
-                  ))}
-                </div>
-              </div>
-              <p className="text-gray-600 text-sm leading-relaxed">{r.text}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+      <ReviewsCarousel />
 
       {/* Newsletter */}
       <section className="px-8 py-20 bg-gray-900 text-white">
