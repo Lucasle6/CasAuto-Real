@@ -102,6 +102,10 @@ export const translations = {
     'form.phone': 'Telefon',
     'form.message': 'Nachricht',
     'form.password': 'Passwort',
+    // login
+    'login.backToSite': 'Zurück zur Website',
+    'login.submit': 'Anmelden',
+    'login.wrongCredentials': 'Email oder Passwort falsch',
     // careers
     'careers.title': 'Karriere & Jobs',
     'careers.subtitle': 'Werden Sie Teil unseres Teams',
@@ -222,6 +226,10 @@ export const translations = {
     'form.phone': 'Phone',
     'form.message': 'Message',
     'form.password': 'Password',
+    // login
+    'login.backToSite': 'Back to the website',
+    'login.submit': 'Log in',
+    'login.wrongCredentials': 'Wrong email or password',
     'careers.title': 'Careers & Jobs',
     'careers.subtitle': 'Become part of our team',
     'careers.apply': 'Apply',
@@ -337,6 +345,10 @@ export const translations = {
     'form.phone': 'Teléfono',
     'form.message': 'Mensaje',
     'form.password': 'Contraseña',
+    // login
+    'login.backToSite': 'Volver al sitio web',
+    'login.submit': 'Iniciar sesión',
+    'login.wrongCredentials': 'Email o contraseña incorrectos',
     'careers.title': 'Empleo y vacantes',
     'careers.subtitle': 'Únete a nuestro equipo',
     'careers.apply': 'Postular',

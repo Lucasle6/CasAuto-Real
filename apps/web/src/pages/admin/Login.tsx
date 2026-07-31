@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
+import { useTranslation } from '../../i18n/useTranslation'
 
 export function Login() {
+  const { t } = useTranslation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -18,13 +20,16 @@ export function Login() {
     })
 
     if (!res.ok) {
-      setError('Email oder Passwort falsch')
+      setError(t('login.wrongCredentials'))
       return
     }
 
     const data = await res.json()
     login(data.accessToken)
-  navigate('/admin')
+    // Only admins have anywhere useful to go at /admin; everyone else (this
+    // form is shared with regular customer accounts via the "already have an
+    // account" link on /register) lands back on the site.
+    navigate(useAuthStore.getState().isAdmin ? '/admin' : '/')
   }
 
   return (
@@ -38,17 +43,17 @@ export function Login() {
         <span className="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-xs">
           ←
         </span>
-        Zurück zur Website
+        {t('login.backToSite')}
       </button>
 
       <div className="bg-white border border-gray-200 rounded-lg p-10 shadow-sm">
         <h1 className="text-2xl font-bold tracking-widest uppercase text-red-800 text-center mb-8">
-          Autohaus Royal
+          CasAuto Real
         </h1>
 
         <div className="space-y-4">
           <div>
-            <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">Email</label>
+            <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">{t('form.email')}</label>
             <input
               type="email"
               value={email}
@@ -57,7 +62,7 @@ export function Login() {
             />
           </div>
           <div>
-            <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">Passwort</label>
+            <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">{t('form.password')}</label>
             <input
               type="password"
               value={password}
@@ -72,7 +77,7 @@ export function Login() {
             onClick={handleSubmit}
             className="w-full bg-red-800 hover:bg-red-700 text-white py-2 rounded font-medium transition-colors"
           >
-            Anmelden
+            {t('login.submit')}
           </button>
         </div>
       </div>
