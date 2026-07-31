@@ -15,7 +15,7 @@ import { Karriere } from './pages/Karriere'
 import { Login } from './pages/admin/Login'
 import { Register } from './pages/Register'
 import { ProtectedRoute } from './components/ProtectedRoute'
-import { CustomCursor } from './components/CustomCursor'
+import { CanvasCursor } from './components/CanvasCursor'
 
 const PageWrapper = ({ children }: { children: React.ReactNode }) => (
   <motion.div
@@ -33,7 +33,7 @@ function App() {
 
   return (
     <>
-    <CustomCursor />
+    <CanvasCursor />
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<PageWrapper><Landing /></PageWrapper>} />
