@@ -11,6 +11,15 @@ interface Props {
   vehicle: Vehicle
 }
 
+// One distinct icon per fuel type, so the badge actually tells them apart at a
+// glance instead of showing the same pump for everything.
+const FUEL_ICON: Record<Vehicle['fuelType'], string> = {
+  Gasoline: '⛽',
+  Diesel: '🛢️',
+  Hybrid: '♻️',
+  Electric: '⚡',
+}
+
 export function VehicleCard({ vehicle }: Props) {
   const navigate = useNavigate()
   const { t, price, lang } = useTranslation()
@@ -69,7 +78,7 @@ export function VehicleCard({ vehicle }: Props) {
         <h3 className="text-xl font-semibold text-gray-900">{vehicle.brand}</h3>
         <p className="text-gray-500 mb-1">{vehicle.model} · {vehicle.year}</p>
         <p className="text-gray-500 text-sm mb-4 flex items-center gap-1.5">
-          <span aria-hidden="true">⛽</span>
+          <span aria-hidden="true">{FUEL_ICON[vehicle.fuelType]}</span>
           {fuelLabels[lang][vehicle.fuelType]}
         </p>
         <span className="text-red-800 font-bold text-lg">{price(vehicle.price)}</span>
