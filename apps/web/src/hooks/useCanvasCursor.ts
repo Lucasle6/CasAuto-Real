@@ -169,6 +169,12 @@ const useCanvasCursor = () => {
   }
 
   useEffect(() => {
+    // A cursor trail only makes sense where there's a persistent pointer to
+    // trail. On touch devices this effect's vendored `touchmove` handler
+    // calls preventDefault() unconditionally to track the finger, which risks
+    // blocking native scroll - skip the whole thing there instead.
+    if (!window.matchMedia('(pointer: fine)').matches) return
+
     renderCanvas()
 
     return () => {
