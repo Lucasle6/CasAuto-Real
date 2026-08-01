@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
+import { useTranslation } from '../../i18n/useTranslation'
 
 export function Login() {
   const [email, setEmail] = useState('')
@@ -8,6 +9,7 @@ export function Login() {
   const [error, setError] = useState('')
   const navigate = useNavigate()
   const login = useAuthStore(state => state.login)
+  const { t } = useTranslation()
 
   async function handleSubmit() {
     setError('')
@@ -43,7 +45,7 @@ export function Login() {
 
       <div className="bg-white border border-gray-200 rounded-lg p-10 shadow-sm">
         <h1 className="text-2xl font-bold tracking-widest uppercase text-red-800 text-center mb-8">
-          Autohaus Royal
+          CasAuto Real
         </h1>
 
         <div className="space-y-4">
@@ -74,6 +76,13 @@ export function Login() {
           >
             Anmelden
           </button>
+
+          <p className="text-center text-sm text-gray-500">
+            {t('login.noAccount')}{' '}
+            <span onClick={() => navigate('/register')} className="text-red-800 cursor-pointer hover:underline">
+              {t('login.register')}
+            </span>
+          </p>
         </div>
       </div>
     </div>
