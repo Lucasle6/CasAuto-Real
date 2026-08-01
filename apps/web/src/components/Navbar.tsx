@@ -5,6 +5,7 @@ import { useFavoritesStore } from '../store/favoritesStore'
 import { useCompareStore } from '../store/compareStore'
 import { useTranslation } from '../i18n/useTranslation'
 import { LanguageSwitcher } from './LanguageSwitcher'
+import { Logo } from './Logo'
 
 
 export function Navbar() {
@@ -67,12 +68,13 @@ export function Navbar() {
   return (
     <header className="bg-gray-950 border-b border-gray-800 px-8 py-4">
       <div className="flex justify-between items-center">
-        <h1
+        <button
           onClick={() => navigate('/')}
-          className="text-2xl font-bold tracking-widest uppercase text-red-500 cursor-pointer select-none"
+          aria-label="CasAuto Real, zur Startseite"
+          className="cursor-pointer select-none bg-transparent border-0 p-0"
         >
-          CasAuto Real
-        </h1>
+          <Logo variant="reversed" nameSize={22} />
+        </button>
 
         {/* Desktop nav */}
         <nav className="hidden md:flex gap-6 items-center">
