@@ -14,7 +14,8 @@ export function Register() {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  async function handleSubmit() {
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
     setError('')
 
     if (form.password !== form.confirmPassword) {
@@ -63,7 +64,7 @@ export function Register() {
         <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('register.title')}</h2>
         <p className="text-gray-500 mb-8">{t('register.subtitle')}</p>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm space-y-4">
+        <form onSubmit={handleSubmit} className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm space-y-4">
           <div>
             <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">{t('form.email')}</label>
             <input
@@ -98,7 +99,7 @@ export function Register() {
           {error && <p className="text-red-600 text-sm">{error}</p>}
 
           <button
-            onClick={handleSubmit}
+            type="submit"
             className="w-full bg-red-800 hover:bg-red-700 text-white py-2 rounded font-medium transition-colors"
           >
             {t('nav.register')}
@@ -110,7 +111,7 @@ export function Register() {
               {t('register.login')}
             </span>
           </p>
-        </div>
+        </form>
       </main>
     </div>
   )

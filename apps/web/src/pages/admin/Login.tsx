@@ -11,7 +11,8 @@ export function Login() {
   const login = useAuthStore(state => state.login)
   const { t } = useTranslation()
 
-  async function handleSubmit() {
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
     setError('')
     const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
       method: 'POST',
@@ -20,19 +21,22 @@ export function Login() {
     })
 
     if (!res.ok) {
-      setError('Email oder Passwort falsch')
+      setError(t('login.wrongCredentials'))
       return
     }
 
     const data = await res.json()
     login(data.accessToken)
-  navigate('/admin')
+    // Only admins have anywhere useful to go at /admin; everyone else (this
+    // form is shared with regular customer accounts via the "already have an
+    // account" link on /register) lands back on the site.
+    navigate(useAuthStore.getState().isAdmin ? '/admin' : '/')
   }
 
   return (
   <div className="min-h-screen bg-gray-50 flex items-center justify-center">
     <div className="w-full max-w-sm">
-      
+
       <button
         onClick={() => navigate('/')}
         className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors mb-6 cursor-pointer select-none"
@@ -40,7 +44,7 @@ export function Login() {
         <span className="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-xs">
           ←
         </span>
-        Zurück zur Website
+        {t('login.backToSite')}
       </button>
 
       <div className="bg-white border border-gray-200 rounded-lg p-10 shadow-sm">
@@ -48,9 +52,9 @@ export function Login() {
           CasAuto Real
         </h1>
 
-        <div className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">Email</label>
+            <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">{t('form.email')}</label>
             <input
               type="email"
               value={email}
@@ -59,7 +63,7 @@ export function Login() {
             />
           </div>
           <div>
-            <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">Passwort</label>
+            <label className="text-xs text-gray-400 uppercase tracking-wider mb-1 block">{t('form.password')}</label>
             <input
               type="password"
               value={password}
@@ -71,10 +75,10 @@ export function Login() {
           {error && <p className="text-red-600 text-sm">{error}</p>}
 
           <button
-            onClick={handleSubmit}
+            type="submit"
             className="w-full bg-red-800 hover:bg-red-700 text-white py-2 rounded font-medium transition-colors"
           >
-            Anmelden
+            {t('login.submit')}
           </button>
 
           <p className="text-center text-sm text-gray-500">
@@ -83,7 +87,7 @@ export function Login() {
               {t('login.register')}
             </span>
           </p>
-        </div>
+        </form>
       </div>
     </div>
   </div>
