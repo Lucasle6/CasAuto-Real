@@ -6,6 +6,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Security
+- The backend had zero auth guards anywhere - every mutating endpoint (`POST`/`PATCH`/`DELETE /vehicles`, `GET /appointments`, `GET /newsletter/subscribers`) was reachable by anyone who knew the API URL, without a token, regardless of the admin-only UI gating on the frontend (`ProtectedRoute` is client-side only and trivially bypassed with a direct request). New `auth/admin.guard.ts` verifies the JWT and checks `role === 'admin'`, now applied to all of those; `GET /vehicles` and `POST /appointments` (booking) stay open on purpose. `JwtModule` is registered `global: true` so the guard doesn't need re-wiring into every module.
+  - **Why:** found while writing the vehicle-seed script - it was able to write to production with no token at all, which is what prompted actually checking every controller instead of assuming vehicles was a one-off oversight. `apps/api/README.md`/`ERKLAERUNG.md` already documented these as admin-only; the code just didn't enforce it.
+- None of the admin frontend requests (create/edit/delete vehicle, list appointments) ever actually sent the JWT that's been sitting in `authStore`/`localStorage` since login - so turning on the guards above would have broken the admin panel outright. New `lib/authFetch.ts` attaches `Authorization: Bearer <token>`; `Dashboard.tsx`, `VehicleForm.tsx`, `VehicleEdit.tsx`, and `admin/Appointments.tsx` now use it for their admin-only requests (the public `GET` calls elsewhere are untouched).
+  - **Why:** the backend fix above is only real if the frontend can still authenticate against it - a guard nobody's client ever satisfies just breaks the feature instead of securing it.
+
 ### Added
 - The canvas cursor-trail effect is now off by default with a small toggle in the navbar (next to the language switcher) to turn it on. New `store/cursorEffectStore.ts` (same `localStorage`-persisted Zustand pattern as `languageStore.ts`); `App.tsx` only renders `<CanvasCursor />` when enabled.
   - **Why:** Marco felt the effect could read as confusing or accidental for visitors who don't know it's intentional, rather than a rendering glitch - opt-in fixes that without removing the effect entirely. Still separately gated behind `pointer: fine` from the earlier touch-scroll fix, so the toggle only does anything on devices where the effect would show in the first place.

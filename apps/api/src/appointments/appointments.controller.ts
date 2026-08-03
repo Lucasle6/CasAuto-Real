@@ -1,11 +1,13 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
 import { AppointmentsService } from './appointments.service';
+import { AdminGuard } from '../auth/admin.guard';
 
 @Controller('appointments')
 export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
   @Get()
+  @UseGuards(AdminGuard)
   findAll() {
     return this.appointmentsService.findAll();
   }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { FUEL_TYPE_LABELS, VEHICLE_STATUS_LABELS, CATEGORY_LABELS } from '../../data/enumLabels'
+import { authFetch } from '../../lib/authFetch'
 
 const INITIAL_FORM = {
   brand: '',
@@ -36,7 +37,7 @@ export function VehicleEdit() {
   }
 
   async function handleSubmit() {
-    await fetch(`${import.meta.env.VITE_API_URL}/vehicles/${id}`, {
+    await authFetch(`/vehicles/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

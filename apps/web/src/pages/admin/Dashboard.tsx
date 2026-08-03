@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import type { Vehicle } from '../../types'
 import { useAuthStore } from '../../store/authStore'
 import { categoryLabel, vehicleStatusLabel } from '../../data/enumLabels'
+import { authFetch } from '../../lib/authFetch'
 
 export function Dashboard() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
@@ -16,7 +17,7 @@ export function Dashboard() {
   }, [])
 
   function handleDelete(id: string) {
-    fetch(`${import.meta.env.VITE_API_URL}/vehicles/${id}`, { method: 'DELETE' })
+    authFetch(`/vehicles/${id}`, { method: 'DELETE' })
       .then(() => setVehicles(vehicles.filter(v => v.id !== id)))
   }
 

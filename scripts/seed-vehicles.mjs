@@ -8,15 +8,21 @@
 // vehicles (136 total). Re-running adds MORE on top rather than replacing -
 // there's no dedupe - so don't run it again without a reason.
 //
-// POST /vehicles currently has no auth guard at all (neither does any other
-// mutating endpoint in the API), which is how this can run without a token -
-// separate pre-existing issue, not something this script relies on staying true.
+// POST /vehicles now requires an admin JWT (see auth/admin.guard.ts) - pass
+// one via ADMIN_TOKEN, e.g. copy the token out of localStorage after logging
+// in as an admin in the browser.
 //
 // Usage: node scripts/seed-vehicles.mjs [count]
-//   API_URL=http://localhost:3000 node scripts/seed-vehicles.mjs 50
+//   API_URL=http://localhost:3000 ADMIN_TOKEN=eyJ... node scripts/seed-vehicles.mjs 50
 
 const API_URL = process.env.API_URL || 'http://3.77.123.218:3000'
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN
 const COUNT = Number(process.argv[2]) || 120
+
+if (!ADMIN_TOKEN) {
+  console.error('Missing ADMIN_TOKEN env var - POST /vehicles requires an admin JWT now.')
+  process.exit(1)
+}
 
 // tier drives the price band; ev models are always Electric.
 const MODELS = [
@@ -107,7 +113,7 @@ async function main() {
     const vehicle = buildVehicle()
     const res = await fetch(`${API_URL}/vehicles`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ADMIN_TOKEN}` },
       body: JSON.stringify(vehicle),
     })
     if (res.ok) {

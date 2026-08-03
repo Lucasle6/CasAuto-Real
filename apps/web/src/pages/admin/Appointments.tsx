@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { appointmentTypeLabel, appointmentStatusLabel } from '../../data/enumLabels'
+import { authFetch } from '../../lib/authFetch'
 
 interface Appointment {
   id: string
@@ -20,7 +21,7 @@ export function Appointments() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/appointments`)
+    authFetch('/appointments')
       .then(res => res.json())
       .then(data => setAppointments(data))
   }, [])
