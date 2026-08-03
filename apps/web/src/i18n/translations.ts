@@ -31,6 +31,7 @@ export const translations = {
     'nav.dashboard': 'Dashboard',
     'nav.appointments': 'Termine',
     'nav.loggedInAs': 'Angemeldet als',
+    'nav.cursorEffect': 'Cursor-Effekt',
     // vehicle card
     'card.addFavorite': 'Zur Merkliste hinzufügen',
     'card.removeFavorite': 'Von der Merkliste entfernen',
@@ -172,6 +173,7 @@ export const translations = {
     'nav.dashboard': 'Dashboard',
     'nav.appointments': 'Appointments',
     'nav.loggedInAs': 'Logged in as',
+    'nav.cursorEffect': 'Cursor effect',
     'card.addFavorite': 'Add to watchlist',
     'card.removeFavorite': 'Remove from watchlist',
     'card.addCompare': 'Add to comparison',
@@ -299,6 +301,7 @@ export const translations = {
     'nav.dashboard': 'Panel',
     'nav.appointments': 'Citas',
     'nav.loggedInAs': 'Conectado como',
+    'nav.cursorEffect': 'Efecto de cursor',
     'card.addFavorite': 'Añadir a favoritos',
     'card.removeFavorite': 'Quitar de favoritos',
     'card.addCompare': 'Añadir a comparar',

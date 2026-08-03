@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Added
+- The canvas cursor-trail effect is now off by default with a small toggle in the navbar (next to the language switcher) to turn it on. New `store/cursorEffectStore.ts` (same `localStorage`-persisted Zustand pattern as `languageStore.ts`); `App.tsx` only renders `<CanvasCursor />` when enabled.
+  - **Why:** Marco felt the effect could read as confusing or accidental for visitors who don't know it's intentional, rather than a rendering glitch - opt-in fixes that without removing the effect entirely. Still separately gated behind `pointer: fine` from the earlier touch-scroll fix, so the toggle only does anything on devices where the effect would show in the first place.
+
 ### Fixed
 - Login and register forms now submit on Enter, not just on clicking the button - both were plain `<input>`s with an `onClick` button instead of a real `<form>`, so Enter did nothing.
   - **Why:** Marco reported it broke the flow having to reach for the mouse after typing a password. Same root cause exists on the appointment-booking, contact, and newsletter forms too (not fixed here, wasn't what was reported), so worth a follow-up sweep.
