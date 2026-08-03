@@ -16,6 +16,7 @@ import { Login } from './pages/admin/Login'
 import { Register } from './pages/Register'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { CanvasCursor } from './components/CanvasCursor'
+import { useCursorEffectStore } from './store/cursorEffectStore'
 
 const PageWrapper = ({ children }: { children: React.ReactNode }) => (
   <motion.div
@@ -30,10 +31,11 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => (
 
 function App() {
   const location = useLocation()
+  const cursorEffectEnabled = useCursorEffectStore(state => state.enabled)
 
   return (
     <>
-    <CanvasCursor />
+    {cursorEffectEnabled && <CanvasCursor />}
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<PageWrapper><Landing /></PageWrapper>} />

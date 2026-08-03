@@ -5,6 +5,7 @@ import { useFavoritesStore } from '../store/favoritesStore'
 import { useCompareStore } from '../store/compareStore'
 import { useTranslation } from '../i18n/useTranslation'
 import { LanguageSwitcher } from './LanguageSwitcher'
+import { CursorEffectToggle } from './CursorEffectToggle'
 import { Logo } from './Logo'
 
 
@@ -99,6 +100,7 @@ export function Navbar() {
             <button key={link.path} onClick={() => go(link.path)} className={linkClass(link.path)}>{link.label}</button>
           ))}
           {authButton}
+          <CursorEffectToggle />
           <LanguageSwitcher />
         </nav>
 
@@ -132,7 +134,7 @@ export function Navbar() {
             <button key={link.path} onClick={() => go(link.path)} className="text-sm text-gray-400 hover:text-white text-left">{link.label}</button>
           ))}
           {authButton}
-          <div className="pt-1"><LanguageSwitcher /></div>
+          <div className="pt-1 flex items-center gap-3"><CursorEffectToggle /><LanguageSwitcher /></div>
         </nav>
       )}
     </header>
