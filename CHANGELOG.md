@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Added
+- A thin red border frames the whole viewport whenever you're logged in (customer or admin) - a fixed, `pointer-events-none` overlay in `App.tsx`, driven by `authStore`'s `isAuthenticated`.
+  - **Why:** Marco wanted a persistent, page-independent signal that you're signed in, in the app's own accent color (`border-red-800`) rather than a generic browser-style indicator.
+
 ### Security
 - The backend had zero auth guards anywhere - every mutating endpoint (`POST`/`PATCH`/`DELETE /vehicles`, `GET /appointments`, `GET /newsletter/subscribers`) was reachable by anyone who knew the API URL, without a token, regardless of the admin-only UI gating on the frontend (`ProtectedRoute` is client-side only and trivially bypassed with a direct request). New `auth/admin.guard.ts` verifies the JWT and checks `role === 'admin'`, now applied to all of those; `GET /vehicles` and `POST /appointments` (booking) stay open on purpose. `JwtModule` is registered `global: true` so the guard doesn't need re-wiring into every module.
   - **Why:** found while writing the vehicle-seed script - it was able to write to production with no token at all, which is what prompted actually checking every controller instead of assuming vehicles was a one-off oversight. `apps/api/README.md`/`ERKLAERUNG.md` already documented these as admin-only; the code just didn't enforce it.
