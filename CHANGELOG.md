@@ -6,6 +6,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Fixed
+- Login and register forms now submit on Enter, not just on clicking the button - both were plain `<input>`s with an `onClick` button instead of a real `<form>`, so Enter did nothing.
+  - **Why:** Marco reported it broke the flow having to reach for the mouse after typing a password. Same root cause exists on the appointment-booking, contact, and newsletter forms too (not fixed here, wasn't what was reported), so worth a follow-up sweep.
+- `admin/Login.tsx` had regressed back to its old hardcoded-German/unconditional-`/admin`-redirect state (PR #34 branched before that fix landed and the merge didn't carry it forward) - re-applied: labels route through `useTranslation`, and login now sends admins to `/admin` but everyone else back to the site, on top of PR #34's "no account yet? register" link, which is kept.
+  - **Why:** noticed while fixing the Enter-to-submit issue on the same file - would have been an easy miss otherwise since the page still looked and worked "fine" for an admin logging in, just silently broken again for the redirect-after-customer-login case this branch specifically exists to prevent.
+
 ### Added
 - `scripts/seed-vehicles.mjs`: a one-off script that POSTs a batch of plausible but entirely fictional vehicles to `/vehicles`, to pad the demo catalog out from 16 to a more realistic-looking inventory. Used once to add 120 vehicles (136 total), evenly spread across the four brands `brandPhotos.ts` already covers.
   - **Why:** Marco's original idea was to pull real listings from mobile.de for a bigger catalog, but scraping and republishing a competitor's actual inventory - especially on a site that's genuinely public (Vercel) - risks their ToS, the sellers' copyright on photos/descriptions, and looks like misrepresenting cars we don't actually have for sale. Generating fictional-but-plausible data gets the same "not a tiny demo catalog" result without any of that; brand/model/price/year are randomized within realistic bands per model tier, not copied from anywhere.
