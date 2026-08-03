@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
 import { NewsletterService } from './newsletter.service';
+import { AdminGuard } from '../auth/admin.guard';
 
 @Controller('newsletter')
 export class NewsletterController {
@@ -11,6 +12,7 @@ export class NewsletterController {
   }
 
   @Get('subscribers')
+  @UseGuards(AdminGuard)
   findAll() {
     return this.newsletterService.findAll();
   }

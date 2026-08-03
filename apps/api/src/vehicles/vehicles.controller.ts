@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Patch, Delete, Body, Query, Param } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Query, Param, UseGuards } from '@nestjs/common';
 import { VehiclesService } from './vehicles.service';
+import { AdminGuard } from '../auth/admin.guard';
 
 @Controller('vehicles')
 export class VehiclesController {
@@ -25,16 +26,19 @@ export class VehiclesController {
   }
 
   @Post()
+  @UseGuards(AdminGuard)
   create(@Body() body: any) {
     return this.vehiclesService.create(body);
   }
 
   @Patch(':id')
+  @UseGuards(AdminGuard)
   update(@Param('id') id: string, @Body() body: any) {
     return this.vehiclesService.update(id, body);
   }
 
   @Delete(':id')
+  @UseGuards(AdminGuard)
   remove(@Param('id') id: string) {
     return this.vehiclesService.remove(id);
   }
