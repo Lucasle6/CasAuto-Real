@@ -55,6 +55,7 @@ export const translations = {
     'catalog.from': 'Von',
     'catalog.to': 'Bis',
     'catalog.vehiclesFound': '{n} Fahrzeuge gefunden',
+    'catalog.authHint': 'Melde dich an, um Fahrzeuge zu merken oder zu vergleichen',
     // vehicle detail
     'detail.inCompare': 'Im Vergleich',
     'detail.bookTestDrive': 'Probefahrt buchen',
@@ -195,6 +196,7 @@ export const translations = {
     'catalog.from': 'From',
     'catalog.to': 'To',
     'catalog.vehiclesFound': '{n} vehicles found',
+    'catalog.authHint': 'Log in to save or compare vehicles',
     'detail.inCompare': 'In comparison',
     'detail.bookTestDrive': 'Book a test drive',
     'footer.navigation': 'Navigation',
@@ -323,6 +325,7 @@ export const translations = {
     'catalog.from': 'Desde',
     'catalog.to': 'Hasta',
     'catalog.vehiclesFound': '{n} vehículos encontrados',
+    'catalog.authHint': 'Inicia sesión para guardar o comparar vehículos',
     'detail.inCompare': 'En comparación',
     'detail.bookTestDrive': 'Reservar prueba de manejo',
     'footer.navigation': 'Navegación',
