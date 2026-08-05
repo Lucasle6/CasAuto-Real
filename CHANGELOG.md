@@ -7,6 +7,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ## [Unreleased]
 
 ### Fixed
+- `/merkliste` and `/vergleich` had no way back other than the browser's own back button or the navbar - unlike `VehicleDetail.tsx`, which already has a `← Zurück` link. Added the same button (`navigate(-1)`) to both, in the same spot and style.
+  - **Why:** Marco reported the comparison page had one and the favorites page didn't; turned out neither actually did - `VehicleDetail.tsx` was the only page with this pattern. Added it consistently to both instead of just the one he noticed.
 - `CompareView.tsx` (the `/vergleich` page and the catalog's compare drawer) never showed a vehicle photo, unlike `VehicleCard.tsx`/`VehicleDetail.tsx` which both do - it was missing entirely from this component, not a regression. Added the same `getVehiclePhoto()` photo block above the brand/model row, with the label column's spacer height adjusted to match so rows still line up.
   - **Why:** Marco reported no images on the comparison page.
 - Only the brand/model text was clickable to open a compared vehicle's detail page - the rest of the card (including the new photo) did nothing. The whole card now navigates on click, matching `VehicleCard.tsx`'s pattern; the remove ("✕") button stops propagation so it doesn't also trigger navigation.
