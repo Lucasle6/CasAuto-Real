@@ -7,6 +7,8 @@ import { useTranslation } from '../i18n/useTranslation'
 import { categoryLabels, fuelLabels, statusLabels } from '../i18n/translations'
 import { CompareView } from '../components/CompareView'
 import { useCompareStore, MAX_COMPARE } from '../store/compareStore'
+import { useAuthStore } from '../store/authStore'
+import { useNavigate } from 'react-router-dom'
 
 const BRANDS = ['All', 'BMW', 'Mercedes', 'Audi', 'Volkswagen']
 const CATEGORIES = ['All', 'New', 'Used']
@@ -15,6 +17,8 @@ const STATUSES = ['All', 'Available', 'Reserved']
 
 export function Catalog() {
   const { t, lang } = useTranslation()
+  const navigate = useNavigate()
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated)
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
   const [selectedBrand, setSelectedBrand] = useState('All')
   const [selectedCategory, setSelectedCategory] = useState('All')
@@ -96,6 +100,14 @@ export function Catalog() {
             <span className="bg-white/25 rounded-full px-2 py-0.5 text-xs tabular-nums">{compareCount}/{MAX_COMPARE}</span>
             <span aria-hidden="true" className={`transition-transform ${showCompare && compareCount > 0 ? 'rotate-180' : ''}`}>▾</span>
           </button>
+          {!isAuthenticated && (
+            <button
+              onClick={() => navigate('/admin/login')}
+              className="w-full text-left text-xs text-gray-400 hover:text-red-800 underline decoration-dotted underline-offset-2 transition-colors mb-4 -mt-2"
+            >
+              {t('catalog.authHint')}
+            </button>
+          )}
           <div className="bg-white border border-gray-200 rounded-lg p-6 space-y-6 shadow-sm">
             <div className="flex justify-between items-center">
               <h2 className="text-sm uppercase tracking-widest text-gray-400">{t('catalog.filter')}</h2>

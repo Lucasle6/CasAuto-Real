@@ -23,13 +23,6 @@ export function VehicleDetail() {
   const toggleCompare = useCompareStore(state => state.toggleCompare)
   const isAuthenticated = useAuthStore(state => state.isAuthenticated)
 
-  // Merkliste/Vergleich require an account - redirect instead of silently
-  // building up an anonymous local list that a login wouldn't then attach to.
-  function requireAuth(action: () => void) {
-    if (!isAuthenticated) { navigate('/admin/login'); return }
-    action()
-  }
-
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/vehicles/${id}`)
       .then(res => res.json())
@@ -67,27 +60,38 @@ export function VehicleDetail() {
               <span className={`text-xs px-2 py-1 rounded-full ${vehicle.status === 'Available' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
                 {statusLabels[lang][vehicle.status]}
               </span>
-              <button
-                onClick={() => requireAuth(() => toggleFavorite(vehicle.id))}
-                aria-label={isFavorite ? t('card.removeFavorite') : t('card.addFavorite')}
-                aria-pressed={isFavorite}
-                className="text-2xl leading-none transition-transform hover:scale-110"
-              >
-                <span className={isFavorite ? 'text-red-800' : 'text-gray-300'}>
-                  {isFavorite ? '♥' : '♡'}
-                </span>
-              </button>
-              <button
-                onClick={() => requireAuth(() => toggleCompare(vehicle.id))}
-                aria-pressed={isComparing}
-                className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
-                  isComparing
-                    ? 'bg-red-800 border-red-800 text-white'
-                    : 'border-gray-300 text-gray-500 hover:border-red-800 hover:text-red-800'
-                }`}
-              >
-                {isComparing ? `✓ ${t('detail.inCompare')}` : `⇄ ${t('card.compare')}`}
-              </button>
+              {isAuthenticated ? (
+                <>
+                  <button
+                    onClick={() => toggleFavorite(vehicle.id)}
+                    aria-label={isFavorite ? t('card.removeFavorite') : t('card.addFavorite')}
+                    aria-pressed={isFavorite}
+                    className="text-2xl leading-none transition-transform hover:scale-110"
+                  >
+                    <span className={isFavorite ? 'text-red-800' : 'text-gray-300'}>
+                      {isFavorite ? '♥' : '♡'}
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => toggleCompare(vehicle.id)}
+                    aria-pressed={isComparing}
+                    className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
+                      isComparing
+                        ? 'bg-red-800 border-red-800 text-white'
+                        : 'border-gray-300 text-gray-500 hover:border-red-800 hover:text-red-800'
+                    }`}
+                  >
+                    {isComparing ? `✓ ${t('detail.inCompare')}` : `⇄ ${t('card.compare')}`}
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={() => navigate('/admin/login')}
+                  className="text-xs text-gray-400 hover:text-red-800 underline decoration-dotted underline-offset-2 transition-colors"
+                >
+                  {t('catalog.authHint')}
+                </button>
+              )}
             </div>
           </div>
 

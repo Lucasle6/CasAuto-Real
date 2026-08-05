@@ -30,13 +30,6 @@ export function VehicleCard({ vehicle }: Props) {
   const toggleCompare = useCompareStore(state => state.toggleCompare)
   const isAuthenticated = useAuthStore(state => state.isAuthenticated)
 
-  // Merkliste/Vergleich require an account - redirect instead of silently
-  // building up an anonymous local list that a login wouldn't then attach to.
-  function requireAuth(action: () => void) {
-    if (!isAuthenticated) { navigate('/admin/login'); return }
-    action()
-  }
-
   return (
     <motion.div
         onClick={() => navigate(`/vehicles/${vehicle.id}`)}
@@ -44,28 +37,32 @@ export function VehicleCard({ vehicle }: Props) {
         transition={{ duration: 0.2 }}
         className="relative bg-white border border-gray-200 rounded-lg overflow-hidden cursor-pointer"
       >
-      <button
-        onClick={(e) => { e.stopPropagation(); requireAuth(() => toggleFavorite(vehicle.id)) }}
-        aria-label={isFavorite ? t('card.removeFavorite') : t('card.addFavorite')}
-        aria-pressed={isFavorite}
-        className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-white/90 shadow-sm flex items-center justify-center text-lg transition-transform hover:scale-110"
-      >
-        <span className={isFavorite ? 'text-red-800' : 'text-gray-300'}>
-          {isFavorite ? '♥' : '♡'}
-        </span>
-      </button>
+      {isAuthenticated && (
+        <>
+          <button
+            onClick={(e) => { e.stopPropagation(); toggleFavorite(vehicle.id) }}
+            aria-label={isFavorite ? t('card.removeFavorite') : t('card.addFavorite')}
+            aria-pressed={isFavorite}
+            className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-white/90 shadow-sm flex items-center justify-center text-lg transition-transform hover:scale-110"
+          >
+            <span className={isFavorite ? 'text-red-800' : 'text-gray-300'}>
+              {isFavorite ? '♥' : '♡'}
+            </span>
+          </button>
 
-      <button
-        onClick={(e) => { e.stopPropagation(); requireAuth(() => toggleCompare(vehicle.id)) }}
-        aria-label={isComparing ? t('card.removeCompare') : t('card.addCompare')}
-        aria-pressed={isComparing}
-        title={t('card.compare')}
-        className={`absolute top-3 left-3 z-10 w-9 h-9 rounded-full shadow-sm flex items-center justify-center text-sm font-medium transition-transform hover:scale-110 ${
-          isComparing ? 'bg-red-800 text-white' : 'bg-white/90 text-gray-300'
-        }`}
-      >
-        {isComparing ? '✓' : '⇄'}
-      </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); toggleCompare(vehicle.id) }}
+            aria-label={isComparing ? t('card.removeCompare') : t('card.addCompare')}
+            aria-pressed={isComparing}
+            title={t('card.compare')}
+            className={`absolute top-3 left-3 z-10 w-9 h-9 rounded-full shadow-sm flex items-center justify-center text-sm font-medium transition-transform hover:scale-110 ${
+              isComparing ? 'bg-red-800 text-white' : 'bg-white/90 text-gray-300'
+            }`}
+          >
+            {isComparing ? '✓' : '⇄'}
+          </button>
+        </>
+      )}
 
       <div className="bg-gray-100 h-56 border-b border-gray-100 overflow-hidden">
         <img
