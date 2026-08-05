@@ -49,8 +49,8 @@ function App() {
         <Route path="/" element={<PageWrapper><Landing /></PageWrapper>} />
         <Route path="/fahrzeuge" element={<PageWrapper><Catalog /></PageWrapper>} />
         <Route path="/vehicles/:id" element={<PageWrapper><VehicleDetail /></PageWrapper>} />
-        <Route path="/merkliste" element={<PageWrapper><Favoriten /></PageWrapper>} />
-        <Route path="/vergleich" element={<PageWrapper><Vergleich /></PageWrapper>} />
+        <Route path="/merkliste" element={<ProtectedRoute><PageWrapper><Favoriten /></PageWrapper></ProtectedRoute>} />
+        <Route path="/vergleich" element={<ProtectedRoute><PageWrapper><Vergleich /></PageWrapper></ProtectedRoute>} />
         <Route path="/kontakt" element={<PageWrapper><Kontakt /></PageWrapper>} />
         <Route path="/unternehmen" element={<PageWrapper><Unternehmen /></PageWrapper>} />
         <Route path="/karriere" element={<PageWrapper><Karriere /></PageWrapper>} />

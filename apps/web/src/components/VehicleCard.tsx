@@ -3,6 +3,7 @@ import type{ Vehicle } from '../types'
 import {motion} from 'framer-motion'
 import { useFavoritesStore } from '../store/favoritesStore'
 import { useCompareStore } from '../store/compareStore'
+import { useAuthStore } from '../store/authStore'
 import { getVehiclePhoto } from '../data/brandPhotos'
 import { useTranslation } from '../i18n/useTranslation'
 import { categoryLabels, statusLabels, fuelLabels } from '../i18n/translations'
@@ -27,6 +28,14 @@ export function VehicleCard({ vehicle }: Props) {
   const toggleFavorite = useFavoritesStore(state => state.toggleFavorite)
   const isComparing = useCompareStore(state => state.isComparing(vehicle.id))
   const toggleCompare = useCompareStore(state => state.toggleCompare)
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated)
+
+  // Merkliste/Vergleich require an account - redirect instead of silently
+  // building up an anonymous local list that a login wouldn't then attach to.
+  function requireAuth(action: () => void) {
+    if (!isAuthenticated) { navigate('/admin/login'); return }
+    action()
+  }
 
   return (
     <motion.div
@@ -36,7 +45,7 @@ export function VehicleCard({ vehicle }: Props) {
         className="relative bg-white border border-gray-200 rounded-lg overflow-hidden cursor-pointer"
       >
       <button
-        onClick={(e) => { e.stopPropagation(); toggleFavorite(vehicle.id) }}
+        onClick={(e) => { e.stopPropagation(); requireAuth(() => toggleFavorite(vehicle.id)) }}
         aria-label={isFavorite ? t('card.removeFavorite') : t('card.addFavorite')}
         aria-pressed={isFavorite}
         className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-white/90 shadow-sm flex items-center justify-center text-lg transition-transform hover:scale-110"
@@ -47,7 +56,7 @@ export function VehicleCard({ vehicle }: Props) {
       </button>
 
       <button
-        onClick={(e) => { e.stopPropagation(); toggleCompare(vehicle.id) }}
+        onClick={(e) => { e.stopPropagation(); requireAuth(() => toggleCompare(vehicle.id)) }}
         aria-label={isComparing ? t('card.removeCompare') : t('card.addCompare')}
         aria-pressed={isComparing}
         title={t('card.compare')}
