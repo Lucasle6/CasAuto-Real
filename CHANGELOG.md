@@ -6,6 +6,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Fixed
+- `CompareView.tsx` (the `/vergleich` page and the catalog's compare drawer) never showed a vehicle photo, unlike `VehicleCard.tsx`/`VehicleDetail.tsx` which both do - it was missing entirely from this component, not a regression. Added the same `getVehiclePhoto()` photo block above the brand/model row, with the label column's spacer height adjusted to match so rows still line up.
+  - **Why:** Marco reported no images on the comparison page.
+- Only the brand/model text was clickable to open a compared vehicle's detail page - the rest of the card (including the new photo) did nothing. The whole card now navigates on click, matching `VehicleCard.tsx`'s pattern; the remove ("✕") button stops propagation so it doesn't also trigger navigation.
+  - **Why:** Marco reported having to click precisely on the vehicle name, which isn't obvious and doesn't match how the catalog cards already behave.
+
 ### Added
 - A thin red border frames the whole viewport whenever you're logged in (customer or admin) - a fixed, `pointer-events-none` overlay in `App.tsx`, driven by `authStore`'s `isAuthenticated`.
   - **Why:** Marco wanted a persistent, page-independent signal that you're signed in, in the app's own accent color (`border-red-800`) rather than a generic browser-style indicator.

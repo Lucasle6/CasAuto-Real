@@ -4,8 +4,10 @@ import type { Vehicle } from '../types'
 import { useCompareStore, MAX_COMPARE } from '../store/compareStore'
 import { useTranslation } from '../i18n/useTranslation'
 import { categoryLabels, fuelLabels, statusLabels } from '../i18n/translations'
+import { getVehiclePhoto } from '../data/brandPhotos'
 
 // Fixed heights so the label column and every vehicle card line up row by row.
+const PHOTO_H = 'h-24'
 const HEADER_H = 'h-24'
 const ROW_H = 'h-14'
 
@@ -57,6 +59,7 @@ export function CompareView({ vehicles }: { vehicles: Vehicle[] }) {
     <div className="flex gap-4 overflow-x-auto px-1 pt-3 pb-4">
       {/* Label column (hidden on mobile - labels move inline into each card) */}
       <div className="shrink-0 hidden sm:flex flex-col w-28">
+        <div className={PHOTO_H} />
         <div className={HEADER_H} />
         {rows.map(row => (
           <div
@@ -72,18 +75,26 @@ export function CompareView({ vehicles }: { vehicles: Vehicle[] }) {
       {compared.map(v => (
         <div
           key={v.id}
-          className="relative flex-1 min-w-[200px] bg-white border border-green-200 rounded-xl shadow-sm flex flex-col overflow-hidden transition-all duration-200 hover:border-green-500 hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] hover:z-10"
+          onClick={() => navigate(`/vehicles/${v.id}`)}
+          className="relative flex-1 min-w-[200px] bg-white border border-green-200 rounded-xl shadow-sm flex flex-col overflow-hidden cursor-pointer transition-all duration-200 hover:border-green-500 hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] hover:z-10"
         >
+          <div className={`${PHOTO_H} bg-gray-100 border-b border-gray-100 overflow-hidden`}>
+            <img
+              src={getVehiclePhoto(v.brand)}
+              alt={`${v.brand} ${v.model}`}
+              loading="lazy"
+              className="w-full h-full object-cover"
+              onError={(e) => (e.currentTarget.style.display = 'none')}
+            />
+          </div>
+
           <div className={`${HEADER_H} px-5 flex items-start justify-between gap-2 bg-green-50/50 border-b border-green-100`}>
-            <button
-              onClick={() => navigate(`/vehicles/${v.id}`)}
-              className="text-left pt-5 hover:text-red-800 transition-colors"
-            >
+            <div className="pt-5">
               <div className="font-semibold text-gray-900 leading-tight">{v.brand}</div>
               <div className="text-gray-500 text-sm">{v.model}</div>
-            </button>
+            </div>
             <button
-              onClick={() => removeFromCompare(v.id)}
+              onClick={(e) => { e.stopPropagation(); removeFromCompare(v.id) }}
               aria-label={`${v.brand} ${v.model} ${t('compare.removeSuffix')}`}
               className="pt-5 text-gray-300 hover:text-red-800 transition-colors text-lg leading-none"
             >
