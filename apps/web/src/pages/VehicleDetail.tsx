@@ -6,6 +6,7 @@ import { Navbar } from '../components/Navbar'
 import { Footer } from '../components/Footer'
 import { useFavoritesStore } from '../store/favoritesStore'
 import { useCompareStore } from '../store/compareStore'
+import { useAuthStore } from '../store/authStore'
 import { getVehiclePhoto } from '../data/brandPhotos'
 import { useTranslation } from '../i18n/useTranslation'
 import { categoryLabels, statusLabels, fuelLabels } from '../i18n/translations'
@@ -20,6 +21,14 @@ export function VehicleDetail() {
   const toggleFavorite = useFavoritesStore(state => state.toggleFavorite)
   const isComparing = useCompareStore(state => vehicle ? state.isComparing(vehicle.id) : false)
   const toggleCompare = useCompareStore(state => state.toggleCompare)
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated)
+
+  // Merkliste/Vergleich require an account - redirect instead of silently
+  // building up an anonymous local list that a login wouldn't then attach to.
+  function requireAuth(action: () => void) {
+    if (!isAuthenticated) { navigate('/admin/login'); return }
+    action()
+  }
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/vehicles/${id}`)
@@ -59,7 +68,7 @@ export function VehicleDetail() {
                 {statusLabels[lang][vehicle.status]}
               </span>
               <button
-                onClick={() => toggleFavorite(vehicle.id)}
+                onClick={() => requireAuth(() => toggleFavorite(vehicle.id))}
                 aria-label={isFavorite ? t('card.removeFavorite') : t('card.addFavorite')}
                 aria-pressed={isFavorite}
                 className="text-2xl leading-none transition-transform hover:scale-110"
@@ -69,7 +78,7 @@ export function VehicleDetail() {
                 </span>
               </button>
               <button
-                onClick={() => toggleCompare(vehicle.id)}
+                onClick={() => requireAuth(() => toggleCompare(vehicle.id))}
                 aria-pressed={isComparing}
                 className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
                   isComparing

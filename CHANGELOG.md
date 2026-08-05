@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Changed
+- Merkliste and Vergleich now require being logged in. `/merkliste` and `/vergleich` are wrapped in `<ProtectedRoute>`, and the heart/compare toggle buttons on `VehicleCard.tsx` and `VehicleDetail.tsx` redirect to login instead of toggling when signed out.
+  - **Why:** Marco reported that adding vehicles while logged out, then logging in, didn't connect them to his account - they're stored in `localStorage`, not per-account, so nothing was actually broken, but the anonymous flow was confusing. Requiring login at least makes it clear these lists belong to a session you're signed into. Storage itself stays `localStorage` (not moved to the backend) - this was a deliberate smaller-scope fix over building real per-account persistence, given how close the deadline is; the list still won't follow you across devices or browsers, and a shared browser with multiple accounts still shares one local list, which is a known limitation of this scope.
+
 ### Fixed
 - `/merkliste` and `/vergleich` had no way back other than the browser's own back button or the navbar - unlike `VehicleDetail.tsx`, which already has a `← Zurück` link. Added the same button (`navigate(-1)`) to both, in the same spot and style.
   - **Why:** Marco reported the comparison page had one and the favorites page didn't; turned out neither actually did - `VehicleDetail.tsx` was the only page with this pattern. Added it consistently to both instead of just the one he noticed.
