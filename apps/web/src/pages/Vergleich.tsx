@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import type { Vehicle } from '../types'
 import { Footer } from '../components/Footer'
 import { Navbar } from '../components/Navbar'
@@ -8,6 +9,7 @@ import { useTranslation } from '../i18n/useTranslation'
 
 export function Vergleich() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const compareIds = useCompareStore(state => state.compareIds)
   const clearCompare = useCompareStore(state => state.clearCompare)
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
@@ -27,6 +29,12 @@ export function Vergleich() {
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 w-full flex-1">
+        <button
+          onClick={() => navigate(-1)}
+          className="text-gray-400 hover:text-gray-900 mb-6 flex items-center gap-2 transition-colors"
+        >
+          ← {t('common.back')}
+        </button>
         <div className="flex justify-between items-center mb-2">
           <h1 className="text-2xl font-bold text-gray-900">{t('compare.title')}</h1>
           {selectedCount > 0 && (

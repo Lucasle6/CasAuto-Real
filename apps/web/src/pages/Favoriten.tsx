@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import type { Vehicle } from '../types'
 import { VehicleCard } from '../components/VehicleCard'
 import { Footer } from '../components/Footer'
@@ -8,6 +9,7 @@ import { useTranslation } from '../i18n/useTranslation'
 
 export function Favoriten() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const favoriteIds = useFavoritesStore(state => state.favoriteIds)
   const pruneFavorites = useFavoritesStore(state => state.pruneFavorites)
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
@@ -32,6 +34,12 @@ export function Favoriten() {
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 w-full flex-1">
+        <button
+          onClick={() => navigate(-1)}
+          className="text-gray-400 hover:text-gray-900 mb-6 flex items-center gap-2 transition-colors"
+        >
+          ← {t('common.back')}
+        </button>
         <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('nav.watchlist')}</h1>
         <p className="text-gray-400 text-sm mb-8">
           {loading
