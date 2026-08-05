@@ -1,19 +1,27 @@
 import { create } from 'zustand'
+import { useAuthStore } from './authStore'
 
-const STORAGE_KEY = 'compareVehicleIds'
 const MAX_COMPARE = 3
 
-function loadCompareIds(): string[] {
+// Namespaced per logged-in account (by email) rather than one shared key, so
+// switching accounts in the same browser shows that account's own selection
+// instead of whoever used the browser last. Still localStorage only - not
+// synced to the backend, so it won't follow an account across devices.
+function keyFor(email: string | null) {
+  return `compareVehicleIds:${email ?? 'anon'}`
+}
+
+function loadCompareIds(email: string | null): string[] {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY)
+    const raw = localStorage.getItem(keyFor(email))
     return raw ? JSON.parse(raw) : []
   } catch {
     return []
   }
 }
 
-function saveCompareIds(ids: string[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(ids))
+function saveCompareIds(email: string | null, ids: string[]) {
+  localStorage.setItem(keyFor(email), JSON.stringify(ids))
 }
 
 interface CompareStore {
@@ -26,9 +34,10 @@ interface CompareStore {
 }
 
 export const useCompareStore = create<CompareStore>((set, get) => ({
-  compareIds: loadCompareIds(),
+  compareIds: loadCompareIds(useAuthStore.getState().userEmail),
   isComparing: (id: string) => get().compareIds.includes(id),
   toggleCompare: (id: string) => {
+    const email = useAuthStore.getState().userEmail
     const current = get().compareIds
     let next: string[]
     if (current.includes(id)) {
@@ -40,29 +49,41 @@ export const useCompareStore = create<CompareStore>((set, get) => ({
     } else {
       next = [...current, id]
     }
-    saveCompareIds(next)
+    saveCompareIds(email, next)
     set({ compareIds: next })
   },
   removeFromCompare: (id: string) => {
+    const email = useAuthStore.getState().userEmail
     const next = get().compareIds.filter(existingId => existingId !== id)
-    saveCompareIds(next)
+    saveCompareIds(email, next)
     set({ compareIds: next })
   },
   clearCompare: () => {
-    saveCompareIds([])
+    const email = useAuthStore.getState().userEmail
+    saveCompareIds(email, [])
     set({ compareIds: [] })
   },
   // Drops IDs that no longer correspond to a real vehicle (e.g. deleted by
   // an admin) - without this, the navbar badge count drifts from what
   // /vergleich actually shows, forever, since nothing else removes them.
   pruneCompare: (existingIds: string[]) => {
+    const email = useAuthStore.getState().userEmail
     const current = get().compareIds
     const next = current.filter(id => existingIds.includes(id))
     if (next.length !== current.length) {
-      saveCompareIds(next)
+      saveCompareIds(email, next)
       set({ compareIds: next })
     }
   },
 }))
+
+// Reload from the newly active account's own selection on login/logout/
+// account switch - otherwise this store would keep showing the previous
+// account's in-memory state until a full page reload.
+useAuthStore.subscribe((state, prevState) => {
+  if (state.userEmail !== prevState.userEmail) {
+    useCompareStore.setState({ compareIds: loadCompareIds(state.userEmail) })
+  }
+})
 
 export { MAX_COMPARE }
