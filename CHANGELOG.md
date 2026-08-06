@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Fixed
+- `README.md` had drifted out of sync with the app in several places: still titled "Autohaus Royal" and referencing React 18; the clone instructions had a `YOUR_USERNAME/autohaus` placeholder that was never filled in; the Architecture section said the frontend is served from S3 when it's actually on Vercel, contradicting the Deployment section a few paragraphs down; the Features list still described Merkliste/Vergleich as accountless and didn't mention i18n, customer registration, or the newsletter at all; and "Default Admin Credentials" implied `POST /auth/register` grants admin access, when every new account is created with the `user` role regardless of what email is used - actual admin access requires manually setting `role = 'admin'` in the database, which wasn't documented anywhere. Also added an `Auth` column to the API endpoints tables, since several now require an admin JWT and the table gave no indication of that.
+  - **Why:** Marco asked for a full pass since the file hadn't kept up with everything that changed this project - a README that confidently states something false (like "register as admin") is worse than one that says nothing.
+
 ### Changed
 - The heart/compare toggle buttons on `VehicleCard.tsx` and `VehicleDetail.tsx` no longer redirect to login when signed out - they're hidden entirely instead. A small text hint (`catalog.authHint`, links to login) explains why, shown once in the catalog sidebar and once on the vehicle detail page rather than repeated on every card.
   - **Why:** Marco felt redirecting straight to login on click was too pushy for something nobody's required to sign up for just to browse - hiding the controls and explaining why in one unobtrusive spot fits better with the catalog staying open to everyone.
