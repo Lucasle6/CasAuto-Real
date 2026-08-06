@@ -1,32 +1,36 @@
-# Autohaus Royal
+# CasAuto Real
 
 Fullstack web application for a German car dealership built with React, NestJS, and MySQL.
 
 ## Tech Stack
 
-- **Frontend:** React 18, TypeScript, Vite, Tailwind CSS, React Router, Zustand
+- **Frontend:** React 19, TypeScript, Vite, Tailwind CSS, React Router, Zustand
 - **Backend:** NestJS, TypeORM, JWT Authentication
 - **Database:** MySQL 8 (Docker)
 
 ## Features
 
-- Vehicle catalog with filters (brand, category, fuel type, price, year)
-- Vehicle detail page with test drive booking
-- Favorites/watchlist — save vehicles and revisit them on `/merkliste` (stored in `localStorage`, no account needed)
-- Vehicle comparison — select up to 3 vehicles and compare them side by side on `/vergleich` (also `localStorage`-only)
-- Admin panel (protected with JWT)
+- Vehicle catalog with filters (brand, category, fuel type, price, year), UI available in German, English, and Spanish
+- Vehicle detail page with test drive booking (no account needed)
+- Customer registration/login, separate from the admin login
+- Favorites/watchlist — save vehicles and revisit them on `/merkliste`. Requires being logged in; saved per account, in `localStorage` (not synced across devices/browsers)
+- Vehicle comparison — select up to 3 vehicles and compare them side by side on `/vergleich`. Same login requirement and per-account local storage as favorites
+- Newsletter signup
+- Admin panel (JWT-protected, requires the `admin` role - see [Default Admin Credentials](#default-admin-credentials))
   - Add, edit, and delete vehicles
   - View appointments
-- Landing page with reviews and footer
+- Landing page with reviews carousel and footer
 - Contact, About, and Careers pages
 
 ## Architecture
 
 ![Architecture diagram](docs/architecture.svg)
 
-The app runs inside a VPC: the frontend is served from an S3 bucket, the backend API runs in the public subnet, and MySQL lives in the private subnet, only reachable from the backend.
+The diagram shows the originally planned design: the app inside a VPC, frontend served from an S3 bucket, backend API in the public subnet, MySQL in the private subnet only reachable from the backend. The actual, currently-deployed setup deviates from this in two ways - see [Deployment (Production)](#deployment-production) for what's actually live:
 
-> **Note:** the current Terraform implementation runs MySQL in the public subnet instead, restricted to the backend by security group rather than subnet isolation - see [terraform/README.md](terraform/README.md) for why. The diagram above shows the target design this deviates from.
+> **Note:** the frontend is served from **Vercel**, not S3 - simpler to deploy and update than syncing a bucket, and Vercel's proxy rewrite (`apps/web/vercel.json`) is what lets the browser reach the backend over HTTPS without mixed-content issues (see [How the pieces connect](#how-the-pieces-connect)).
+>
+> **Note:** MySQL runs in the **public subnet**, restricted to the backend by security group rather than subnet isolation - see [terraform/README.md](terraform/README.md) for why.
 
 ## Getting Started
 
@@ -41,8 +45,8 @@ The app runs inside a VPC: the frontend is served from an S3 bucket, the backend
 1. Clone the repository
 
 \`\`\`bash
-git clone https://github.com/YOUR_USERNAME/autohaus.git
-cd autohaus
+git clone https://github.com/Lucasle6/CasAuto-Real.git
+cd CasAuto-Real
 \`\`\`
 
 2. Start MySQL with Docker
@@ -78,7 +82,9 @@ pnpm dev
 
 ### Default Admin Credentials
 
-Create an admin user by sending a POST request to:
+`POST /auth/register` (also used by the customer-facing `/register` page) always creates a user with the `user` role - it does **not** grant admin access, regardless of what email you register with. To get an admin account:
+
+1. Register normally:
 
 \`\`\`
 POST http://localhost:3000/auth/register
@@ -88,45 +94,56 @@ POST http://localhost:3000/auth/register
 }
 \`\`\`
 
+2. Then promote that user to admin directly in the database:
+
+\`\`\`sql
+UPDATE users SET role = 'admin' WHERE email = 'admin@autohaus.de';
+\`\`\`
+
+Log in at `/admin/login` (or via the navbar's "Anmelden" button) with that account to reach the admin panel.
+
 ## API Endpoints
 
+"Auth" below means the request needs an `Authorization: Bearer <token>` header from an account with the `admin` role (see [`auth/admin.guard.ts`](apps/api/src/auth/admin.guard.ts)); everything else is open, no token needed.
+
 ### Vehicles
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | /vehicles | Get all vehicles (with filters) |
-| GET | /vehicles/:id | Get vehicle by ID |
-| POST | /vehicles | Create vehicle |
-| PATCH | /vehicles/:id | Update vehicle |
-| DELETE | /vehicles/:id | Delete vehicle |
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| GET | /vehicles | Get all vehicles (with filters) | – |
+| GET | /vehicles/:id | Get vehicle by ID | – |
+| POST | /vehicles | Create vehicle | admin |
+| PATCH | /vehicles/:id | Update vehicle | admin |
+| DELETE | /vehicles/:id | Delete vehicle | admin |
 
 ### Appointments
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | /appointments | Get all appointments |
-| POST | /appointments | Create appointment |
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| GET | /appointments | Get all appointments | admin |
+| POST | /appointments | Create appointment (test drive booking) | – |
 
 ### Auth
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | /auth/login | Login |
-| POST | /auth/register | Register admin user |
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| POST | /auth/login | Log in, returns a JWT | – |
+| POST | /auth/register | Register a new account (always created with the `user` role - see [Default Admin Credentials](#default-admin-credentials)) | – |
 
 ### Newsletter
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | /newsletter/subscribe | Subscribe an email to the newsletter |
-| GET | /newsletter/subscribers | List subscribers |
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| POST | /newsletter/subscribe | Subscribe an email to the newsletter | – |
+| GET | /newsletter/subscribers | List subscribers | admin |
 
 > In production these endpoints are reached through the `/api` proxy, e.g. `GET /api/vehicles` on the frontend resolves to `GET /vehicles` on the backend. See [Deployment](#deployment-production).
 
 ## Project Structure
 
 \`\`\`
-autohaus/
+CasAuto-Real/
 ├── apps/
 │   ├── web/          # React frontend
 │   └── api/          # NestJS backend
-├── terraform/        # AWS infrastructure (VPC, EC2, S3, MySQL) - see terraform/README.md
+├── scripts/          # One-off maintenance/seed scripts - see scripts/seed-vehicles.mjs
+├── terraform/        # AWS infrastructure (VPC, EC2, MySQL) - see terraform/README.md
 ├── docker-compose.yml
 └── package.json
 \`\`\`
