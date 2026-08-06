@@ -37,40 +37,64 @@ The diagram shows the originally planned design: the app inside a VPC, frontend 
 ### Prerequisites
 
 - Node.js v20+
-- pnpm
-- Docker Desktop
+- pnpm - install with `npm install -g pnpm` if you don't already have it
+- Docker Desktop, running (needed for local MySQL)
 
 ### Installation
 
 1. Clone the repository
 
-\`\`\`bash
+```bash
 git clone https://github.com/Lucasle6/CasAuto-Real.git
 cd CasAuto-Real
-\`\`\`
+```
 
 2. Start MySQL with Docker
 
-\`\`\`bash
+```bash
 docker-compose up -d
-\`\`\`
+```
 
-3. Setup the backend
+This starts the MySQL container defined in [`docker-compose.yml`](docker-compose.yml) (credentials `root`/`root`, database `autohaus_db` - matching what `apps/api/.env.example` expects).
 
-\`\`\`bash
+3. Set up and start the backend
+
+```bash
 cd apps/api
 cp .env.example .env
 pnpm install
 pnpm start:dev
-\`\`\`
+```
 
-4. Setup the frontend
+`.env`'s defaults already match the Docker MySQL from step 2, so no editing needed for local dev. The database schema is created automatically on first start (TypeORM `synchronize: true`) - no separate migration step. Leave this running in its own terminal; it serves the API at `http://localhost:3000`.
 
-\`\`\`bash
+4. Set up and start the frontend
+
+In a **new terminal**:
+
+```bash
 cd apps/web
+echo "VITE_API_URL=http://localhost:3000" > .env.local
 pnpm install
 pnpm dev
-\`\`\`
+```
+
+The `.env.local` step matters - there's no default, and without it `VITE_API_URL` is unset, so the frontend can't reach the backend at all (empty catalog, broken login, everything). This file is gitignored (`*.local`) and machine-specific, so it's never committed.
+
+5. (Optional) Add some vehicles
+
+The database starts completely empty - the catalog will show nothing until vehicles exist. Either add a few by hand in the admin panel (see [Default Admin Credentials](#default-admin-credentials) to get admin access first), or run the seed script for a larger demo set. It needs an admin JWT, which you can get from the same login you set up above:
+
+```bash
+# get a token for the admin account you created in "Default Admin Credentials"
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@autohaus.de","password":"your_password"}'
+# copy the "accessToken" value from the response, then:
+
+# from the repo root
+API_URL=http://localhost:3000 ADMIN_TOKEN=<paste the accessToken here> node scripts/seed-vehicles.mjs 20
+```
 
 ### Access
 
@@ -78,7 +102,8 @@ pnpm dev
 |---|---|
 | Frontend | http://localhost:5173 |
 | Backend API | http://localhost:3000 |
-| Admin Panel | http://localhost:5173/admin |
+| Admin login | http://localhost:5173/admin/login |
+| Admin panel (after logging in) | http://localhost:5173/admin |
 
 ### Default Admin Credentials
 
@@ -86,19 +111,19 @@ pnpm dev
 
 1. Register normally:
 
-\`\`\`
+```
 POST http://localhost:3000/auth/register
 {
   "email": "admin@autohaus.de",
   "password": "your_password"
 }
-\`\`\`
+```
 
 2. Then promote that user to admin directly in the database:
 
-\`\`\`sql
+```sql
 UPDATE users SET role = 'admin' WHERE email = 'admin@autohaus.de';
-\`\`\`
+```
 
 Log in at `/admin/login` (or via the navbar's "Anmelden" button) with that account to reach the admin panel.
 
@@ -137,7 +162,7 @@ Log in at `/admin/login` (or via the navbar's "Anmelden" button) with that accou
 
 ## Project Structure
 
-\`\`\`
+```
 CasAuto-Real/
 ├── apps/
 │   ├── web/          # React frontend
@@ -146,7 +171,7 @@ CasAuto-Real/
 ├── terraform/        # AWS infrastructure (VPC, EC2, MySQL) - see terraform/README.md
 ├── docker-compose.yml
 └── package.json
-\`\`\`
+```
 
 ## Deployment (Production)
 
@@ -168,18 +193,18 @@ The backend is an EC2 instance that builds `apps/api/Dockerfile` from a fresh gi
 
 The AWS side is managed entirely by Terraform. State lives remotely in an S3 bucket with a DynamoDB lock, shared across the team. The full step-by-step (bootstrap, AWS SSO credentials, apply) is in [terraform/README.md](terraform/README.md). In short:
 
-\`\`\`bash
+```bash
 cd terraform
 terraform init -backend-config=backend.hcl
 terraform plan
 terraform apply
-\`\`\`
+```
 
 To roll a change that only runs in `user_data` (which executes on first boot) onto the running backend, replace just that instance — MySQL is a separate instance and stays untouched, and the Elastic IP re-attaches automatically:
 
-\`\`\`bash
+```bash
 terraform apply -replace=aws_instance.backend
-\`\`\`
+```
 
 The frontend deploys on its own: pushing to `main` triggers a Vercel build of `apps/web`.
 
